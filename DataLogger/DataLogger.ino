@@ -1,20 +1,17 @@
-//Autor: Fábio Henrique Cabrini
-//Resumo: Esse programa possibilita ligar e desligar o led onboard, além de mandar o status para o Broker MQTT possibilitando o Helix saber
-//se o led está ligado ou desligado.
-//Revisões:
-//Rev1: 26-08-2023 Código portado para o ESP32 e para realizar a leitura de luminosidade e publicar o valor em um tópico aprorpiado do broker
-//Autor Rev1: Lucas Demetrius Augusto
-//Rev2: 28-08-2023 Ajustes para o funcionamento no FIWARE Descomplicado
-//Autor Rev2: Fábio Henrique Cabrini
-//Rev3: 1-11-2023 Refinamento do código e ajustes para o funcionamento no FIWARE Descomplicado
-//Autor Rev3: Fábio Henrique Cabrini
+//Autor: Macaco Engenheiro
+//Resumo: Esse programa faz a funcao de um dataLogger de ambiente enviando informacoes de status de temp, hum, e luminosidade para o Broker MQTT
+//possibilitando controle via sistemas externos
+#include <DHT.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
+#define DHT11_PIN 21
+
+DHT dht11 (DHT11_PIN, DHT11);
 
 // Configurações - variáveis editáveis
 const char* default_SSID = "Diogo";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "12345678";                              // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "34.229.163.198";                // IP do Broker MQTT
+const char* default_BROKER_MQTT = "107.20.83.104";                // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
 const char* default_TOPICO_SUBSCRIBE = "/TEF/lamp001/cmd";      // Tópico MQTT de escuta
 const char* default_TOPICO_PUBLISH_1 = "/TEF/lamp001/attrs";    // Tópico MQTT de envio de informações para Broker
@@ -39,6 +36,8 @@ WiFiClient espClient;
 PubSubClient MQTT(espClient);
 char EstadoSaida = '0';
 
+
+
 void initSerial() {
   Serial.begin(115200);
 }
@@ -58,6 +57,7 @@ void initMQTT() {
 }
 
 void setup() {
+  dht11.begin();//inicializar o sensor dht
   InitOutput();
   initSerial();
   initWiFi();
@@ -70,6 +70,8 @@ void loop() {
   VerificaConexoesWiFIEMQTT();
   EnviaEstadoOutputMQTT();
   handleLuminosity();
+  handleTempAndHum();
+  Serial.println("TESTWEEEEEEEEEEEEEEEEEEE");
   MQTT.loop();
 }
 
@@ -163,11 +165,21 @@ void reconnectMQTT() {
   }
 }
 
+void handleTempAndHum() {
+  float hum = dht11.readHumidity();
+  float temp = dht11.readTemperature();
+
+  Serial.print("Valor de temperatura: ");
+  Serial.print(temp);
+  Serial.print("Valor de humidade: ");
+  Serial.print(hum);
+
+}
+
 void handleLuminosity() {
   const int potPin = 35;
   int sensorValue = analogRead(potPin);
   int luminosity = map(sensorValue, 0, 4095, 0, 100);
-  //int luminosity = sensorValue;
   String mensagem = String(luminosity);
   Serial.print("Valor da luminosidade: ");
   Serial.println(mensagem.c_str());
