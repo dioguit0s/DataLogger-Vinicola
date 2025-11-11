@@ -17,7 +17,12 @@ const char* default_TOPICO_SUBSCRIBE = "/TEF/lamp001/cmd";      // Tópico MQTT 
 const char* default_TOPICO_PUBLISH_1 = "/TEF/lamp001/attrs";    // Tópico MQTT de envio de informações para Broker
 const char* default_TOPICO_PUBLISH_2 = "/TEF/lamp001/attrs/l";  // Tópico MQTT de envio de informações para Broker
 const char* default_ID_MQTT = "fiware_001";                     // ID MQTT
-const int default_D4 = 2;                                       // Pino do LED onboard
+
+// Definição dos pinos do LED RGB
+const int PIN_LED_RED = 12;
+const int PIN_LED_GREEN = 13;
+const int PIN_LED_BLUE = 14;
+
 // Declaração da variável para o prefixo do tópico
 const char* topicPrefix = "lamp001";
 
@@ -30,12 +35,16 @@ char* TOPICO_SUBSCRIBE = const_cast<char*>(default_TOPICO_SUBSCRIBE);
 char* TOPICO_PUBLISH_1 = const_cast<char*>(default_TOPICO_PUBLISH_1);
 char* TOPICO_PUBLISH_2 = const_cast<char*>(default_TOPICO_PUBLISH_2);
 char* ID_MQTT = const_cast<char*>(default_ID_MQTT);
-int D4 = default_D4;
 
 WiFiClient espClient;
 PubSubClient MQTT(espClient);
 char EstadoSaida = '0';
 
+void setRGB(int red, int green, int blue) {
+  digitalWrite(PIN_LED_RED, red);
+  digitalWrite(PIN_LED_GREEN, green);
+  digitalWrite(PIN_LED_BLUE, blue);
+}
 
 
 void initSerial() {
@@ -58,6 +67,7 @@ void initMQTT() {
 
 void setup() {
   dht11.begin();//inicializar o sensor dht
+  initRGB();
   InitOutput();
   initSerial();
   initWiFi();
@@ -90,31 +100,44 @@ void reconectWiFi() {
   Serial.println(WiFi.localIP());
 
   // Garantir que o LED inicie desligado
-  digitalWrite(D4, LOW);
+  setRGB(LOW, LOW, LOW);
 }
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
   String msg;
-  for (int i = 0; i < length; i++) {
+  [cite_start]for (int i = 0; i < length; i++) { [cite: 18]
     char c = (char)payload[i];
-    msg += c;
+    [cite_start]msg += c; [cite: 19]
   }
   Serial.print("- Mensagem recebida: ");
   Serial.println(msg);
 
-  // Forma o padrão de tópico para comparação
-  String onTopic = String(topicPrefix) + "@on|";
-  String offTopic = String(topicPrefix) + "@off|";
-
-  // Compara com o tópico recebido
-  if (msg.equals(onTopic)) {
-    digitalWrite(D4, HIGH);
-    EstadoSaida = '1';
-  }
-
-  if (msg.equals(offTopic)) {
-    digitalWrite(D4, LOW);
-    EstadoSaida = '0';
+  // Lógica para os 4 estados do LED RGB
+  // Seu backend deve enviar EXATAMENTE estas strings.
+  
+  if (msg.equals("TEMP_ALARM")) {
+    // Estado 1: Temperatura fora dos limites - VERMELHO
+    Serial.println(">>> ALARME: Temperatura. Ligando LED Vermelho.");
+    setRGB(HIGH, LOW, LOW); // Vermelho
+    
+  } else if (msg.equals("HUM_ALARM")) {
+    // Estado 2: Umidade fora dos limites - AZUL
+    Serial.println(">>> ALARME: Umidade. Ligando LED Azul.");
+    setRGB(LOW, LOW, HIGH); // Azul
+    
+  } else if (msg.equals("LUM_ALARM")) {
+    // Estado 3: Luminosidade fora dos limites - AMARELO
+    Serial.println(">>> ALARME: Luminosidade. Ligando LED Amarelo.");
+    setRGB(HIGH, HIGH, LOW); // Amarelo (Vermelho + Verde)
+    
+  } else if (msg.equals("OFF") || msg.equals("NORMAL")) {
+    // Estado 4: LED Desligado (Tudo normal)
+    Serial.println(">>> ESTADO: Normal. Desligando LED.");
+    setRGB(LOW, LOW, LOW); // Desligado
+    
+  } else {
+    // Mensagem não reconhecida (pode ser as antigas 'lamp001@on|')
+    Serial.println("Mensagem MQTT não reconhecida para controle do LED.");
   }
 }
 
@@ -124,30 +147,28 @@ void VerificaConexoesWiFIEMQTT() {
   reconectWiFi();
 }
 
-void EnviaEstadoOutputMQTT() {
-  if (EstadoSaida == '1') {
-    MQTT.publish(TOPICO_PUBLISH_1, "s|on");
-    Serial.println("- Led Ligado");
-  }
+//  void EnviaEstadoOutputMQTT() {
+//    if (EstadoSaida == '1') {
+//      MQTT.publish(TOPICO_PUBLISH_1, "s|on");
+//      Serial.println("- Led Ligado");
+//    }
+//  
+//    if (EstadoSaida == '0') {
+//      MQTT.publish(TOPICO_PUBLISH_1, "s|off");
+//      Serial.println("- Led Desligado");
+//    }
+//    Serial.println("- Estado do LED onboard enviado ao broker!");
+//    delay(1000);
+//  }
 
-  if (EstadoSaida == '0') {
-    MQTT.publish(TOPICO_PUBLISH_1, "s|off");
-    Serial.println("- Led Desligado");
-  }
-  Serial.println("- Estado do LED onboard enviado ao broker!");
-  delay(1000);
-}
-
-void InitOutput() {
-  pinMode(D4, OUTPUT);
-  digitalWrite(D4, HIGH);
-  boolean toggle = false;
-
-  for (int i = 0; i <= 10; i++) {
-    toggle = !toggle;
-    digitalWrite(D4, toggle);
-    delay(200);
-  }
+void initRGB() {
+  pinMode(PIN_LED_RED, OUTPUT);
+  pinMode(PIN_LED_GREEN, OUTPUT);
+  pinMode(PIN_LED_BLUE, OUTPUT);
+  
+  // Garante que o LED comece desligado
+  setRGB(LOW, LOW, LOW);
+  Serial.println("LED RGB inicializado como DESLIGADO.");
 }
 
 void reconnectMQTT() {
