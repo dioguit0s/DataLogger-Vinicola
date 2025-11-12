@@ -15,7 +15,7 @@ const char* default_BROKER_MQTT = "54.221.149.162";                // IP do Brok
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
 const char* default_TOPICO_SUBSCRIBE = "/TEF/logger001/cmd";      // Tópico MQTT de escuta
 const char* default_TOPICO_PUBLISH_1 = "/TEF/logger001/attrs";    // Tópico MQTT de envio de informações para Broker
-const char* default_TOPICO_PUBLISH_2 = "/TEF/logger001/attrs/l,";  // Tópico MQTT de envio de informações para Broker de luminosidade
+const char* default_TOPICO_PUBLISH_2 = "/TEF/logger001/attrs/l";  // Tópico MQTT de envio de informações para Broker de luminosidade
 const char* default_TOPICO_PUBLISH_3 = "/TEF/logger001/attrs/t";  // Tópico MQTT de envio de informações para Broker de humidade
 const char* default_TOPICO_PUBLISH_4 = "/TEF/logger001/attrs/h";  // Tópico MQTT de envio de informações para Broker de temperatura
 
