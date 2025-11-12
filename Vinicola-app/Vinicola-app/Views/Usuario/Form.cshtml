@@ -1,0 +1,81 @@
+﻿﻿@model UsuarioViewModel
+@{
+    ViewBag.Title = (Model.Id == 0 || ViewBag.Operacao == "I") ? "Novo Usuário" : "Alterar Usuário";
+    string operacao = (Model.Id == 0 || ViewBag.Operacao == "I") ? "I" : "A";
+}
+
+<style>
+    .form-container {
+        max-width: 700px;
+        margin: 20px auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .control-label {
+        font-weight: 600;
+        color: #34495e;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 10px 15px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    .form-actions {
+        text-align: right;
+        margin-top: 30px;
+    }
+</style>
+
+
+<div class="form-container">
+    <h2>@ViewBag.Title</h2>
+
+    @using (Html.BeginForm("Salvar", "Usuario", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <input type="hidden" name="operacao" value="@operacao" />
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Id, new { @class = "col-sm-2 col-form-label" })
+            <div class="col-sm-10">
+                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Nome, new { @class = "col-sm-2 col-form-label" })
+            <div class="col-sm-10">
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", placeholder = "Digite o nome completo" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="/usuario/index" class="btn btn-secondary">Cancelar</a>
+            <input type="submit" value="Salvar" class="btn btn-success" />
+        </div>
+    }
+</div>

@@ -1,0 +1,12 @@
+.vs/
+*.suo
+*.user
+*.csproj.user
+
+[Bb]in/
+[Oo]bj/
+
+packages/
+*.nupkg
+
+*.DS_Store
