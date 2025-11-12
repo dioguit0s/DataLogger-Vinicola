@@ -11,7 +11,7 @@ DHT dht11 (DHT11_PIN, DHT11);
 // Configurações - variáveis editáveis
 const char* default_SSID = "Diogo";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "12345678";                              // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "107.20.83.104";                // IP do Broker MQTT
+const char* default_BROKER_MQTT = "54.221.149.162";                // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
 const char* default_TOPICO_SUBSCRIBE = "/TEF/lamp001/cmd";      // Tópico MQTT de escuta
 const char* default_TOPICO_PUBLISH_1 = "/TEF/lamp001/attrs";    // Tópico MQTT de envio de informações para Broker
@@ -68,7 +68,7 @@ void initMQTT() {
 void setup() {
   dht11.begin();//inicializar o sensor dht
   initRGB();
-  InitOutput();
+  initOutput();
   initSerial();
   initWiFi();
   initMQTT();
@@ -105,9 +105,9 @@ void reconectWiFi() {
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
   String msg;
-  [cite_start]for (int i = 0; i < length; i++) { [cite: 18]
+  for (int i = 0; i < length; i++) { [cite: 18]
     char c = (char)payload[i];
-    [cite_start]msg += c; [cite: 19]
+    msg += c; [cite: 19]
   }
   Serial.print("- Mensagem recebida: ");
   Serial.println(msg);
