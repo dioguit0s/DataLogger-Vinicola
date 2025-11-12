@@ -11,15 +11,18 @@ DHT dht11 (DHT11_PIN, DHT11);
 // Configurações - variáveis editáveis
 const char* default_SSID = "Diogo";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "12345678";                              // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "107.20.83.104";                // IP do Broker MQTT
+const char* default_BROKER_MQTT = "54.221.149.162";                // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
-const char* default_TOPICO_SUBSCRIBE = "/TEF/lamp001/cmd";      // Tópico MQTT de escuta
-const char* default_TOPICO_PUBLISH_1 = "/TEF/lamp001/attrs";    // Tópico MQTT de envio de informações para Broker
-const char* default_TOPICO_PUBLISH_2 = "/TEF/lamp001/attrs/l";  // Tópico MQTT de envio de informações para Broker
+const char* default_TOPICO_SUBSCRIBE = "/TEF/logger001/cmd";      // Tópico MQTT de escuta
+const char* default_TOPICO_PUBLISH_1 = "/TEF/logger001/attrs";    // Tópico MQTT de envio de informações para Broker
+const char* default_TOPICO_PUBLISH_2 = "/TEF/logger001/attrs/l";  // Tópico MQTT de envio de informações para Broker de luminosidade
+const char* default_TOPICO_PUBLISH_3 = "/TEF/logger001/attrs/2";  // Tópico MQTT de envio de informações para Broker de humidade
+const char* default_TOPICO_PUBLISH_4 = "/TEF/logger001/attrs/3";  // Tópico MQTT de envio de informações para Broker de temperatura
+
 const char* default_ID_MQTT = "fiware_001";                     // ID MQTT
 const int default_D4 = 2;                                       // Pino do LED onboard
 // Declaração da variável para o prefixo do tópico
-const char* topicPrefix = "lamp001";
+const char* topicPrefix = "logger001";
 
 // Variáveis para configurações editáveis
 char* SSID = const_cast<char*>(default_SSID);
@@ -29,6 +32,8 @@ int BROKER_PORT = default_BROKER_PORT;
 char* TOPICO_SUBSCRIBE = const_cast<char*>(default_TOPICO_SUBSCRIBE);
 char* TOPICO_PUBLISH_1 = const_cast<char*>(default_TOPICO_PUBLISH_1);
 char* TOPICO_PUBLISH_2 = const_cast<char*>(default_TOPICO_PUBLISH_2);
+char* TOPICO_PUBLISH_3 = const_cast<char*>(default_TOPICO_PUBLISH_3);
+char* TOPICO_PUBLISH_4 = const_cast<char*>(default_TOPICO_PUBLISH_4);
 char* ID_MQTT = const_cast<char*>(default_ID_MQTT);
 int D4 = default_D4;
 
@@ -71,7 +76,6 @@ void loop() {
   EnviaEstadoOutputMQTT();
   handleLuminosity();
   handleTempAndHum();
-  Serial.println("TESTWEEEEEEEEEEEEEEEEEEE");
   MQTT.loop();
 }
 
@@ -170,10 +174,13 @@ void handleTempAndHum() {
   float temp = dht11.readTemperature();
 
   Serial.print("Valor de temperatura: ");
-  Serial.print(temp);
+  String mensagemTemp = String(temp);
+  Serial.println(mensagemTemp);
   Serial.print("Valor de humidade: ");
-  Serial.print(hum);
-
+  String mensagemHum = String(hum);
+  Serial.println(mensagemHum);
+  MQTT.publish(TOPICO_PUBLISH_3, mensagemTemp.c_str());
+  MQTT.publish(TOPICO_PUBLISH_4, mensagemHum.c_str());
 }
 
 void handleLuminosity() {
