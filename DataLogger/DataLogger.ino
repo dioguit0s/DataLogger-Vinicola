@@ -11,7 +11,7 @@ DHT dht11 (DHT11_PIN, DHT11);
 // Configurações - variáveis editáveis
 const char* default_SSID = "Diogo";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "12345678";                              // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "107.20.83.104";                // IP do Broker MQTT
+const char* default_BROKER_MQTT = "54.221.149.162";                // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
 const char* default_TOPICO_SUBSCRIBE = "/TEF/lamp001/cmd";      // Tópico MQTT de escuta
 const char* default_TOPICO_PUBLISH_1 = "/TEF/lamp001/attrs";    // Tópico MQTT de envio de informações para Broker
@@ -32,6 +32,8 @@ int BROKER_PORT = default_BROKER_PORT;
 char* TOPICO_SUBSCRIBE = const_cast<char*>(default_TOPICO_SUBSCRIBE);
 char* TOPICO_PUBLISH_1 = const_cast<char*>(default_TOPICO_PUBLISH_1);
 char* TOPICO_PUBLISH_2 = const_cast<char*>(default_TOPICO_PUBLISH_2);
+char* TOPICO_PUBLISH_3 = const_cast<char*>(default_TOPICO_PUBLISH_3);
+char* TOPICO_PUBLISH_4 = const_cast<char*>(default_TOPICO_PUBLISH_4);
 char* ID_MQTT = const_cast<char*>(default_ID_MQTT);
 int D4 = default_D4;
 
@@ -173,9 +175,10 @@ void handleTempAndHum() {
 
   Serial.print("Valor de temperatura: ");
   String mensagemTemp = String(temp);
+  Serial.println(mensagemTemp);
   Serial.print("Valor de humidade: ");
   String mensagemHum = String(hum);
-  Serial.print(mensagemHum);
+  Serial.println(mensagemHum);
   MQTT.publish(TOPICO_PUBLISH_3, mensagemTemp.c_str());
   MQTT.publish(TOPICO_PUBLISH_4, mensagemHum.c_str());
 }
