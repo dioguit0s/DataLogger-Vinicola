@@ -1,5 +1,5 @@
-﻿using CadAlunoMVC.Models;
-using CadChamadoMVC.DAO;
+﻿using Vinicola_app.Models;
+using Vinicola_app.DAO;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Vinicola_app.Models;
