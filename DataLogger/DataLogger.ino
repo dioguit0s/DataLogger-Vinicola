@@ -13,16 +13,16 @@ const char* default_SSID = "Diogo";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "12345678";                              // Senha da rede Wi-Fi
 const char* default_BROKER_MQTT = "54.221.149.162";                // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
-const char* default_TOPICO_SUBSCRIBE = "/TEF/lamp001/cmd";      // Tópico MQTT de escuta
-const char* default_TOPICO_PUBLISH_1 = "/TEF/lamp001/attrs";    // Tópico MQTT de envio de informações para Broker
-const char* default_TOPICO_PUBLISH_2 = "/TEF/lamp001/attrs/l";  // Tópico MQTT de envio de informações para Broker de luminosidade
-const char* default_TOPICO_PUBLISH_3 = "/TEF/lamp001/attrs/2";  // Tópico MQTT de envio de informações para Broker de humidade
-const char* default_TOPICO_PUBLISH_4 = "/TEF/lamp001/attrs/3";  // Tópico MQTT de envio de informações para Broker de temperatura
+const char* default_TOPICO_SUBSCRIBE = "/TEF/logger001/cmd";      // Tópico MQTT de escuta
+const char* default_TOPICO_PUBLISH_1 = "/TEF/logger001/attrs";    // Tópico MQTT de envio de informações para Broker
+const char* default_TOPICO_PUBLISH_2 = "/TEF/logger001/attrs/l";  // Tópico MQTT de envio de informações para Broker de luminosidade
+const char* default_TOPICO_PUBLISH_3 = "/TEF/logger001/attrs/2";  // Tópico MQTT de envio de informações para Broker de humidade
+const char* default_TOPICO_PUBLISH_4 = "/TEF/logger001/attrs/3";  // Tópico MQTT de envio de informações para Broker de temperatura
 
 const char* default_ID_MQTT = "fiware_001";                     // ID MQTT
 const int default_D4 = 2;                                       // Pino do LED onboard
 // Declaração da variável para o prefixo do tópico
-const char* topicPrefix = "lamp001";
+const char* topicPrefix = "logger001";
 
 // Variáveis para configurações editáveis
 char* SSID = const_cast<char*>(default_SSID);
