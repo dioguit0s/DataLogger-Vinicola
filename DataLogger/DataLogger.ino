@@ -4,14 +4,15 @@
 #include <DHT.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include <LiquidCrystal_I2C.h>
 #define DHT11_PIN 21
 
 DHT dht11 (DHT11_PIN, DHT11);
 
 // Configurações - variáveis editáveis
 const char* default_SSID = "Diogo";                       // Nome da rede Wi-Fi
-const char* default_PASSWORD = "12345678";                              // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "54.221.149.162";                // IP do Broker MQTT
+const char* default_PASSWORD = "12345678";                // Senha da rede Wi-Fi
+const char* default_BROKER_MQTT = "54.221.149.162";       // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
 const char* default_TOPICO_SUBSCRIBE = "/TEF/logger001/cmd";      // Tópico MQTT de escuta
 const char* default_TOPICO_PUBLISH_1 = "/TEF/logger001/attrs";    // Tópico MQTT de envio de informações para Broker
@@ -26,8 +27,16 @@ const int PIN_LED_RED = 12;
 const int PIN_LED_GREEN = 13;
 const int PIN_LED_BLUE = 14;
 
+//Definindo pino do buzzer
+const int PIN_BUZZER = 8;
+
+//Definindo pinos da tela
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+//Ligar SCL no pino 22
+//Ligar SDA no pino 21
+
 // Declaração da variável para o prefixo do tópico
-const char* topicPrefix = "logger001";
+const char* topicPrefix = "logger";
 
 // Variáveis para configurações editáveis
 char* SSID = const_cast<char*>(default_SSID);
@@ -73,17 +82,19 @@ void initMQTT() {
 void setup() {
   dht11.begin();//inicializar o sensor dht
   initRGB();
-  initOutput();
+ // initOutput();
   initSerial();
   initWiFi();
   initMQTT();
+  lcd.init();
+  lcd.backlight();
+  writeStartMessage();
   delay(5000);
-  MQTT.publish(TOPICO_PUBLISH_1, "s|on");
 }
 
 void loop() {
   VerificaConexoesWiFIEMQTT();
-  EnviaEstadoOutputMQTT();
+  writeSensorValues();
   handleLuminosity();
   handleTempAndHum();
   MQTT.loop();
@@ -109,9 +120,9 @@ void reconectWiFi() {
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
   String msg;
-  for (int i = 0; i < length; i++) { [cite: 18]
+  for (int i = 0; i < length; i++) {
     char c = (char)payload[i];
-    msg += c; [cite: 19]
+    msg += c;
   }
   Serial.print("- Mensagem recebida: ");
   Serial.println(msg);
@@ -123,21 +134,26 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
     // Estado 1: Temperatura fora dos limites - VERMELHO
     Serial.println(">>> ALARME: Temperatura. Ligando LED Vermelho.");
     setRGB(HIGH, LOW, LOW); // Vermelho
+    tone(PIN_BUZZER, 2000); //liga o buzzer com 2000 de frequencia
     
   } else if (msg.equals("HUM_ALARM")) {
     // Estado 2: Umidade fora dos limites - AZUL
     Serial.println(">>> ALARME: Umidade. Ligando LED Azul.");
     setRGB(LOW, LOW, HIGH); // Azul
+    tone(PIN_BUZZER, 3000); //liga o buzzer com 3000 de frequencia
+
     
   } else if (msg.equals("LUM_ALARM")) {
     // Estado 3: Luminosidade fora dos limites - AMARELO
     Serial.println(">>> ALARME: Luminosidade. Ligando LED Amarelo.");
     setRGB(HIGH, HIGH, LOW); // Amarelo (Vermelho + Verde)
+    tone(PIN_BUZZER, 4000, 3000); //liga o buzzer com 4000 de frequencia
     
   } else if (msg.equals("OFF") || msg.equals("NORMAL")) {
     // Estado 4: LED Desligado (Tudo normal)
     Serial.println(">>> ESTADO: Normal. Desligando LED.");
     setRGB(LOW, LOW, LOW); // Desligado
+    noTone(PIN_BUZZER);
     
   } else {
     // Mensagem não reconhecida (pode ser as antigas 'lamp001@on|')
@@ -212,4 +228,21 @@ void handleLuminosity() {
   Serial.print("Valor da luminosidade: ");
   Serial.println(mensagem.c_str());
   MQTT.publish(TOPICO_PUBLISH_2, mensagem.c_str());
+}
+
+void writeStartMessage(){
+  lcd.setCursor(0, 0);
+  lcd.print("Inicialziando...");
+}
+
+void writeSensorValues(){
+  String lumValue = String(analogRead(35));
+  String humValue = String(dht11.readHumidity());
+  String tempValue = String(dht11.readTemperature());
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Hum  Temp  Lum");
+  lcd.setCursor(0, 1);
+  lcd.print(humValue + "  " + tempValue + "  " + lumValue);
 }
