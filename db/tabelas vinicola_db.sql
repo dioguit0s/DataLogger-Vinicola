@@ -12,7 +12,7 @@ CREATE TABLE users
     email VARCHAR(255) NOT NULL UNIQUE, -- único no sistema
     
     password_hash VARCHAR(255) NOT NULL, 
-    profile_url VARCHAR(500) 
+    profile_pic VARCHAR(MAX) 
     );
 GO
 
@@ -31,7 +31,7 @@ CREATE TABLE winery
     email VARCHAR(255) NOT NULL UNIQUE, -- único no sistema
     
     telephone VARCHAR(20) NOT NULL, 
-    logo_url VARCHAR(500),
+    logo_pic VARCHAR(MAX),
 
     CONSTRAINT FK_winery_user 
         FOREIGN KEY (user_id) REFERENCES users(id)
@@ -61,9 +61,9 @@ CREATE TABLE dataLogger
         FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE NO ACTION, -- não deixa deletar o usuário se ele configurou um logger
 
-    CONSTRAINT CHK_temp_range CHECK (temp_min < temp_max),
-    CONSTRAINT CHK_lum_range CHECK (lum_min < lum_max),
-    CONSTRAINT CHK_humid_range CHECK (humid_min < humid_max)
+--    CONSTRAINT CHK_temp_range CHECK (temp_min < temp_max),
+--    CONSTRAINT CHK_lum_range CHECK (lum_min < lum_max),
+--    CONSTRAINT CHK_humid_range CHECK (humid_min < humid_max)
     );
 GO
 
@@ -87,8 +87,4 @@ CREATE TABLE errorLog
         FOREIGN KEY (datalogger_id) REFERENCES dataLogger(id)
         ON DELETE CASCADE -- se o logger for deletado, seus logs de erro vão junto
     );
-GO
-
-CREATE INDEX IX_errorLog_Query
-    ON errorLog (datalogger_id, log_time DESC);
 GO
