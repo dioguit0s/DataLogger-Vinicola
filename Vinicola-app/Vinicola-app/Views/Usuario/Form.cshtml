@@ -1,4 +1,4 @@
-﻿﻿@model UsuarioViewModel
+﻿@model UsuarioViewModel
 @{
     ViewBag.Title = (Model.Id == 0 || ViewBag.Operacao == "I") ? "Novo Usuário" : "Alterar Usuário";
     string operacao = (Model.Id == 0 || ViewBag.Operacao == "I") ? "I" : "A";
