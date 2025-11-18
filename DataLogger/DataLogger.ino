@@ -119,37 +119,48 @@ void reconectWiFi() {
 }
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
+  
   String msg;
   for (int i = 0; i < length; i++) {
     char c = (char)payload[i];
     msg += c;
   }
+
   Serial.print("- Mensagem recebida: ");
   Serial.println(msg);
 
-  // Lógica para os 4 estados do LED RGB
-  // Seu backend deve enviar EXATAMENTE estas strings.
-  
-  if (msg.equals("TEMP_ALARM")) {
+  int startIndex = msg.indexOf('@');
+  int endIndex = msg.indexOf('|');
+
+  String message; 
+
+  if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+    message = msg.substring(startIndex + 1, endIndex);
+  } else {
+    Serial.println("- Formato de mensagem inválido.");
+    message = "";
+  }
+
+  if (message.equals("TEMP_ALARM")) {
     // Estado 1: Temperatura fora dos limites - VERMELHO
     Serial.println(">>> ALARME: Temperatura. Ligando LED Vermelho.");
     setRGB(HIGH, LOW, LOW); // Vermelho
     tone(PIN_BUZZER, 2000); //liga o buzzer com 2000 de frequencia
     
-  } else if (msg.equals("HUM_ALARM")) {
+  } else if (message.equals("HUM_ALARM")) {
     // Estado 2: Umidade fora dos limites - AZUL
     Serial.println(">>> ALARME: Umidade. Ligando LED Azul.");
     setRGB(LOW, LOW, HIGH); // Azul
     tone(PIN_BUZZER, 3000); //liga o buzzer com 3000 de frequencia
 
     
-  } else if (msg.equals("LUM_ALARM")) {
+  } else if (message.equals("LUM_ALARM")) {
     // Estado 3: Luminosidade fora dos limites - AMARELO
     Serial.println(">>> ALARME: Luminosidade. Ligando LED Amarelo.");
     setRGB(HIGH, HIGH, LOW); // Amarelo (Vermelho + Verde)
     tone(PIN_BUZZER, 4000, 3000); //liga o buzzer com 4000 de frequencia
     
-  } else if (msg.equals("OFF") || msg.equals("NORMAL")) {
+  } else if (message.equals("OFF") || message.equals("NORMAL")) {
     // Estado 4: LED Desligado (Tudo normal)
     Serial.println(">>> ESTADO: Normal. Desligando LED.");
     setRGB(LOW, LOW, LOW); // Desligado
