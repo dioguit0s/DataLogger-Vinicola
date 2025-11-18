@@ -1,172 +1,181 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\",
+  "WorkspaceRootPath": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\views\\usuario\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\views\\usuario\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\controllers\\vinicolacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\controllers\\vinicolacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\models\\usuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\models\\usuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\views\\usuario\\form.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\views\\usuario\\form.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\dao\\usuariodao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\dao\\usuariodao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\dao\\usuariodao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\dao\\conexaobd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\views\\usuario\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\views\\usuario\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\models\\usuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\models\\usuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\views\\usuario\\form.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\views\\usuario\\form.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\dao\\conexaobd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\dao\\conexaobd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\dao\\helperdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\dao\\helperdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\dao\\helperdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|z:\\ec5\\c# repo\\datalogger-vinicola\\vinicola-app\\vinicola-app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
-      "VerticalTabListWidth": 256,
+      "VerticalTabListWidth": 163,
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Index.cshtml",
-              "RelativeDocumentMoniker": "Vinicola-app\\Views\\Usuario\\Index.cshtml",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Index.cshtml",
-              "RelativeToolTip": "Vinicola-app\\Views\\Usuario\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-12T01:02:54.48Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ErrorViewModel.cs",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Models\\ErrorViewModel.cs",
-              "RelativeDocumentMoniker": "Vinicola-app\\Models\\ErrorViewModel.cs",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Models\\ErrorViewModel.cs",
-              "RelativeToolTip": "Vinicola-app\\Models\\ErrorViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T00:59:59.936Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UsuarioViewModel.cs",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Models\\UsuarioViewModel.cs",
-              "RelativeDocumentMoniker": "Vinicola-app\\Models\\UsuarioViewModel.cs",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Models\\UsuarioViewModel.cs",
-              "RelativeToolTip": "Vinicola-app\\Models\\UsuarioViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T00:58:53.241Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Form.cshtml",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Form.cshtml",
-              "RelativeDocumentMoniker": "Vinicola-app\\Views\\Usuario\\Form.cshtml",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Form.cshtml",
-              "RelativeToolTip": "Vinicola-app\\Views\\Usuario\\Form.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-12T00:56:31.903Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ConexaoBD.cs",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\ConexaoBD.cs",
-              "RelativeDocumentMoniker": "Vinicola-app\\DAO\\ConexaoBD.cs",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\ConexaoBD.cs",
-              "RelativeToolTip": "Vinicola-app\\DAO\\ConexaoBD.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "VinicolaController.cs",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\VinicolaController.cs",
+              "RelativeDocumentMoniker": "Vinicola-app\\Controllers\\VinicolaController.cs",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\VinicolaController.cs",
+              "RelativeToolTip": "Vinicola-app\\Controllers\\VinicolaController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T01:30:44.645Z",
+              "WhenOpened": "2025-11-13T23:50:56.588Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "HelperDAO.cs",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\HelperDAO.cs",
-              "RelativeDocumentMoniker": "Vinicola-app\\DAO\\HelperDAO.cs",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\HelperDAO.cs",
-              "RelativeToolTip": "Vinicola-app\\DAO\\HelperDAO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T01:23:16.975Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UsuarioDAO.cs",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\UsuarioDAO.cs",
-              "RelativeDocumentMoniker": "Vinicola-app\\DAO\\UsuarioDAO.cs",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\UsuarioDAO.cs",
-              "RelativeToolTip": "Vinicola-app\\DAO\\UsuarioDAO.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAwwCkAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T01:22:16.257Z",
-              "EditorCaption": ""
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Index.cshtml",
+              "RelativeDocumentMoniker": "Vinicola-app\\Views\\Usuario\\Index.cshtml",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Index.cshtml",
+              "RelativeToolTip": "Vinicola-app\\Views\\Usuario\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-12T01:02:54.48Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "UsuarioController.cs",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\UsuarioController.cs",
-              "RelativeDocumentMoniker": "Vinicola-app\\Controllers\\UsuarioController.cs",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\UsuarioController.cs",
-              "RelativeToolTip": "Vinicola-app\\Controllers\\UsuarioController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF0AAAABAAAAAAAAAA==",
+              "Title": "ErrorViewModel.cs",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Models\\ErrorViewModel.cs",
+              "RelativeDocumentMoniker": "Vinicola-app\\Models\\ErrorViewModel.cs",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Models\\ErrorViewModel.cs",
+              "RelativeToolTip": "Vinicola-app\\Models\\ErrorViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T01:20:14.39Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T00:59:59.936Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UsuarioViewModel.cs",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Models\\UsuarioViewModel.cs",
+              "RelativeDocumentMoniker": "Vinicola-app\\Models\\UsuarioViewModel.cs",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Models\\UsuarioViewModel.cs",
+              "RelativeToolTip": "Vinicola-app\\Models\\UsuarioViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T00:58:53.241Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Form.cshtml",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Form.cshtml",
+              "RelativeDocumentMoniker": "Vinicola-app\\Views\\Usuario\\Form.cshtml",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Form.cshtml",
+              "RelativeToolTip": "Vinicola-app\\Views\\Usuario\\Form.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-12T00:56:31.903Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ConexaoBD.cs",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\ConexaoBD.cs",
+              "RelativeDocumentMoniker": "Vinicola-app\\DAO\\ConexaoBD.cs",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\ConexaoBD.cs",
+              "RelativeToolTip": "Vinicola-app\\DAO\\ConexaoBD.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T01:30:44.645Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
+              "Title": "HelperDAO.cs",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\HelperDAO.cs",
+              "RelativeDocumentMoniker": "Vinicola-app\\DAO\\HelperDAO.cs",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\HelperDAO.cs",
+              "RelativeToolTip": "Vinicola-app\\DAO\\HelperDAO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T01:23:16.975Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsuarioDAO.cs",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\UsuarioDAO.cs",
+              "RelativeDocumentMoniker": "Vinicola-app\\DAO\\UsuarioDAO.cs",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\UsuarioDAO.cs",
+              "RelativeToolTip": "Vinicola-app\\DAO\\UsuarioDAO.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACkAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T01:22:16.257Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UsuarioController.cs",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\UsuarioController.cs",
+              "RelativeDocumentMoniker": "Vinicola-app\\Controllers\\UsuarioController.cs",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\UsuarioController.cs",
+              "RelativeToolTip": "Vinicola-app\\Controllers\\UsuarioController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T01:20:14.39Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "HomeController.cs",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\HomeController.cs",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Vinicola-app\\Controllers\\HomeController.cs",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\HomeController.cs",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Controllers\\HomeController.cs",
               "RelativeToolTip": "Vinicola-app\\Controllers\\HomeController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -174,11 +183,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "Program.cs",
-              "DocumentMoniker": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Program.cs",
+              "DocumentMoniker": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Program.cs",
               "RelativeDocumentMoniker": "Vinicola-app\\Program.cs",
-              "ToolTip": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Program.cs",
+              "ToolTip": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Program.cs",
               "RelativeToolTip": "Vinicola-app\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",

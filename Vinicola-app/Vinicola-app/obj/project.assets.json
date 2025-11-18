@@ -476,11 +476,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Vinicola-app.csproj",
+      "projectUniqueName": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Vinicola-app.csproj",
       "projectName": "Vinicola-app",
-      "projectPath": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Vinicola-app.csproj",
+      "projectPath": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Vinicola-app.csproj",
       "packagesPath": "C:\\Users\\082230012\\.nuget\\packages\\",
-      "outputPath": "Z:\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\obj\\",
+      "outputPath": "Z:\\EC5\\C# repo\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
