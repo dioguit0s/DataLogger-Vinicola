@@ -11,7 +11,7 @@ BEGIN
     INSERT INTO users (nome, email, password_hash, profile_pic)
     VALUES (@nome, @email, @password_hash, @profile_pic);
     
-    SELECT SCOPE_IDENTITY() AS new_id;
+--    SELECT SCOPE_IDENTITY() AS new_id;
 END;
 GO
 
@@ -65,8 +65,8 @@ AS
 BEGIN
     INSERT INTO winery (user_id, name, description, address, cnpj, email, telephone, logo_pic)
     VALUES (@user_id, @name, @description, @address, @cnpj, @email, @telephone, @logo_pic);
-    
-    SELECT SCOPE_IDENTITY() AS new_id;
+
+--    SELECT SCOPE_IDENTITY() AS new_id;
 END;
 GO
 
@@ -126,7 +126,7 @@ BEGIN
     INSERT INTO dataLogger (winery_id, user_id, temp_min, temp_max, lum_min, lum_max, humid_min, humid_max)
     VALUES (@winery_id, @user_id, @temp_min, @temp_max, @lum_min, @lum_max, @humid_min, @humid_max);
     
-    SELECT SCOPE_IDENTITY() AS new_id;
+--    SELECT SCOPE_IDENTITY() AS new_id;
 END;
 GO
 
@@ -185,8 +185,8 @@ AS
 BEGIN
     INSERT INTO errorLog (datalogger_id, log_time, temp, lum, humid, error_temp, error_humid, error_lum)
     VALUES (@datalogger_id, @log_time, @temp, @lum, @humid, @error_temp, @error_humid, @error_lum);
-    
-    SELECT SCOPE_IDENTITY() AS new_id;
+
+--    SELECT SCOPE_IDENTITY() AS new_id;
 END;
 GO
 
