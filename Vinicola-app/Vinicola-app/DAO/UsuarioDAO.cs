@@ -15,18 +15,21 @@ namespace Vinicola_app.DAO
             SqlParameter[] p = new SqlParameter[2];
             p[0] = new SqlParameter("id", usuario.Id);
             p[1] = new SqlParameter("nome", usuario.Nome);
+            p[2] = new SqlParameter("email", usuario.Email);
+            p[3] = new SqlParameter("senhaHash", usuario.SenhaHash);
+            p[4] = new SqlParameter("fotoProfile", usuario.FotoProfile); 
             return p;
         }
 
         public void Inserir(UsuarioViewModel usuario)
         {
-            string sql = "insert into usuarios(id, nome) values (@id, @nome)";
+            string sql = "insert into usuarios(id, nome, email, senhaHash, fotoProfile) values (@id, @nome, @email, @password_hash, @profile_pic)";
             HelperDAO.ExecutaSQL(sql, CriaParametros(usuario));
         }
 
         public void Alterar(UsuarioViewModel usuario)
         {
-            string sql = "update usuarios set nome = @nome where id = @id";
+            string sql = "update usuarios set nome = @nome, email = @email, senhaHash = @password_hash, fotoProfile = @profile_pic where id = @id";
             HelperDAO.ExecutaSQL(sql, CriaParametros(usuario));
         }
 
@@ -42,6 +45,9 @@ namespace Vinicola_app.DAO
             UsuarioViewModel u = new UsuarioViewModel();
             u.Id = Convert.ToInt32(registro["id"]);
             u.Nome = registro["nome"].ToString();
+            u.Email = registro["email"].ToString();
+            u.SenhaHash = registro["senhaHash"].ToString();
+            u.FotoProfile = registro["fotoProfile"].ToString();
             return u;
         }
 
