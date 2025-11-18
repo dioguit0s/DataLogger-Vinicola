@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Vinicola-app")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+27ef86b6850f4ec95512024b538f4a2283b5359d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0e810f64eeec61d2649801893cece8f82e5580c2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Vinicola-app")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Vinicola-app")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
