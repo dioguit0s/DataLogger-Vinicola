@@ -25,11 +25,6 @@ namespace Vinicola_app.DAO
 
         }
 
-        public void Insert(DataLoggerViewModel dataLogger)
-        {
-            string sql = "insert into dataLogger(id, wineryId, userId, tempMin, tempMax, lumMin, lumMax, humidMin, humidMax) values (@id, @winery_id, @user_id, @temp_min, @temp_max, @lum_min, @lum_max, @humid_min, @humid_max)";
-            HelperDAO.ExecutaSQL(sql, NewParameters(dataLogger));
-        }
 
 
     }
