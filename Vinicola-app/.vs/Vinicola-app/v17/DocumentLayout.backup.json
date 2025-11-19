@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|c:\\users\\seidorbr\\onedrive\\\u00E1rea de trabalho\\fesa\\projetos\\datalogger-vinicola\\vinicola-app\\vinicola-app\\dao\\dataloggerdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\dao\\dataloggerdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|c:\\users\\seidorbr\\onedrive\\\u00E1rea de trabalho\\fesa\\projetos\\datalogger-vinicola\\vinicola-app\\vinicola-app\\views\\login\\form.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\views\\login\\form.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -29,10 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|c:\\users\\seidorbr\\onedrive\\\u00E1rea de trabalho\\fesa\\projetos\\datalogger-vinicola\\vinicola-app\\vinicola-app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|c:\\users\\seidorbr\\onedrive\\\u00E1rea de trabalho\\fesa\\projetos\\datalogger-vinicola\\vinicola-app\\vinicola-app\\dao\\dataloggerdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|solutionrelative:vinicola-app\\dao\\dataloggerdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{52D3D30D-6467-4AF9-A899-0229CA96E0ED}|Vinicola-app\\Vinicola-app.csproj|c:\\users\\seidorbr\\onedrive\\\u00E1rea de trabalho\\fesa\\projetos\\datalogger-vinicola\\vinicola-app\\vinicola-app\\views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -102,11 +102,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Login\\Index.cshtml",
               "RelativeDocumentMoniker": "Vinicola-app\\Views\\Login\\Index.cshtml",
@@ -119,33 +119,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Form.cshtml",
               "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Login\\Form.cshtml",
               "RelativeDocumentMoniker": "Vinicola-app\\Views\\Login\\Form.cshtml",
-              "ToolTip": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Login\\Form.cshtml*",
-              "RelativeToolTip": "Vinicola-app\\Views\\Login\\Form.cshtml*",
-              "ViewState": "AgIAAGoAAAAAAAAAAAAmwIQAAAAGAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Login\\Form.cshtml",
+              "RelativeToolTip": "Vinicola-app\\Views\\Login\\Form.cshtml",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAcwIQAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-11-19T00:26:22.313Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "_ViewStart.cshtml",
-              "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\_ViewStart.cshtml",
-              "RelativeDocumentMoniker": "Vinicola-app\\Views\\_ViewStart.cshtml",
-              "ToolTip": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\_ViewStart.cshtml",
-              "RelativeToolTip": "Vinicola-app\\Views\\_ViewStart.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-19T00:20:32.697Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "Vinicola-app\\Views\\Home\\Index.cshtml",
@@ -171,7 +158,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Form.cshtml",
               "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Form.cshtml",
               "RelativeDocumentMoniker": "Vinicola-app\\Views\\Usuario\\Form.cshtml",
@@ -184,7 +171,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Usuario\\Index.cshtml",
               "RelativeDocumentMoniker": "Vinicola-app\\Views\\Usuario\\Index.cshtml",
@@ -193,6 +180,32 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-11-12T01:02:54.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DataLoggerDAO.cs",
+              "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\DataLoggerDAO.cs",
+              "RelativeDocumentMoniker": "Vinicola-app\\DAO\\DataLoggerDAO.cs",
+              "ToolTip": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\DataLoggerDAO.cs*",
+              "RelativeToolTip": "Vinicola-app\\DAO\\DataLoggerDAO.cs*",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAYwAwAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T01:01:34.551Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "Vinicola-app\\Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "Vinicola-app\\Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-19T00:20:32.697Z",
               "EditorCaption": ""
             },
             {
@@ -211,19 +224,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "DataLoggerDAO.cs",
-              "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\DataLoggerDAO.cs",
-              "RelativeDocumentMoniker": "Vinicola-app\\DAO\\DataLoggerDAO.cs",
-              "ToolTip": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\DAO\\DataLoggerDAO.cs",
-              "RelativeToolTip": "Vinicola-app\\DAO\\DataLoggerDAO.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAuwBQAAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T01:01:34.551Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Program.cs",
               "RelativeDocumentMoniker": "Vinicola-app\\Program.cs",
@@ -236,7 +236,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Startup.cs",
               "DocumentMoniker": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Startup.cs",
               "RelativeDocumentMoniker": "Vinicola-app\\Startup.cs",
