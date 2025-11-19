@@ -185,7 +185,7 @@ AS
 BEGIN
     INSERT INTO errorLog (datalogger_id, log_time, temp, lum, humid, error_temp, error_humid, error_lum)
     VALUES (@datalogger_id, @log_time, @temp, @lum, @humid, @error_temp, @error_humid, @error_lum);
-
+ 
 --    SELECT SCOPE_IDENTITY() AS new_id;
 END;
 GO

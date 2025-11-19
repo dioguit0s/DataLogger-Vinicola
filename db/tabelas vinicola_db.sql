@@ -51,7 +51,7 @@ CREATE TABLE dataLogger
     lum_min DECIMAL(10,2) NOT NULL,
     lum_max DECIMAL(10,2) NOT NULL,
     humid_min DECIMAL(10,2) NOT NULL,
-    humid_max DECIMAL(10,2) NOT NULL,
+    humid_max DECIMAL(10,2) NOT NULL,   
 
     CONSTRAINT FK_dataLogger_winery 
         FOREIGN KEY (winery_id) REFERENCES winery(id)
