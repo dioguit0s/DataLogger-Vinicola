@@ -12,7 +12,7 @@ DHT dht11 (DHT11_PIN, DHT11);
 // Configurações - variáveis editáveis
 const char* default_SSID = "Diogo";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "12345678";                // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "54.221.149.162";       // IP do Broker MQTT
+const char* default_BROKER_MQTT = "107.20.24.157";       // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
 const char* default_TOPICO_SUBSCRIBE = "/TEF/logger001/cmd";      // Tópico MQTT de escuta
 const char* default_TOPICO_PUBLISH_1 = "/TEF/logger001/attrs";    // Tópico MQTT de envio de informações para Broker
@@ -36,7 +36,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 //Ligar SDA no pino 21
 
 // Declaração da variável para o prefixo do tópico
-const char* topicPrefix = "logger";
+const char* topicPrefix = "logger001";
 
 // Variáveis para configurações editáveis
 char* SSID = const_cast<char*>(default_SSID);
@@ -98,6 +98,7 @@ void loop() {
   handleLuminosity();
   handleTempAndHum();
   MQTT.loop();
+  delay(5000);
 }
 
 void reconectWiFi() {
@@ -256,4 +257,4 @@ void writeSensorValues(){
   lcd.print("Hum  Temp  Lum");
   lcd.setCursor(0, 1);
   lcd.print(humValue + "  " + tempValue + "  " + lumValue);
-}
+} 
