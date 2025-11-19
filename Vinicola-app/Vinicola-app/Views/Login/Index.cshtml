@@ -1,4 +1,138 @@
-﻿@page
-@model Vinicola_app.Views.Login.IndexModel
+﻿@model Vinicola_app.Models.UsuarioViewModel
 @{
+    ViewBag.Title = "VinoSense - Login";
+    Layout = null;
 }
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .login-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 6px solid #800020; /* Vinho */
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .brand-header h1 {
+                font-family: 'Georgia', serif;
+                color: #2c3e50;
+                font-weight: 700;
+                margin: 0;
+                font-size: 2.5rem;
+            }
+
+            .brand-header span {
+                color: #800020;
+            }
+
+        .login-icon {
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            height: 45px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
+
+        .btn-login {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            transition: background 0.2s;
+        }
+
+            .btn-login:hover {
+                background-color: #1a252f;
+                color: white;
+            }
+
+        .divider {
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            line-height: 0.1em;
+            margin: 20px 0;
+            color: #7f8c8d;
+        }
+
+            .divider span {
+                background: #fff;
+                padding: 0 10px;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="brand-header">
+            <!-- <div class="login-icon">🍷</div>  -->
+            <h1>Vino<span>Sense</span></h1>
+        </div>
+
+        @if (TempData["ErroLogin"] != null)
+        {
+            <div class="alert alert-danger text-center small">
+                @TempData["ErroLogin"]
+            </div>
+        }
+
+        @using (Html.BeginForm("Autenticar", "Login", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label class="font-weight-bold text-muted small">E-MAIL</label>
+                @Html.TextBox("email", null, new { @class = "form-control", placeholder = "seu@email.com", type = "email", required = "required" })
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold text-muted small">SENHA</label>
+                @Html.Password("senhaHash", null, new { @class = "form-control", placeholder = "********", required = "required" })
+            </div>
+
+            <button type="submit" class="btn btn-login btn-block mt-4">ENTRAR</button>
+        }
+
+        <div class="divider">
+            <span>ou</span>
+        </div>
+
+        <a href="@Url.Action("Create", "Usuario")" class="btn btn-outline-secondary btn-block">
+            Criar nova conta
+        </a>
+    </div>
+
+</body>
+</html>

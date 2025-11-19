@@ -75,5 +75,54 @@ namespace Vinicola_app.DAO
             DataTable tabela = HelperDAO.ExecutaSelect(sql, null);
             return Convert.ToInt32(tabela.Rows[0]["MAIOR"]);
         }
+
+        public UsuarioViewModel VerificarLogin(string email, string senha)
+        {
+            UsuarioViewModel usuario = null; // Inicializa como nulo. Se não achar, retorna nulo.
+
+            // 1. Criar a conexão (Use a sua string de conexão ou método Helper)
+            using (SqlConnection conexao = ConexaoBD.GetConexao())
+            {
+                // 2. Criar a instrução SQL
+                // NOTA: Verifique se o nome da coluna no banco é 'Senha' ou 'SenhaHash'
+                string sql = "SELECT Id, Nome, Email, DataNascimento, CPF, SenhaHash FROM Usuarios WHERE Email = @email AND SenhaHash = @senha";
+
+                using (SqlCommand comando = new SqlCommand(sql, conexao))
+                {
+                    // 3. Adicionar parâmetros (Segurança contra SQL Injection)
+                    comando.Parameters.Add(new SqlParameter("@email", email));
+                    comando.Parameters.Add(new SqlParameter("@senha", senha));
+
+                    try
+                    {
+                        conexao.Open();
+
+                        // 4. Executar o comando
+                        using (SqlDataReader leitor = comando.ExecuteReader())
+                        {
+                            // 5. Se encontrou uma linha, preenche o objeto
+                            if (leitor.Read())
+                            {
+                                usuario = new UsuarioViewModel();
+                                usuario.Id = Convert.ToInt32(leitor["Id"]);
+                                usuario.Nome = leitor["Nome"].ToString();
+                                usuario.Email = leitor["Email"].ToString();
+
+
+                                // Não é recomendável retornar a senha para a View, mas se precisar mapear:
+                                // usuario.SenhaHash = leitor["SenhaHash"].ToString();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // É uma boa prática logar o erro ou lançar para o controller tratar
+                        throw new Exception("Erro ao verificar login: " + ex.Message);
+                    }
+                }
+            }
+
+            return usuario;
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace Vinicola_app.DAO
     {
         private SqlParameter[] NewParameters(DataLoggerViewModel dataLogger)
         {
-            SqlParameter[] p = new SqlParameter[8];
+            SqlParameter[] p = new SqlParameter[9];
             p[0] = new SqlParameter("id", dataLogger.Id);
             p[1] = new SqlParameter("wineryId", dataLogger.WineryId);
             p[2] = new SqlParameter("userId", dataLogger.UserId);
@@ -22,6 +22,8 @@ namespace Vinicola_app.DAO
             p[6] = new SqlParameter("lumMax", dataLogger.LumMax);
             p[7] = new SqlParameter("humidMin", dataLogger.HumidMin);
             p[8] = new SqlParameter("humidMax", dataLogger.HumidMax);
+
+            return p;
 
         }
 

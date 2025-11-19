@@ -1,4 +1,4 @@
-﻿using System.Data.SqlClient;
+﻿/* using System.Data.SqlClient;
 using System.Data;
 using Vinicola_app.Models;
 
@@ -77,3 +77,4 @@ namespace Vinicola_app.DAO
         }
     }
 }
+*/
