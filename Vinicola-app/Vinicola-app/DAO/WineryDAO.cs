@@ -6,6 +6,15 @@ namespace Vinicola_app.DAO
 {
     public class WineryDAO
     {
+        public void Inserir(WineryViewModel winery)
+        {
+            HelperDAO.ExecutaProc("sp_winery_insert", CriaParametros(winery));
+        }
+
+        public void Alterar(WineryViewModel winery)
+        {
+            HelperDAO.ExecutaProc("sp_winery_update", CriaParametros(winery));
+        }
 
         private SqlParameter[] CriaParametros(WineryViewModel usuario)
         {
@@ -21,57 +30,56 @@ namespace Vinicola_app.DAO
             return p;
         }
 
-        public void Inserir(WineryViewModel usuario)
-        {
-            string sql = "insert into usuarios(id, name, email, description, adress, cnpj, email, telephone, logoPic) values (@id, @name, @description, @password_hash, @profile_pic)";
-            HelperDAO.ExecutaSQL(sql, CriaParametros(usuario));
-        }
-
-        public void Alterar(WineryViewModel usuario)
-        {
-            string sql = "update usuarios set nome = @nome, email = @email, senhaHash = @password_hash, fotoProfile = @profile_pic where id = @id";
-            HelperDAO.ExecutaSQL(sql, CriaParametros(usuario));
-        }
-
+        //Add procedure de Exclusão
         public void Excluir(int id)
         {
-            string sql = "delete from usuarios where id = @id";
+            string sql = "delete from winery where id = @id";
             SqlParameter[] p = { new SqlParameter("id", id) };
             HelperDAO.ExecutaSQL(sql, p);
         }
 
-        private WineryViewModel MontaUsuario(DataRow registro)
+        private WineryViewModel MontaWinery(DataRow registro)
         {
-            WineryViewModel u = new WineryViewModel();
-            u.Id = Convert.ToInt32(registro["id"]);
-            u.Nome = registro["nome"].ToString();
-            u.Email = registro["email"].ToString();
-            u.SenhaHash = registro["senhaHash"].ToString();
-            u.FotoProfile = registro["fotoProfile"].ToString();
-            return u;
+            WineryViewModel w = new WineryViewModel();
+            w.Id = Convert.ToInt32(registro["id"]);
+            w.Name = registro["nome"].ToString();
+            w.Description = registro["description"].ToString();
+            w.Adress = registro["adress"].ToString();
+            w.Cnpj = registro["cnpj"].ToString();
+            w.Email = registro["email"].ToString();
+            w.Telephone = registro["telephone"].ToString();
+            w.LogoPic = registro["logoPìc"].ToString();
+            return w;
         }
 
         public WineryViewModel Consulta(int id)
         {
-            string sql = "select * from usuarios where id = @id";
-            SqlParameter[] p = { new SqlParameter("id", id) };
-            DataTable tabela = HelperDAO.ExecutaSelect(sql, p);
-            return tabela.Rows.Count == 0 ? null : MontaUsuario(tabela.Rows[0]);
+            var p = new SqlParameter[]
+            {
+                new SqlParameter("id", id)
+            };
+            DataTable tabela = HelperDAO.ExecutaProcSelect("sp_winery_select", p);
+            if (tabela.Rows.Count == 0)
+                return null;
+            else
+                return MontaWinery(tabela.Rows[0]);
         }
 
+        //Add procedure de Listagem
         public List<WineryViewModel> Listagem()
         {
             List<WineryViewModel> lista = new List<WineryViewModel>();
-            string sql = "select * from usuarios order by nome";
+            string sql = "select * from winery order by nome";
             DataTable tabela = HelperDAO.ExecutaSelect(sql, null);
             foreach (DataRow registro in tabela.Rows)
-                lista.Add(MontaUsuario(registro));
+                lista.Add(MontaWinery(registro));
             return lista;
         }
 
+        //Add procedure de proximoId
         public int ProximoId()
         {
-            string sql = "select isnull(max(id) + 1, 1) as 'MAIOR' from usuarios";
+            string sql = "select isnull(max(id) + 1, 1) as 'MAIOR' from winery";
             DataTable tabela = HelperDAO.ExecutaSelect(sql, null);
             return Convert.ToInt32(tabela.Rows[0]["MAIOR"]);
         }
