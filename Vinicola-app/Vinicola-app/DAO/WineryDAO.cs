@@ -18,7 +18,7 @@ namespace Vinicola_app.DAO
 
         private SqlParameter[] CriaParametros(WineryViewModel usuario)
         {
-            SqlParameter[] p = new SqlParameter[2];
+            SqlParameter[] p = new SqlParameter[8];
             p[0] = new SqlParameter("id", usuario.Id);
             p[1] = new SqlParameter("name", usuario.Name);
             p[2] = new SqlParameter("description", usuario.Description);
