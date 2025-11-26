@@ -2,6 +2,8 @@
 *.suo
 *.user
 *.csproj.user
+*.sln.idef
+*.idef.log
 
 [Bb]in/
 [Oo]bj/
