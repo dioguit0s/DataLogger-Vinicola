@@ -12,7 +12,7 @@ DHT dht11 (DHT11_PIN, DHT11);
 // Configurações - variáveis editáveis
 const char* default_SSID = "digsbionic_2G";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "Diogos1239";                // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "13.221.126.231";       // IP do Broker MQTT
+const char* default_BROKER_MQTT = "18.232.105.248";       // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
 const char* default_TOPICO_SUBSCRIBE = "/TEF/logger002/cmd";      // Tópico MQTT de escuta
 const char* default_TOPICO_PUBLISH_1 = "/TEF/logger002/attrs";    // Tópico MQTT de envio de informações para Broker
@@ -89,7 +89,7 @@ void setup() {
   lcd.init();
   lcd.backlight();
   lcd.setCursor(0, 0);
-  lcd.print("Inicialziando...");
+  lcd.print("Inicializando...");
   //writeStartMessage();
   delay(5000);
 }
@@ -211,6 +211,8 @@ void reconnectMQTT() {
     Serial.println(BROKER_MQTT);
     if (MQTT.connect(ID_MQTT)) {
       Serial.println("Conectado com sucesso ao broker MQTT!");
+     // lcd.print("Servidor conectado");
+     delay(2000)
       MQTT.subscribe(TOPICO_SUBSCRIBE);
     } else {
       Serial.println("Falha ao reconectar no broker.");
