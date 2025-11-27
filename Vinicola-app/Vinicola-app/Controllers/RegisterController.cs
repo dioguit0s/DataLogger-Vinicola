@@ -32,7 +32,7 @@ namespace Vinicola_app.Controllers
                 usuario.Nome = nome;
                 usuario.Email = email;
                 usuario.SenhaHash = senhaHash;
-                usuario.FotoProfile = "default.png"; // Define uma foto padrão para não quebrar o banco
+                usuario.FotoProfile = null; // Define uma foto padrão para não quebrar o banco
 
                 // 3. Salva no banco
                 dao.Inserir(usuario);

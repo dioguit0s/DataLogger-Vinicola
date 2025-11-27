@@ -208,18 +208,49 @@
             <li><a href="@Url.Action("Sobre", "Home")">Sobre</a></li>
         </ul>
 
-        <div class="user-profile">
-            <div class="user-info">
-                <div class="user-name">Ola, @nomeUsuario</div>
-            </div>
+        <div class="user-profile dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+               id="userDropdown"
+               data-bs-toggle="dropdown"
+               aria-expanded="false"
+               style="color: inherit;">
 
-            <div class="avatar">
-                <img src="https://via.placeholder.com/40/800020/FFFFFF?text=U" alt="User">
-            </div>
+                <div class="user-info me-2 text-end d-none d-md-block">
+                    <div class="user-name" style="font-size: 0.9rem; font-weight: bold; color: var(--primary-color);">
+                        Olá, @nomeUsuario
+                    </div>
+                    <small style="font-size: 0.75rem; color: #888;">Minha Conta</small>
+                </div>
 
-            <a href="@Url.Action("Sair", "Login")" class="btn-logout-custom" onclick="return confirm('Deseja realmente sair?');">
-                Sair
+                <div class="avatar" style="width: 45px; height: 45px; border: 2px solid var(--primary-color); border-radius: 50%; overflow: hidden;">
+                    @{
+                        // Tenta pegar imagem da sessão ou renderiza placeholder
+                        var fotoSessao = Context.Session.Get("UsuarioFoto"); // Requer extensão de sessão ou lógica similar
+                        string avatarUrl = "https://via.placeholder.com/45/800020/FFFFFF?text=" + nomeUsuario.Substring(0, 1);
+
+                        // Se você não tiver a foto na sessão, pode deixar o placeholder ou fazer uma ViewComponent
+                        if (fotoSessao != null && fotoSessao.Length > 0)
+                        {
+                            avatarUrl = "data:image/jpeg;base64," + Convert.ToBase64String(fotoSessao);
+                        }
+                    }
+                    <img src="@avatarUrl" alt="User" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
             </a>
+
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown" style="border: none; border-top: 3px solid var(--primary-color);">
+                <li>
+                    <a class="dropdown-item py-2" href="@Url.Action("Perfil", "Usuario")">
+                        <i class="fas fa-user-edit me-2" style="color: var(--primary-color);"></i> Editar Perfil
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item py-2 text-danger" href="@Url.Action("Sair", "Login")" onclick="return confirm('Deseja realmente sair?');">
+                        <i class="fas fa-sign-out-alt me-2"></i> Sair
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
 

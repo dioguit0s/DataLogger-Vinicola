@@ -17,7 +17,10 @@ namespace Vinicola_app.DAO
             p[1] = new SqlParameter("nome", usuario.Nome);
             p[2] = new SqlParameter("email", usuario.Email);
             p[3] = new SqlParameter("password_hash", usuario.SenhaHash);
-            p[4] = new SqlParameter("profile_pic", usuario.FotoProfile); 
+            p[4] = new SqlParameter("profile_pic", SqlDbType.VarBinary, -1)
+            {
+                Value = (object)usuario.FotoProfile ?? DBNull.Value
+            };
             return p;
         }
 
@@ -29,7 +32,7 @@ namespace Vinicola_app.DAO
 
         public void Alterar(UsuarioViewModel usuario)
         {
-            string sql = "update users set nome = @nome, email = @email, password_hash = @password_hash, fotoProfile = @profile_pic where id = @id";
+            string sql = "update users set nome = @nome, email = @email, password_hash = @password_hash, profile_pic = @profile_pic where id = @id";
             HelperDAO.ExecutaSQL(sql, CriaParametros(usuario));
         }
 
@@ -46,8 +49,16 @@ namespace Vinicola_app.DAO
             u.Id = Convert.ToInt32(registro["id"]);
             u.Nome = registro["nome"].ToString();
             u.Email = registro["email"].ToString();
-            u.SenhaHash = registro["senhaHash"].ToString();
-            u.FotoProfile = registro["fotoProfile"].ToString();
+            u.SenhaHash = registro["password_hash"].ToString();
+
+            // Verificação de nulo e conversão correta
+            if (registro["profile_pic"] != DBNull.Value)
+            {
+                var colType = registro.Table.Columns["profile_pic"].DataType;
+                if (colType == typeof(byte[]))
+                    u.FotoProfile = (byte[])registro["profile_pic"];
+            }
+
             return u;
         }
 
