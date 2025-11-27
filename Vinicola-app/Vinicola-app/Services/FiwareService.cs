@@ -18,28 +18,30 @@ namespace Vinicola_app.Services
             _httpClient = httpClient;
         }
 
-        public async Task<bool> CriarDispositivoFiware(string deviceId)
+        // Alterado para HttpResponseMessage para permitir leitura de erro no Controller
+        public async Task<HttpResponseMessage> CriarDispositivoFiware(string deviceId)
         {
             var urlBase = _configuration["Fiware:Url"];
-            var porta = _configuration["Fiware:PortIOT"];
+            var portaIot = _configuration["Fiware:PortIOT"];      // 4041
+            var portaBroker = _configuration["Fiware:PortBroker"]; // 1026 (Orion)
 
-            // Monta a URL: http://{{url}}:4041/iot/devices
-            var endpoint = $"http://{urlBase}:{porta}/iot/devices";
+            // -----------------------------------------------------------------
+            // PASSO 1: Criar Dispositivo no IoT Agent (Porta 4041)
+            // -----------------------------------------------------------------
+            var endpointIot = $"http://{urlBase}:{portaIot}/iot/devices";
 
-            // Cabeçalhos padrão do FIWARE (ajuste conforme sua configuração do Docker)
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("fiware-service", _configuration["Fiware:Service"]);
             _httpClient.DefaultRequestHeaders.Add("fiware-servicepath", _configuration["Fiware:ServicePath"]);
 
-            // Montagem do Payload (JSON)
-            var payloadObj = new
+            var payloadDevice = new
             {
                 devices = new[]
                 {
                     new
                     {
                         device_id = deviceId,
-                        entity_name = $"urn:ngsi-ld:Logger:{deviceId}", 
+                        entity_name = $"urn:ngsi-ld:Logger:{deviceId}",
                         entity_type = "Logger",
                         protocol = "PDI-IoTA-UltraLight",
                         transport = "MQTT",
@@ -61,21 +63,84 @@ namespace Vinicola_app.Services
                 }
             };
 
-            var jsonContent = new StringContent(
-                JsonSerializer.Serialize(payloadObj),
+            var jsonContentDevice = new StringContent(
+                JsonSerializer.Serialize(payloadDevice),
                 Encoding.UTF8,
                 "application/json");
 
             try
             {
-                var response = await _httpClient.PostAsync(endpoint, jsonContent);
-                return response.IsSuccessStatusCode;
+                // Executa a primeira chamada
+                var responseIot = await _httpClient.PostAsync(endpointIot, jsonContentDevice);
+
+                // Se falhar a primeira, retorna o erro imediatamente
+                if (!responseIot.IsSuccessStatusCode)
+                    return responseIot;
+
+                // -----------------------------------------------------------------
+                // PASSO 2: Registrar Comandos no Orion Context Broker (Porta 1026)
+                // -----------------------------------------------------------------
+                // Isso vincula os atributos de comando (provider) ao IoT Agent
+
+                var endpointBroker = $"http://{urlBase}:{portaBroker}/v2/registrations";
+
+                var payloadRegistration = new
+                {
+                    description = "Logger Commands",
+                    dataProvided = new
+                    {
+                        entities = new[]
+                        {
+                            new { id = $"urn:ngsi-ld:Logger:{deviceId}", type = "Logger" }
+                        },
+                        attrs = new[] { "TEMP_ALARM", "HUM_ALARM", "LUM_ALARM", "OFF" }
+                    },
+                    provider = new
+                    {
+                        http = new { url = $"http://{urlBase}:{portaIot}" }, // Aponta de volta para o IoT Agent (4041)
+                        legacyForwarding = true
+                    }
+                };
+
+                var jsonContentBroker = new StringContent(
+                    JsonSerializer.Serialize(payloadRegistration),
+                    Encoding.UTF8,
+                    "application/json");
+
+                // Executa a segunda chamada
+                var responseBroker = await _httpClient.PostAsync(endpointBroker, jsonContentBroker);
+
+                // Retorna o resultado final (se o passo 2 falhar, o erro será retornado aqui)
+                return responseBroker;
+            }
+            catch (Exception)
+            {
+                // Retorna um erro genérico de serviço indisponível caso a conexão caia
+                return new HttpResponseMessage(System.Net.HttpStatusCode.ServiceUnavailable)
+                {
+                    Content = new StringContent("Erro de conexão com o servidor FIWARE.")
+                };
+            }
+        }
+
+        public async Task<string> ListarDispositivos()
+        {
+            var urlBase = _configuration["Fiware:Url"];
+            var portaIot = _configuration["Fiware:PortIOT"];
+            var endpoint = $"http://{urlBase}:{portaIot}/iot/devices";
+
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("fiware-service", _configuration["Fiware:Service"]);
+            _httpClient.DefaultRequestHeaders.Add("fiware-servicepath", _configuration["Fiware:ServicePath"]);
+
+            try
+            {
+                var response = await _httpClient.GetAsync(endpoint);
+                return await response.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
             {
-                // Logar erro se necessário
-                Console.WriteLine("Erro ao conectar no FIWARE: " + ex.Message);
-                return false;
+                return $"Erro ao consultar FIWARE: {ex.Message}";
             }
         }
     }

@@ -86,11 +86,20 @@ namespace Vinicola_app.Controllers
                         // Só chamamos ao inserir um novo, pois o ID não muda na edição geralmente
                         if (!string.IsNullOrEmpty(model.DeviceId))
                         {
-                            bool sucessoFiware = await _fiwareService.CriarDispositivoFiware(model.DeviceId);
-                            if (!sucessoFiware)
+                            var responseFiware = await _fiwareService.CriarDispositivoFiware(model.DeviceId);
+
+                            // Verificamos especificamente se o código é 201 (Created)
+                            bool sucessoFiware = (int)responseFiware.StatusCode == 201;
+
+                            if (sucessoFiware)
                             {
-                                // Opcional: Adicionar um alerta que salvou no banco mas falhou no Fiware
-                                TempData["Erro"] = "Dispositivo salvo localmente, mas houve erro na comunicação com o FIWARE.";
+                                TempData["Sucesso"] = "Dispositivo cadastrado com sucesso (Local + FIWARE)!";
+                            }
+                            else
+                            {
+                                string conteudoErro = await responseFiware.Content.ReadAsStringAsync();
+
+                                TempData["Erro"] = $"Salvo localmente, mas erro no servidor FIWARE ({responseFiware.StatusCode}): {conteudoErro}";
                             }
                         }
 
@@ -155,6 +164,15 @@ namespace Vinicola_app.Controllers
             var listaVinicolas = wineryDao.Listagem();
 
             ViewBag.Vinicolas = new SelectList(listaVinicolas, "Id", "Name");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TesteFiware()
+        {
+            string resultadoJson = await _fiwareService.ListarDispositivos();
+
+            // Retorna o JSON direto na tela para facilitar a leitura
+            return Content(resultadoJson, "application/json");
         }
     }
 }
