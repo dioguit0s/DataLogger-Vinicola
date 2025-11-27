@@ -7,27 +7,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WineLogger - Dashboard</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>VinoSense - Dashboard</title>
 
     <style>
         :root {
-            --primary-color: #722F37; /* Cor de Vinho */
-            --secondary-color: #f4f4f9;
-            --text-dark: #333;
+            /* Cores extraídas do Login */
+            --primary-color: #800020; /* Vinho oficial */
+            --primary-hover: #5a0016;
+            --secondary-color: #f8f9fa; /* Fundo cinza claro */
+            --text-dark: #2c3e50;
             --text-light: #fff;
-            --sidebar-width: 250px;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
+            /* Fonte idêntica ao Login */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         body {
@@ -35,17 +33,19 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            color: #333;
         }
 
-        /* --- Navbar --- */
+        /* --- Navbar (Estilo White Card) --- */
         .navbar {
-            background-color: var(--primary-color);
-            color: var(--text-light);
+            background-color: #ffffff;
+            /* Borda inferior vinho para identidade visual */
+            border-bottom: 4px solid var(--primary-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 2rem;
-            height: 70px;
+            height: 80px; /* Um pouco mais alta para a logo */
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
@@ -53,28 +53,34 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 10px;
         }
+
+            .logo img {
+                max-height: 55px; /* Tamanho ajustado da logo */
+                width: auto;
+            }
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             list-style: none;
+            margin: 0;
         }
 
             .nav-links li a {
-                color: var(--text-light);
+                color: var(--text-dark);
                 text-decoration: none;
-                font-weight: 500;
-                transition: opacity 0.3s;
+                font-weight: 600;
+                font-size: 0.95rem;
+                transition: color 0.3s;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
 
                 .nav-links li a:hover {
-                    opacity: 0.8;
+                    color: var(--primary-color);
                 }
 
         .user-profile {
@@ -90,37 +96,49 @@
         .user-name {
             font-size: 0.9rem;
             font-weight: bold;
-        }
-
-        .user-role {
-            font-size: 0.8rem;
-            opacity: 0.8;
+            color: var(--primary-color);
         }
 
         .avatar {
             width: 40px;
             height: 40px;
-            background-color: #fff;
             border-radius: 50%;
-            display: flex; /* Placeholder para imagem */
+            overflow: hidden;
+            border: 2px solid var(--primary-color);
+            display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary-color);
-            font-weight: bold;
         }
+
+            .avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
         .btn-logout {
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.5);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
+            /* Botão outline para combinar com fundo branco */
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 6px 15px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
         }
 
             .btn-logout:hover {
-                background: rgba(255,255,255,0.1);
+                background-color: var(--primary-color);
+                color: white;
+                text-decoration: none;
+            }
+
+            .btn-logout a {
+                text-decoration: none;
+                color: inherit; /* Herda a cor do botão pai */
             }
 
         /* --- Main Content --- */
@@ -131,17 +149,26 @@
             width: 100%;
         }
 
+        .section-title {
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            font-weight: 700;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
         /* --- Filters Bar --- */
         .filters-bar {
             background: white;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: var(--shadow);
             margin-bottom: 2rem;
             display: flex;
             gap: 20px;
             align-items: end;
             flex-wrap: wrap;
+            border: 1px solid #eee;
         }
 
         .filter-group {
@@ -151,28 +178,36 @@
         }
 
             .filter-group label {
-                font-size: 0.85rem;
-                color: #666;
+                font-size: 0.75rem;
+                color: #888;
                 font-weight: bold;
+                text-transform: uppercase;
             }
 
             .filter-group select {
                 padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
                 min-width: 200px;
                 background-color: #fff;
+                color: #495057;
+                font-size: 0.9rem;
             }
 
         .btn-filter {
-            padding: 10px 20px;
-            background-color: var(--primary-color);
+            padding: 10px 25px;
+            background-color: var(--text-dark); /* Botão escuro para contraste elegante */
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            transition: background 0.2s;
         }
+
+            .btn-filter:hover {
+                background-color: var(--primary-color); /* Fica vinho ao passar o mouse */
+            }
 
         /* --- KPI Cards --- */
         .kpi-grid {
@@ -185,38 +220,46 @@
         .kpi-card {
             background: white;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: var(--shadow);
-            border-left: 5px solid var(--primary-color);
+            border-left: 5px solid var(--primary-color); /* Mantém o padrão */
+            transition: transform 0.2s;
         }
 
+            .kpi-card:hover {
+                transform: translateY(-3px);
+            }
+
             .kpi-card h3 {
-                font-size: 0.9rem;
-                color: #666;
+                font-size: 0.85rem;
+                color: #6c757d;
                 margin-bottom: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
 
         .kpi-value {
-            font-size: 2rem;
-            font-weight: bold;
+            font-size: 2.2rem;
+            font-weight: 700;
             color: var(--text-dark);
         }
 
         .kpi-status {
             font-size: 0.8rem;
-            margin-top: 5px;
+            margin-top: 8px;
+            font-weight: 500;
         }
 
         .status-ok {
-            color: green;
+            color: #27ae60;
         }
 
         .status-warn {
-            color: orange;
+            color: #f39c12;
         }
 
         .status-danger {
-            color: red;
+            color: #c0392b;
         }
 
         /* --- Charts Grid --- */
@@ -229,7 +272,7 @@
         .chart-container {
             background: white;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: var(--shadow);
             position: relative;
             height: 400px;
@@ -240,54 +283,58 @@
             grid-column: 1 / -1;
         }
 
-        h2.section-title {
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
+        /* Responsividade */
+        @@media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
 
-        {
-            flex-direction: column;
-            height: auto;
-            padding: 1rem;
-            gap: 1rem;
-        }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
 
-        .nav-links {
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+            .logo img {
+                max-height: 45px;
+            }
 
-        .charts-grid {
-            grid-template-columns: 1fr;
-        }
-
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
     <nav class="navbar">
         <div class="logo">
-            <span>🍷 WineLogger</span>
+            <img src="@Url.Content("~/files/qualivine-logo.png")" alt="Qualivine">
         </div>
+
         <ul class="nav-links">
-            <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+            <li><a href="@Url.Action("Index", "Home")">Dashboard</a></li>
             <li><a href="@Url.Action("Index", "Winery")">Vinícolas</a></li>
-            <li><a href="@Url.Action("Index","DataLogger")">DataLoggers</a></li>
+            <li><a href="@Url.Action("Index", "DataLogger")">DataLoggers</a></li>
             <li><a href="@Url.Action("Sobre", "Home")">Sobre</a></li>
         </ul>
+
         <div class="user-profile">
             <div class="user-info">
-                <div class="user-name">@Context.Session.GetString("UsuarioNome")</div>
+                <div class="user-name">Ola, @Context.Session.GetString("UsuarioNome")</div>
             </div>
+
             <div class="avatar">
-                <img src="https://via.placeholder.com/40" alt="JS" style="border-radius: 50%;">
+                <img src="https://via.placeholder.com/40/800020/FFFFFF?text=User" alt="User">
             </div>
-            <button class="btn-logout" onclick="alert('Logout acionado')">
-                <a href="@Url.Action("Sair", "Login")">
-                    Sair
-                </a>
-            </button>
+
+            <a href="@Url.Action("Sair", "Login")" class="btn-logout">
+                Sair
+            </a>
         </div>
     </nav>
 
@@ -324,29 +371,29 @@
                 </select>
             </div>
 
-            <button class="btn-filter" onclick="updateDashboard()">Atualizar</button>
+            <button class="btn-filter" onclick="updateDashboard()">Atualizar Dados</button>
         </div>
 
         <div class="kpi-grid">
-            <div class="kpi-card" style="border-left-color: #ff6384;">
-                <h3>Temperatura Média (Atual)</h3>
-                <div class="kpi-value">14.5 °C</div>
-                <div class="kpi-status status-ok">Dentro do esperado</div>
+            <div class="kpi-card" style="border-left-color: #800020;">
+                <h3>Temperatura Média</h3>
+                <div class="kpi-value">-- °C</div>
+                <div class="kpi-status status-ok">Aguardando dados...</div>
             </div>
-            <div class="kpi-card" style="border-left-color: #36a2eb;">
-                <h3>Umidade Relativa (Atual)</h3>
-                <div class="kpi-value">72%</div>
-                <div class="kpi-status status-warn">Levemente alta</div>
+            <div class="kpi-card" style="border-left-color: #2c3e50;">
+                <h3>Umidade Relativa</h3>
+                <div class="kpi-value">-- %</div>
+                <div class="kpi-status status-warn">Aguardando dados...</div>
             </div>
-            <div class="kpi-card" style="border-left-color: #ffce56;">
-                <h3>Luminosidade (Atual)</h3>
-                <div class="kpi-value">120 Lux</div>
-                <div class="kpi-status status-ok">Ideal</div>
+            <div class="kpi-card" style="border-left-color: #f39c12;">
+                <h3>Luminosidade</h3>
+                <div class="kpi-value">-- Lux</div>
+                <div class="kpi-status status-ok">Aguardando dados...</div>
             </div>
-            <div class="kpi-card" style="border-left-color: #4bc0c0;">
-                <h3>Sensores Ativos</h3>
-                <div class="kpi-value">3/3</div>
-                <div class="kpi-status status-ok">Conexão estável</div>
+            <div class="kpi-card" style="border-left-color: #27ae60;">
+                <h3>Status do Sistema</h3>
+                <div class="kpi-value">Online</div>
+                <div class="kpi-status status-ok">Conexão com FIWARE OK</div>
             </div>
         </div>
 
@@ -366,28 +413,26 @@
     </div>
 
     <script>
-        // --- MOCK DATA GENERATORS ---
-        // Função para gerar horários simulados
+        // --- FUNÇÕES DE DADOS SIMULADOS (MOCK) ---
         function generateLabels(count) {
             const labels = [];
             const now = new Date();
             for (let i = 0; i < count; i++) {
-                const date = new Date(now.getTime() - (i * 60 * 60 * 1000)); // 1 ponto por hora para simplificar o gráfico inicial
+                const date = new Date(now.getTime() - (i * 60 * 60 * 1000));
                 labels.unshift(`${date.getHours()}:00`);
             }
             return labels;
         }
 
-        // Função para gerar dados numéricos aleatórios dentro de um range
         function generateData(count, min, max) {
             return Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1) + min));
         }
 
-        const labels = generateLabels(12); // Últimas 12 horas
+        const labels = generateLabels(12);
 
         // --- CONFIGURAÇÃO CHART.JS ---
 
-        // 1. Gráfico de Temperatura e Umidade (Linha mista)
+        // 1. Gráfico de Temperatura e Umidade (Cores ajustadas para o tema)
         const ctxTempHum = document.getElementById('tempHumidityChart').getContext('2d');
         const tempHumidityChart = new Chart(ctxTempHum, {
             type: 'line',
@@ -396,19 +441,23 @@
                 datasets: [
                     {
                         label: 'Temperatura (°C)',
-                        data: generateData(12, 12, 16), // Entre 12 e 16 graus
-                        borderColor: '#ff6384',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        data: generateData(12, 12, 16),
+                        borderColor: '#800020', // VINHO (Tema)
+                        backgroundColor: 'rgba(128, 0, 32, 0.1)',
                         yAxisID: 'y',
-                        tension: 0.4
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 3
                     },
                     {
                         label: 'Umidade (%)',
-                        data: generateData(12, 60, 80), // Entre 60 e 80%
-                        borderColor: '#36a2eb',
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        data: generateData(12, 60, 80),
+                        borderColor: '#2c3e50', // Azul Escuro (Tema)
+                        backgroundColor: 'rgba(44, 62, 80, 0.1)',
                         yAxisID: 'y1',
-                        tension: 0.4
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 3
                     }
                 ]
             },
@@ -420,17 +469,16 @@
                     intersect: false,
                 },
                 plugins: {
-                    title: {
-                        display: true,
-                        text: 'Histórico de Temperatura e Umidade (Últimas 12h)'
-                    }
+                    title: { display: true, text: 'Histórico de Monitoramento (12h)', font: { size: 16 } },
+                    legend: { position: 'top' }
                 },
                 scales: {
                     y: {
                         type: 'linear',
                         display: true,
                         position: 'left',
-                        title: { display: true, text: 'Temperatura (°C)' }
+                        title: { display: true, text: 'Temperatura (°C)' },
+                        grid: { color: '#f0f0f0' }
                     },
                     y1: {
                         type: 'linear',
@@ -438,12 +486,15 @@
                         position: 'right',
                         grid: { drawOnChartArea: false },
                         title: { display: true, text: 'Umidade (%)' }
+                    },
+                    x: {
+                        grid: { display: false }
                     }
                 }
             }
         });
 
-        // 2. Gráfico de Luminosidade (Área)
+        // 2. Gráfico de Luminosidade
         const ctxLux = document.getElementById('luxChart').getContext('2d');
         const luxChart = new Chart(ctxLux, {
             type: 'line',
@@ -452,8 +503,8 @@
                 datasets: [{
                     label: 'Luminosidade (Lux)',
                     data: generateData(12, 100, 500),
-                    borderColor: '#ffce56',
-                    backgroundColor: 'rgba(255, 206, 86, 0.4)',
+                    borderColor: '#f39c12',
+                    backgroundColor: 'rgba(243, 156, 18, 0.2)',
                     fill: true,
                     tension: 0.3
                 }]
@@ -463,11 +514,15 @@
                 maintainAspectRatio: false,
                 plugins: {
                     title: { display: true, text: 'Variação de Luminosidade' }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { grid: { color: '#f0f0f0' } }
                 }
             }
         });
 
-        // 3. Gráfico Comparativo (Barra)
+        // 3. Gráfico Comparativo
         const ctxComp = document.getElementById('sensorComparisonChart').getContext('2d');
         const sensorComparisonChart = new Chart(ctxComp, {
             type: 'bar',
@@ -477,9 +532,9 @@
                     label: 'Temp Média Hoje',
                     data: [14.2, 15.1, 13.8],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(75, 192, 192, 0.7)'
+                        'rgba(128, 0, 32, 0.8)', // Vinho
+                        'rgba(44, 62, 80, 0.8)', // Escuro
+                        'rgba(243, 156, 18, 0.8)' // Laranja
                     ]
                 }]
             },
@@ -487,56 +542,68 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    title: { display: true, text: 'Comparativo entre Sensores' }
+                    title: { display: true, text: 'Comparativo entre Sensores' },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { grid: { color: '#f0f0f0' } },
+                    x: { grid: { display: false } }
                 }
             }
         });
 
+        // --- LÓGICA DE ATUALIZAÇÃO ---
         async function updateDashboard() {
-            // Pega o device selecionado no dropdown
             const deviceId = document.getElementById('sensorSelect').value;
             const btn = document.querySelector('.btn-filter');
+            const originalText = btn.innerText;
+
             btn.innerText = "Carregando...";
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
 
             try {
-                // Chama nosso Controller C#
+                // Chama Controller C#
                 const response = await fetch(`@Url.Action("ObterDadosDashboard", "Home")?deviceId=${deviceId}`);
+
+                if (!response.ok) throw new Error("Falha na requisição");
+
                 const data = await response.json();
 
-                // 1. Atualiza KPI Cards
+                // 1. Atualiza KPI Cards (Seletores por índice)
                 const cards = document.querySelectorAll('.kpi-value');
-                cards[0].innerText = data.kpi.temp.toFixed(1) + ' °C'; // Temperatura
-                cards[1].innerText = data.kpi.hum.toFixed(1) + '%';    // Umidade
-                cards[2].innerText = data.kpi.lum.toFixed(0) + ' Lux'; // Luminosidade
+                if(data.kpi) {
+                    cards[0].innerText = data.kpi.temp.toFixed(1) + ' °C';
+                    cards[1].innerText = data.kpi.hum.toFixed(1) + '%';
+                    cards[2].innerText = data.kpi.lum.toFixed(0) + ' Lux';
+                }
 
                 // 2. Atualiza Gráfico Temp/Hum
-                // Se o histórico vier vazio, mantemos arrays vazios para não quebrar
-                tempHumidityChart.data.datasets[0].data = data.charts.temp || [];
-                tempHumidityChart.data.datasets[1].data = data.charts.hum || [];
+                if(data.charts) {
+                    tempHumidityChart.data.datasets[0].data = data.charts.temp || [];
+                    tempHumidityChart.data.datasets[1].data = data.charts.hum || [];
+                    tempHumidityChart.update();
 
-                // Ajusta labels dinamicamente se necessário (quantidade de pontos)
-                // Aqui mantemos as labels fixas de hora por enquanto, mas idealmente viriam do backend
-                tempHumidityChart.update();
-
-                // 3. Atualiza Gráfico Lux
-                luxChart.data.datasets[0].data = data.charts.lum || [];
-                luxChart.update();
+                    // 3. Atualiza Gráfico Lux
+                    luxChart.data.datasets[0].data = data.charts.lum || [];
+                    luxChart.update();
+                }
 
                 console.log("Dados atualizados do FIWARE:", data);
 
             } catch (error) {
                 console.error("Erro ao buscar dados:", error);
-                alert("Erro ao conectar com o servidor.");
+                // alert("Erro ao conectar com o servidor. Verifique o console.");
             } finally {
-                btn.innerText = "Atualizar";
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.style.opacity = "1";
             }
         }
 
-        // Carrega os dados assim que a página abre
         document.addEventListener("DOMContentLoaded", () => {
             updateDashboard();
         });
-
     </script>
 </body>
 </html>
