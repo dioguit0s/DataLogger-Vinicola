@@ -16,26 +16,26 @@ namespace Vinicola_app.DAO
             p[0] = new SqlParameter("id", usuario.Id);
             p[1] = new SqlParameter("nome", usuario.Nome);
             p[2] = new SqlParameter("email", usuario.Email);
-            p[3] = new SqlParameter("senhaHash", usuario.SenhaHash);
-            p[4] = new SqlParameter("fotoProfile", usuario.FotoProfile); 
+            p[3] = new SqlParameter("password_hash", usuario.SenhaHash);
+            p[4] = new SqlParameter("profile_pic", usuario.FotoProfile); 
             return p;
         }
 
         public void Inserir(UsuarioViewModel usuario)
         {
-            string sql = "insert into usuarios(id, nome, email, senhaHash, fotoProfile) values (@id, @nome, @email, @password_hash, @profile_pic)";
+            string sql = "insert into users(id, nome, email, password_hash, profile_pic) values (@id, @nome, @email, @password_hash, @profile_pic)";
             HelperDAO.ExecutaSQL(sql, CriaParametros(usuario));
         }
 
         public void Alterar(UsuarioViewModel usuario)
         {
-            string sql = "update usuarios set nome = @nome, email = @email, senhaHash = @password_hash, fotoProfile = @profile_pic where id = @id";
+            string sql = "update users set nome = @nome, email = @email, password_hash = @password_hash, fotoProfile = @profile_pic where id = @id";
             HelperDAO.ExecutaSQL(sql, CriaParametros(usuario));
         }
 
         public void Excluir(int id)
         {
-            string sql = "delete from usuarios where id = @id";
+            string sql = "delete from users where id = @id";
             SqlParameter[] p = { new SqlParameter("id", id) };
             HelperDAO.ExecutaSQL(sql, p);
         }
@@ -53,7 +53,7 @@ namespace Vinicola_app.DAO
 
         public UsuarioViewModel Consulta(int id)
         {
-            string sql = "select * from usuarios where id = @id";
+            string sql = "select * from users where id = @id";
             SqlParameter[] p = { new SqlParameter("id", id) };
             DataTable tabela = HelperDAO.ExecutaSelect(sql, p);
             return tabela.Rows.Count == 0 ? null : MontaUsuario(tabela.Rows[0]);
@@ -62,7 +62,7 @@ namespace Vinicola_app.DAO
         public List<UsuarioViewModel> Listagem()
         {
             List<UsuarioViewModel> lista = new List<UsuarioViewModel>();
-            string sql = "select * from usuarios order by nome";
+            string sql = "select * from users order by nome";
             DataTable tabela = HelperDAO.ExecutaSelect(sql, null);
             foreach (DataRow registro in tabela.Rows)
                 lista.Add(MontaUsuario(registro));
@@ -71,7 +71,7 @@ namespace Vinicola_app.DAO
 
         public int ProximoId()
         {
-            string sql = "select isnull(max(id) + 1, 1) as 'MAIOR' from usuarios";
+            string sql = "select isnull(max(id) + 1, 1) as 'MAIOR' from users";
             DataTable tabela = HelperDAO.ExecutaSelect(sql, null);
             return Convert.ToInt32(tabela.Rows[0]["MAIOR"]);
         }
@@ -85,7 +85,7 @@ namespace Vinicola_app.DAO
             {
                 // 2. Criar a instrução SQL
                 // NOTA: Verifique se o nome da coluna no banco é 'Senha' ou 'SenhaHash'
-                string sql = "SELECT Id, Nome, Email, DataNascimento, CPF, SenhaHash FROM Usuarios WHERE Email = @email AND SenhaHash = @senha";
+                string sql = "SELECT Id, Nome, Email, DataNascimento, CPF, SenhaHash FROM users WHERE Email = @email AND SenhaHash = @senha";
 
                 using (SqlCommand comando = new SqlCommand(sql, conexao))
                 {
