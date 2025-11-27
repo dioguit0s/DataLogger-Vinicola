@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         //Adicionei o set, dps eu explico
+        public string DeviceId { get; set; } //id do dispositivo no fiware
         public int WineryId { get; set; }
         //Adicionei o set 
         public int UserId { get; set; }

@@ -1,0 +1,74 @@
+﻿@model Vinicola_app.Models.DataLoggerViewModel
+
+@{
+    ViewData["Title"] = ViewBag.Operacao == "I" ? "Novo Data Logger" : "Editar Data Logger";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">@ViewData["Title"]</h4>
+            </div>
+            <div class="card-body">
+
+                @if (ViewBag.Erro != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Erro!</strong> @ViewBag.Erro
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-action="Salvar" method="post">
+                    <input type="hidden" name="operacao" value="@ViewBag.Operacao" />
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UserId" />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="DeviceId" class="control-label fw-bold">ID do Dispositivo (FIWARE)</label>
+                        <input asp-for="DeviceId" class="form-control" placeholder="Ex: logger002" />
+                        <span asp-validation-for="DeviceId" class="text-danger"></span>
+                        @if (ViewBag.Operacao == "A")
+                        {
+                            <small class="text-muted">Nota: Alterar este ID não atualiza automaticamente o dispositivo no servidor FIWARE.</small>
+                        }
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="WineryId" class="control-label fw-bold">Vinícola</label>
+                        <select asp-for="WineryId" asp-items="ViewBag.Vinicolas" class="form-select">
+                            <option value="">-- Selecione uma Vinícola --</option>
+                        </select>
+                        <span asp-validation-for="WineryId" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label asp-for="TempMin" class="control-label fw-bold">Temp. Mínima (°C)</label>
+                            <input asp-for="TempMin" class="form-control" type="number" step="0.1" />
+                            <span asp-validation-for="TempMin" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 form-group mb-3">
+                            <label asp-for="TempMax" class="control-label fw-bold">Temp. Máxima (°C)</label>
+                            <input asp-for="TempMax" class="form-control" type="number" step="0.1" />
+                            <span asp-validation-for="TempMax" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-4 d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

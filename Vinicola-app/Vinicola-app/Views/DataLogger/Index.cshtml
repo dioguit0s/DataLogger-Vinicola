@@ -1,0 +1,156 @@
+﻿@model List<Vinicola_app.Models.DataLoggerViewModel>
+
+@{
+    ViewData["Title"] = "Sensores (Data Loggers)";
+}
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .page-header h2 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    /* Card específico para DataLogger */
+    .logger-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border-left: 5px solid #27ae60; /* Verde para diferenciar */
+        padding: 20px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .logger-card:hover {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .logger-info {
+        display: flex;
+        align-items: flex-start; /* Alinhado ao topo para listas de detalhes */
+        gap: 20px;
+        flex: 1;
+        min-width: 250px;
+    }
+
+    .logger-info .icon {
+        font-size: 36px;
+        color: #27ae60;
+        padding-top: 5px;
+    }
+
+    .logger-details h4 {
+        margin: 0 0 5px 0;
+        color: #2c3e50;
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .logger-details .meta-info {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+
+    /* Badges para as medidas */
+    .badge-medida {
+        display: inline-block;
+        font-size: 0.8rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        color: #555;
+    }
+
+    .logger-actions {
+        display: flex;
+        gap: 10px;
+    }
+</style>
+
+<div class="page-header">
+    <h2>@ViewData["Title"]</h2>
+    <a asp-action="Create" class="btn btn-success btn-lg">
+        📡 Novo Data Logger
+    </a>
+</div>
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Erro"]
+    </div>
+}
+
+<div>
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            Nenhum Data Logger cadastrado. Clique no botão acima para adicionar.
+        </div>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            <div class="logger-card">
+                <div class="logger-info">
+                    <div class="icon">📡</div>
+                    <div class="logger-details">
+                        <h4>
+                            Logger #@item.Id
+                            @if (item.GetType().GetProperty("DeviceId") != null)
+                            {
+                                <span class="text-muted">(@item.GetType().GetProperty("DeviceId")?.GetValue(item, null))</span>
+                            }
+                        </h4>
+
+                        <p class="meta-info">
+                            <strong>Vinícola ID:</strong> @item.WineryId
+                        </p>
+
+                        <div>
+                            <span class="badge-medida" title="Temperatura">
+                                🌡️ @item.TempMin°C a @item.TempMax°C
+                            </span>
+                            <span class="badge-medida" title="Umidade">
+                                💧 @item.HumidMin% a @item.HumidMax%
+                            </span>
+                            <span class="badge-medida" title="Luminosidade">
+                                💡 @item.LumMin Lx a @item.LumMax Lx
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="logger-actions">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info text-white">
+                        Editar
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"
+                       onclick="return confirm('Tem certeza que deseja excluir o logger #@item.Id?');">
+                        Excluir
+                    </a>
+                </div>
+            </div>
+        }
+    }
+</div>

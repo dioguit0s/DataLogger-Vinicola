@@ -45,7 +45,7 @@ CREATE TABLE dataLogger
     
     winery_id INT NOT NULL, 
     user_id INT NOT NULL, 
-    
+    device_id VARCHAR(100) NOT NULL UNIQUE,
     temp_min DECIMAL(10,2) NOT NULL,
     temp_max DECIMAL(10,2) NOT NULL,
     lum_min DECIMAL(10,2) NOT NULL,

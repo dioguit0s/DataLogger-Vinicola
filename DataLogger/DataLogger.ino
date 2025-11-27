@@ -12,7 +12,7 @@ DHT dht11 (DHT11_PIN, DHT11);
 // Configurações - variáveis editáveis
 const char* default_SSID = "digsbionic_2G";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "Diogos1239";                // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "13.221.126.231";       // IP do Broker MQTT
+const char* default_BROKER_MQTT = "54.83.65.15";       // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
 const char* default_TOPICO_SUBSCRIBE = "/TEF/logger002/cmd";      // Tópico MQTT de escuta
 const char* default_TOPICO_PUBLISH_1 = "/TEF/logger002/attrs";    // Tópico MQTT de envio de informações para Broker
@@ -82,15 +82,13 @@ void initMQTT() {
 void setup() {
   dht11.begin();//inicializar o sensor dht
   initRGB();
- // initOutput();
   initSerial();
   initWiFi();
   initMQTT();
   lcd.init();
   lcd.backlight();
   lcd.setCursor(0, 0);
-  lcd.print("Inicialziando...");
-  //writeStartMessage();
+  lcd.print("Inicializando...");
   delay(5000);
 }
 
@@ -180,20 +178,6 @@ void VerificaConexoesWiFIEMQTT() {
     reconnectMQTT();
   reconectWiFi();
 }
-
-//  void EnviaEstadoOutputMQTT() {
-//    if (EstadoSaida == '1') {
-//      MQTT.publish(TOPICO_PUBLISH_1, "s|on");
-//      Serial.println("- Led Ligado");
-//    }
-//  
-//    if (EstadoSaida == '0') {
-//      MQTT.publish(TOPICO_PUBLISH_1, "s|off");
-//      Serial.println("- Led Desligado");
-//    }
-//    Serial.println("- Estado do LED onboard enviado ao broker!");
-//    delay(1000);
-//  }
 
 void initRGB() {
   pinMode(PIN_LED_RED, OUTPUT);
