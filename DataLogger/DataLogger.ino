@@ -237,8 +237,8 @@ void writeStartMessage(){
 
 void writeSensorValues(){
   String lumValue = String(map(analogRead(35), 0, 4095, 0, 100));
-  String humValue = String(dht11.readHumidity());
-  String tempValue = String(dht11.readTemperature());
+  String humValue = String(int(dht11.readHumidity()));
+  String tempValue = String(int(dht11.readTemperature()));
 
   lcd.clear();
   lcd.setCursor(0, 0);
