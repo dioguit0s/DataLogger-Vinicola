@@ -3,9 +3,7 @@
     public class DataLoggerViewModel
     {
         public int Id { get; set; }
-        //Adicionei o set, dps eu explico
         public int WineryId { get; set; }
-        //Adicionei o set 
         public int UserId { get; set; }
         public double TempMin { get; set; }
         public double TempMax { get; set; }
