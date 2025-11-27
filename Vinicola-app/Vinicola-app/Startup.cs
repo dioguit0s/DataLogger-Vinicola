@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Vinicola_app.Services;
 
 namespace Vinicola_app
 {
@@ -22,6 +23,8 @@ namespace Vinicola_app
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            // Adiciona o suporte a HttpClient e o nosso Serviço
+            services.AddHttpClient<FiwareService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
