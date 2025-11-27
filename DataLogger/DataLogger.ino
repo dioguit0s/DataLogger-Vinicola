@@ -12,13 +12,13 @@ DHT dht11 (DHT11_PIN, DHT11);
 // Configurações - variáveis editáveis
 const char* default_SSID = "digsbionic_2G";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "Diogos1239";                // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "54.83.65.15";       // IP do Broker MQTT
+const char* default_BROKER_MQTT = "54.242.94.244";       // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
-const char* default_TOPICO_SUBSCRIBE = "/TEF/logger002/cmd";      // Tópico MQTT de escuta
-const char* default_TOPICO_PUBLISH_1 = "/TEF/logger002/attrs";    // Tópico MQTT de envio de informações para Broker
-const char* default_TOPICO_PUBLISH_2 = "/TEF/logger002/attrs/l";  // Tópico MQTT de envio de informações para Broker de luminosidade
-const char* default_TOPICO_PUBLISH_3 = "/TEF/logger002/attrs/t";  // Tópico MQTT de envio de informações para Broker de humidade
-const char* default_TOPICO_PUBLISH_4 = "/TEF/logger002/attrs/h";  // Tópico MQTT de envio de informações para Broker de temperatura
+const char* default_TOPICO_SUBSCRIBE = "/TEF/logger007/cmd";      // Tópico MQTT de escuta
+const char* default_TOPICO_PUBLISH_1 = "/TEF/logger007/attrs";    // Tópico MQTT de envio de informações para Broker
+const char* default_TOPICO_PUBLISH_2 = "/TEF/logger007/attrs/l";  // Tópico MQTT de envio de informações para Broker de luminosidade
+const char* default_TOPICO_PUBLISH_3 = "/TEF/logger007/attrs/t";  // Tópico MQTT de envio de informações para Broker de humidade
+const char* default_TOPICO_PUBLISH_4 = "/TEF/logger007/attrs/h";  // Tópico MQTT de envio de informações para Broker de temperatura
 
 const char* default_ID_MQTT = "fiware_001";                     // ID MQTT
 
@@ -36,7 +36,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 //Ligar SDA no pino 21
 
 // Declaração da variável para o prefixo do tópico
-const char* topicPrefix = "logger002";
+const char* topicPrefix = "logger007";
 
 // Variáveis para configurações editáveis
 char* SSID = const_cast<char*>(default_SSID);
@@ -196,6 +196,8 @@ void reconnectMQTT() {
     if (MQTT.connect(ID_MQTT)) {
       Serial.println("Conectado com sucesso ao broker MQTT!");
       MQTT.subscribe(TOPICO_SUBSCRIBE);
+      Serial.println("Enviando pacote de inicialização para criar entidade...");
+      MQTT.publish(default_TOPICO_PUBLISH_1, "s|boot|t|0|h|0|l|0");
     } else {
       Serial.println("Falha ao reconectar no broker.");
       Serial.println("Haverá nova tentativa de conexão em 2s");
@@ -234,7 +236,7 @@ void writeStartMessage(){
 }
 
 void writeSensorValues(){
-  String lumValue = String(analogRead(35));
+  String lumValue = String(map(analogRead(35), 0, 4095, 0, 100));
   String humValue = String(dht11.readHumidity());
   String tempValue = String(dht11.readTemperature());
 
@@ -242,5 +244,5 @@ void writeSensorValues(){
   lcd.setCursor(0, 0);
   lcd.print("Hum  Temp  Lum");
   lcd.setCursor(0, 1);
-  lcd.print(humValue + "  " + tempValue + "  " + lumValue);
+  lcd.print(humValue + "  " + tempValue + "   " + lumValue);
 } 

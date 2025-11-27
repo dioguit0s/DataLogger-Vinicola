@@ -40,7 +40,7 @@ namespace Vinicola_app.Services
                 {
                     new
                     {
-                        device_id = deviceId,
+                        device_id = "logger" + deviceId,
                         entity_name = $"urn:ngsi-ld:Logger:{deviceId}",
                         entity_type = "Logger",
                         protocol = "PDI-IoTA-UltraLight",

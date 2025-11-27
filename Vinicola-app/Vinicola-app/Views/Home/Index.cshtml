@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Vinicola_app.Models.DashboardViewModel
+@using Microsoft.AspNetCore.Http @{
     Layout = null;
 }
 
@@ -10,7 +11,7 @@
     <title>WineLogger - Dashboard</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -92,17 +93,12 @@
             font-weight: bold;
         }
 
-        .user-role {
-            font-size: 0.8rem;
-            opacity: 0.8;
-        }
-
         .avatar {
             width: 40px;
             height: 40px;
             background-color: #fff;
             border-radius: 50%;
-            display: flex; /* Placeholder para imagem */
+            display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary-color);
@@ -121,6 +117,11 @@
 
             .btn-logout:hover {
                 background: rgba(255,255,255,0.1);
+            }
+
+            .btn-logout a {
+                color: white;
+                text-decoration: none;
             }
 
         /* --- Main Content --- */
@@ -174,6 +175,11 @@
             font-weight: bold;
         }
 
+            .btn-filter:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+
         /* --- KPI Cards --- */
         .kpi-grid {
             display: grid;
@@ -187,7 +193,8 @@
             padding: 1.5rem;
             border-radius: 10px;
             box-shadow: var(--shadow);
-            border-left: 5px solid var(--primary-color);
+            border-left: 5px solid #ccc;
+            transition: border-color 0.3s;
         }
 
             .kpi-card h3 {
@@ -205,6 +212,9 @@
         .kpi-status {
             font-size: 0.8rem;
             margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .status-ok {
@@ -217,6 +227,10 @@
 
         .status-danger {
             color: red;
+        }
+
+        .text-muted {
+            color: #999;
         }
 
         /* --- Charts Grid --- */
@@ -245,23 +259,24 @@
             color: var(--primary-color);
         }
 
-        {
-            flex-direction: column;
-            height: auto;
-            padding: 1rem;
-            gap: 1rem;
-        }
+                /* Responsividade */
+                @@media (max-width: 768px) {
+                    .navbar {
+                        flex-direction: column;
+                        height: auto;
+                        padding: 1rem;
+                        gap: 1rem;
+                    }
 
-        .nav-links {
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+                    .nav-links {
+                        flex-wrap: wrap;
+                        justify-content: center;
+                    }
 
-        .charts-grid {
-            grid-template-columns: 1fr;
-        }
-
-        }
+                    .charts-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
     </style>
 </head>
 <body>
@@ -273,7 +288,7 @@
         <ul class="nav-links">
             <li><a href="@Url.Action("Index", "Home")">Home</a></li>
             <li><a href="@Url.Action("Index", "Winery")">Vinícolas</a></li>
-            <li><a href="@Url.Action("Index","DataLogger")">DataLoggers</a></li>
+            <li><a href="@Url.Action("Index", "DataLogger")">DataLoggers</a></li>
             <li><a href="@Url.Action("Sobre", "Home")">Sobre</a></li>
         </ul>
         <div class="user-profile">
@@ -281,12 +296,10 @@
                 <div class="user-name">@Context.Session.GetString("UsuarioNome")</div>
             </div>
             <div class="avatar">
-                <img src="https://via.placeholder.com/40" alt="JS" style="border-radius: 50%;">
+                <img src="https://via.placeholder.com/40" alt="User" style="border-radius: 50%;">
             </div>
-            <button class="btn-logout" onclick="alert('Logout acionado')">
-                <a href="@Url.Action("Sair", "Login")">
-                    Sair
-                </a>
+            <button class="btn-logout">
+                <a href="@Url.Action("Sair", "Login")">Sair</a>
             </button>
         </div>
     </nav>
@@ -300,27 +313,33 @@
                 <label for="vinicolaSelect">Vinícola</label>
                 <select id="vinicolaSelect">
                     <option value="all">Todas as Vinícolas</option>
-                    <option value="1">Vinícola Santa Helena</option>
-                    <option value="2">Vinícola Vale Verde</option>
+                    @if (Model != null && Model.Vinicolas.Any())
+                    {
+                        foreach (var winery in Model.Vinicolas)
+                        {
+                            <option value="@winery.Id">@winery.Name</option>
+                        }
+                    }
                 </select>
             </div>
 
             <div class="filter-group">
                 <label for="sensorSelect">Datalogger</label>
-                <select id="sensorSelect">
-                    <option value="all">Todos os Sensores</option>
-                    <option value="DL-01">DL-01 (Adega Principal)</option>
-                    <option value="DL-02">DL-02 (Armazenamento)</option>
-                    <option value="DL-03">DL-03 (Fermentação)</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label for="periodoSelect">Período de Análise</label>
-                <select id="periodoSelect">
-                    <option value="hour">Última Hora (Tempo Real)</option>
-                    <option value="day" selected>Últimas 24 Horas</option>
-                    <option value="week">Últimos 7 Dias</option>
+                <select id="sensorSelect" onchange="updateDashboard()">
+                    @if (Model == null || !Model.Loggers.Any())
+                    {
+                        <option value="">Nenhum sensor cadastrado</option>
+                    }
+                    else
+                    {
+                        foreach (var logger in Model.Loggers)
+                        {
+                            <option value="@logger.DeviceId">
+                                @logger.DeviceId
+                                @(!string.IsNullOrEmpty(logger.WineryId.ToString()) ? $"(Vinícola #{logger.WineryId})" : "")
+                            </option>
+                        }
+                    }
                 </select>
             </div>
 
@@ -328,25 +347,35 @@
         </div>
 
         <div class="kpi-grid">
-            <div class="kpi-card" style="border-left-color: #ff6384;">
+
+            <div class="kpi-card" id="card-temp" style="border-left-color: #ccc;">
                 <h3>Temperatura Média (Atual)</h3>
-                <div class="kpi-value">14.5 °C</div>
-                <div class="kpi-status status-ok">Dentro do esperado</div>
+                <div class="kpi-value">0.0 °C</div>
+                <div class="kpi-status text-muted">
+                    <i class="fas fa-sync fa-spin"></i> Sincronizando...
+                </div>
             </div>
-            <div class="kpi-card" style="border-left-color: #36a2eb;">
+
+            <div class="kpi-card" id="card-hum" style="border-left-color: #ccc;">
                 <h3>Umidade Relativa (Atual)</h3>
-                <div class="kpi-value">72%</div>
-                <div class="kpi-status status-warn">Levemente alta</div>
+                <div class="kpi-value">0%</div>
+                <div class="kpi-status text-muted">
+                    <i class="fas fa-sync fa-spin"></i> Sincronizando...
+                </div>
             </div>
-            <div class="kpi-card" style="border-left-color: #ffce56;">
+
+            <div class="kpi-card" id="card-lum" style="border-left-color: #ccc;">
                 <h3>Luminosidade (Atual)</h3>
-                <div class="kpi-value">120 Lux</div>
-                <div class="kpi-status status-ok">Ideal</div>
+                <div class="kpi-value">0 Lux</div>
+                <div class="kpi-status text-muted">
+                    <i class="fas fa-sync fa-spin"></i> Sincronizando...
+                </div>
             </div>
+
             <div class="kpi-card" style="border-left-color: #4bc0c0;">
-                <h3>Sensores Ativos</h3>
-                <div class="kpi-value">3/3</div>
-                <div class="kpi-status status-ok">Conexão estável</div>
+                <h3>Status do Sensor</h3>
+                <div class="kpi-value" style="font-size: 1.5rem;">Aguardando</div>
+                <div class="kpi-status text-muted">Verificando conexão...</div>
             </div>
         </div>
 
@@ -354,11 +383,9 @@
             <div class="chart-container chart-full">
                 <canvas id="tempHumidityChart"></canvas>
             </div>
-
             <div class="chart-container">
                 <canvas id="luxChart"></canvas>
             </div>
-
             <div class="chart-container">
                 <canvas id="sensorComparisonChart"></canvas>
             </div>
@@ -366,177 +393,197 @@
     </div>
 
     <script>
-        // --- MOCK DATA GENERATORS ---
-        // Função para gerar horários simulados
+        let intervaloAtualizacao;
+
         function generateLabels(count) {
             const labels = [];
-            const now = new Date();
             for (let i = 0; i < count; i++) {
-                const date = new Date(now.getTime() - (i * 60 * 60 * 1000)); // 1 ponto por hora para simplificar o gráfico inicial
-                labels.unshift(`${date.getHours()}:00`);
+                if (i === 0) labels.unshift("Agora");
+                else labels.unshift(`-${i}`);
             }
             return labels;
         }
 
-        // Função para gerar dados numéricos aleatórios dentro de um range
-        function generateData(count, min, max) {
-            return Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1) + min));
-        }
-
-        const labels = generateLabels(12); // Últimas 12 horas
-
-        // --- CONFIGURAÇÃO CHART.JS ---
-
-        // 1. Gráfico de Temperatura e Umidade (Linha mista)
+        // --- CHART CONFIG ---
         const ctxTempHum = document.getElementById('tempHumidityChart').getContext('2d');
         const tempHumidityChart = new Chart(ctxTempHum, {
             type: 'line',
             data: {
-                labels: labels,
+                labels: generateLabels(12),
                 datasets: [
-                    {
-                        label: 'Temperatura (°C)',
-                        data: generateData(12, 12, 16), // Entre 12 e 16 graus
-                        borderColor: '#ff6384',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        yAxisID: 'y',
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Umidade (%)',
-                        data: generateData(12, 60, 80), // Entre 60 e 80%
-                        borderColor: '#36a2eb',
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        yAxisID: 'y1',
-                        tension: 0.4
-                    }
+                    { label: 'Temperatura (°C)', data: [], borderColor: '#ff6384', backgroundColor: 'rgba(255, 99, 132, 0.2)', yAxisID: 'y', tension: 0.4 },
+                    { label: 'Umidade (%)', data: [], borderColor: '#36a2eb', backgroundColor: 'rgba(54, 162, 235, 0.2)', yAxisID: 'y1', tension: 0.4 }
                 ]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Histórico de Temperatura e Umidade (Últimas 12h)'
-                    }
-                },
+                responsive: true, maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: { title: { display: true, text: 'Últimas 12 Leituras (Tempo Real)' } },
                 scales: {
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        title: { display: true, text: 'Temperatura (°C)' }
-                    },
-                    y1: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        grid: { drawOnChartArea: false },
-                        title: { display: true, text: 'Umidade (%)' }
-                    }
+                    y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Temp (°C)' } },
+                    y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Umid (%)' } }
                 }
             }
         });
 
-        // 2. Gráfico de Luminosidade (Área)
         const ctxLux = document.getElementById('luxChart').getContext('2d');
         const luxChart = new Chart(ctxLux, {
             type: 'line',
             data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Luminosidade (Lux)',
-                    data: generateData(12, 100, 500),
-                    borderColor: '#ffce56',
-                    backgroundColor: 'rgba(255, 206, 86, 0.4)',
-                    fill: true,
-                    tension: 0.3
-                }]
+                labels: generateLabels(12),
+                datasets: [{ label: 'Luminosidade (Lux)', data: [], borderColor: '#ffce56', backgroundColor: 'rgba(255, 206, 86, 0.4)', fill: true, tension: 0.3 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: { display: true, text: 'Variação de Luminosidade' }
-                }
-            }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Variação de Luminosidade' } } }
         });
 
-        // 3. Gráfico Comparativo (Barra)
         const ctxComp = document.getElementById('sensorComparisonChart').getContext('2d');
         const sensorComparisonChart = new Chart(ctxComp, {
             type: 'bar',
             data: {
-                labels: ['DL-01', 'DL-02', 'DL-03'],
-                datasets: [{
-                    label: 'Temp Média Hoje',
-                    data: [14.2, 15.1, 13.8],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(75, 192, 192, 0.7)'
-                    ]
-                }]
+                labels: ['Temp', 'Humid', 'Lum/10'],
+                datasets: [{ label: 'Leitura Atual', data: [0, 0, 0], backgroundColor: ['#ff6384', '#36a2eb', '#ffce56'] }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: { display: true, text: 'Comparativo entre Sensores' }
-                }
-            }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Snapshot do Sensor Atual' } } }
         });
 
-        async function updateDashboard() {
-            // Pega o device selecionado no dropdown
+        // --- UPDATE FUNCTION ---
+        async function updateDashboard(silencioso = false) {
+
             const deviceId = document.getElementById('sensorSelect').value;
+            if (!deviceId) return;
+
             const btn = document.querySelector('.btn-filter');
-            btn.innerText = "Carregando...";
+            if (!silencioso) {
+                btn.innerText = "Carregando...";
+                btn.disabled = true;
+            }
 
             try {
-                // Chama nosso Controller C#
-                const response = await fetch(`@Url.Action("ObterDadosDashboard", "Home")?deviceId=${deviceId}`);
+                const timestamp = new Date().getTime();
+                const response = await fetch(`@Url.Action("ObterDadosDashboard", "Home")?deviceId=${deviceId}&_=${timestamp}`);
+
+                if (!response.ok) throw new Error('Falha na requisição');
+
                 const data = await response.json();
 
-                // 1. Atualiza KPI Cards
+                // Seleciona Cards e Textos
                 const cards = document.querySelectorAll('.kpi-value');
-                cards[0].innerText = data.kpi.temp.toFixed(1) + ' °C'; // Temperatura
-                cards[1].innerText = data.kpi.hum.toFixed(1) + '%';    // Umidade
-                cards[2].innerText = data.kpi.lum.toFixed(0) + ' Lux'; // Luminosidade
+                const statusTexts = document.querySelectorAll('.kpi-status');
+                const cardDivs = document.querySelectorAll('.kpi-card'); // Para mudar a borda
 
-                // 2. Atualiza Gráfico Temp/Hum
-                // Se o histórico vier vazio, mantemos arrays vazios para não quebrar
-                tempHumidityChart.data.datasets[0].data = data.charts.temp || [];
-                tempHumidityChart.data.datasets[1].data = data.charts.hum || [];
+                if (data.kpi) {
+                    // 1. TEMPERATURA
+                    const temp = data.kpi.temp || 0;
+                    cards[0].innerText = temp.toFixed(1) + ' °C';
 
-                // Ajusta labels dinamicamente se necessário (quantidade de pontos)
-                // Aqui mantemos as labels fixas de hora por enquanto, mas idealmente viriam do backend
-                tempHumidityChart.update();
+                    if (temp === 0) {
+                        statusTexts[0].innerHTML = '<i class="fas fa-exclamation-circle"></i> Sem leitura';
+                        statusTexts[0].className = "kpi-status text-muted";
+                        cardDivs[0].style.borderLeftColor = "#ccc";
+                    } else {
+                        statusTexts[0].innerHTML = '<i class="fas fa-check-circle"></i> Leitura Ativa';
+                        statusTexts[0].className = "kpi-status status-ok";
+                        cardDivs[0].style.borderLeftColor = "#ff6384";
+                    }
 
-                // 3. Atualiza Gráfico Lux
-                luxChart.data.datasets[0].data = data.charts.lum || [];
-                luxChart.update();
+                    // 2. UMIDADE
+                    const hum = data.kpi.hum || 0;
+                    cards[1].innerText = hum.toFixed(1) + '%';
 
-                console.log("Dados atualizados do FIWARE:", data);
+                    if (hum === 0) {
+                        statusTexts[1].innerHTML = '<i class="fas fa-exclamation-circle"></i> Sem leitura';
+                        statusTexts[1].className = "kpi-status text-muted";
+                        cardDivs[1].style.borderLeftColor = "#ccc";
+                    } else {
+                        statusTexts[1].innerHTML = '<i class="fas fa-check-circle"></i> Leitura Ativa';
+                        statusTexts[1].className = "kpi-status status-ok";
+                        cardDivs[1].style.borderLeftColor = "#36a2eb";
+                    }
+
+                    // 3. LUMINOSIDADE
+                    const lumValue = data.kpi.lum || 0;
+                    cards[2].innerText = lumValue.toFixed(0) + ' Lux';
+
+                    const statusLum = statusTexts[2];
+                    const cardLum = cardDivs[2];
+
+                    if (lumValue < 100) {
+                        statusLum.innerHTML = '<i class="fas fa-moon"></i> Baixa (Escuro)';
+                        statusLum.className = "kpi-status status-warn";
+                        cardLum.style.borderLeftColor = "#f1c40f";
+                    } else if (lumValue > 800) {
+                        statusLum.innerHTML = '<i class="fas fa-sun"></i> Alta (Sol direto)';
+                        statusLum.className = "kpi-status status-danger";
+                        cardLum.style.borderLeftColor = "#e74c3c";
+                    } else {
+                        statusLum.innerHTML = '<i class="fas fa-lightbulb"></i> Ideal';
+                        statusLum.className = "kpi-status status-ok";
+                        cardLum.style.borderLeftColor = "#2ecc71";
+                    }
+
+                    // 4. STATUS GERAL
+                    const cardStatus = cards[3];
+                    const textStatus = statusTexts[3];
+
+                    if(temp > 0 || hum > 0 || lumValue > 0) {
+                        cardStatus.innerText = "Online";
+                        cardStatus.style.color = "green";
+                        textStatus.innerText = "Recebendo dados...";
+                        cardDivs[3].style.borderLeftColor = "green";
+                    } else {
+                        cardStatus.innerText = "Offline";
+                        cardStatus.style.color = "red";
+                        textStatus.innerText = "Verifique o sensor";
+                        cardDivs[3].style.borderLeftColor = "red";
+                    }
+                }
+
+                // Atualiza Gráficos
+                if (data.charts) {
+                    tempHumidityChart.data.datasets[0].data = data.charts.temp || [];
+                    tempHumidityChart.data.datasets[1].data = data.charts.hum || [];
+                    tempHumidityChart.update('none');
+
+                    luxChart.data.datasets[0].data = data.charts.lum || [];
+                    luxChart.update('none');
+
+                    sensorComparisonChart.data.datasets[0].data = [
+                        data.kpi.temp,
+                        data.kpi.hum,
+                        data.kpi.lum / 10
+                    ];
+                    sensorComparisonChart.update('none');
+                }
 
             } catch (error) {
                 console.error("Erro ao buscar dados:", error);
-                alert("Erro ao conectar com o servidor.");
             } finally {
-                btn.innerText = "Atualizar";
+                if (!silencioso) {
+                    btn.innerText = "Atualizar";
+                    btn.disabled = false;
+                }
             }
         }
 
-        // Carrega os dados assim que a página abre
-        document.addEventListener("DOMContentLoaded", () => {
-            updateDashboard();
+        function iniciarCicloAutomatico() {
+            if (intervaloAtualizacao) clearInterval(intervaloAtualizacao);
+            intervaloAtualizacao = setInterval(() => {
+                updateDashboard(true);
+            }, 5000);
+        }
+
+        document.getElementById('sensorSelect').addEventListener('change', () => {
+            updateDashboard(false);
+            iniciarCicloAutomatico();
         });
 
+        document.addEventListener("DOMContentLoaded", () => {
+            const sensorSelect = document.getElementById('sensorSelect');
+            if (sensorSelect.options.length > 0 && sensorSelect.value) {
+                updateDashboard(false); // Primeira carga visual
+                iniciarCicloAutomatico(); // Inicia o loop
+            }
+        });
     </script>
 </body>
 </html>
