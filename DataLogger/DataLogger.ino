@@ -12,7 +12,7 @@ DHT dht11 (DHT11_PIN, DHT11);
 // Configurações - variáveis editáveis
 const char* default_SSID = "Diogo";                       // Nome da rede Wi-Fi
 const char* default_PASSWORD = "12345678";                // Senha da rede Wi-Fi
-const char* default_BROKER_MQTT = "52.91.92.109";       // IP do Broker MQTT
+const char* default_BROKER_MQTT = "3.80.36.39";       // IP do Broker MQTT
 const int default_BROKER_PORT = 1883;                           // Porta do Broker MQTT
 const char* default_TOPICO_SUBSCRIBE = "/TEF/logger010/cmd";      // Tópico MQTT de escuta
 const char* default_TOPICO_PUBLISH_1 = "/TEF/logger010/attrs";    // Tópico MQTT de envio de informações para Broker
