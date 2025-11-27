@@ -16,6 +16,62 @@ namespace Vinicola_app.Controllers
             return View(listaDeUsuarios);
         }
 
+        public IActionResult Perfil()
+        {
+            // Obtém o ID da sessão (ajuste conforme sua lógica de sessão atual)
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+
+            if (usuarioId == null)
+                return RedirectToAction("Index", "Login");
+
+            UsuarioDAO dao = new UsuarioDAO();
+            var usuario = dao.Consulta(usuarioId.Value); // Assumindo que você tem um método Consulta(int id)
+
+            return View(usuario);
+        }
+
+        [HttpPost]
+        public IActionResult SalvarPerfil(UsuarioViewModel model)
+        {
+            try
+            {
+                UsuarioDAO dao = new UsuarioDAO();
+
+                // Lógica de conversão de Imagem para Bits
+                if (model.FotoUpload != null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        model.FotoUpload.CopyTo(memoryStream);
+                        model.FotoProfile = memoryStream.ToArray(); // Converte para array de bytes
+                    }
+                }
+                else
+                {
+                    // Se não upou nova foto, tenta manter a antiga (precisa buscar do banco para não perder)
+                    var usuarioAntigo = dao.Consulta(model.Id);
+                    model.FotoProfile = usuarioAntigo.FotoProfile;
+                }
+
+                dao.Alterar(model); // Atualize seu DAO para salvar o campo FotoPerfil
+
+                // Atualiza sessão com novo nome se mudou
+                HttpContext.Session.SetString("UsuarioNome", model.Nome);
+
+                // Atualiza a foto na sessão (opcional, para exibir no layout sem ir no banco)
+                if (model.FotoProfile != null)
+                    HttpContext.Session.Set("UsuarioFoto", model.FotoProfile);
+
+                TempData["Sucesso"] = "Perfil atualizado com sucesso!";
+                return RedirectToAction("Perfil");
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao atualizar: " + ex.Message;
+                return View("Perfil", model);
+            }
+        }
+
         public ActionResult Create()
         {
             ViewBag.Operacao = "I";

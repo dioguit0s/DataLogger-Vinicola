@@ -9,6 +9,12 @@
 
         public string SenhaHash { get; set; }
 
-        public string FotoProfile { get; set; }
+        // Campo para armazenar os bits da imagem (Vai para o Banco)
+        public byte[]? FotoProfile { get; set; }
+
+        // Campo auxiliar para receber o upload no formulário (Não vai para o Banco)
+        public IFormFile? FotoUpload { get; set; }
+
+
     }
 }
