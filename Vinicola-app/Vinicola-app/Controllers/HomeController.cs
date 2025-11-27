@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Vinicola_app.Services;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using Vinicola_app.DAO; 
+using Vinicola_app.Models;
 
 namespace Vinicola_app.Controllers
 {
@@ -18,7 +21,20 @@ namespace Vinicola_app.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            if (usuarioId == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            WineryDAO wineryDao = new WineryDAO();
+            DataLoggerDAO loggerDao = new DataLoggerDAO();
+
+            DashboardViewModel model = new DashboardViewModel();
+            model.Vinicolas = wineryDao.Listagem(usuarioId.Value);
+            model.Loggers = loggerDao.Listagem(usuarioId.Value);
+
+            return View(model);
         }
 
         public IActionResult Sobre()
@@ -30,7 +46,7 @@ namespace Vinicola_app.Controllers
         public async Task<IActionResult> ObterDadosDashboard(string deviceId)
         {
             if (string.IsNullOrEmpty(deviceId) || deviceId == "all")
-                deviceId = "003";
+                deviceId = "";
 
             // 1. Busca dados atuais (Orion)
             var jsonAtual = await _fiwareService.ObterDadosAtuais(deviceId);

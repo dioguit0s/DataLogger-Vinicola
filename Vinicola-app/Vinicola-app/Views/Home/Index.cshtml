@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Vinicola_app.Models.DashboardViewModel
+@{
     Layout = null;
 }
 
@@ -300,18 +301,33 @@
                 <label for="vinicolaSelect">Vinícola</label>
                 <select id="vinicolaSelect">
                     <option value="all">Todas as Vinícolas</option>
-                    <option value="1">Vinícola Santa Helena</option>
-                    <option value="2">Vinícola Vale Verde</option>
+                    @if (Model != null && Model.Vinicolas.Any())
+                    {
+                        foreach (var winery in Model.Vinicolas)
+                        {
+                            <option value="@winery.Id">@winery.Name</option>
+                        }
+                    }
                 </select>
             </div>
 
             <div class="filter-group">
                 <label for="sensorSelect">Datalogger</label>
-                <select id="sensorSelect">
-                    <option value="all">Todos os Sensores</option>
-                    <option value="DL-01">DL-01 (Adega Principal)</option>
-                    <option value="DL-02">DL-02 (Armazenamento)</option>
-                    <option value="DL-03">DL-03 (Fermentação)</option>
+                <select id="sensorSelect" onchange="updateDashboard()">
+                    @if (Model == null || !Model.Loggers.Any())
+                    {
+                        <option value="">Nenhum sensor cadastrado</option>
+                    }
+                    else
+                    {
+                        foreach (var logger in Model.Loggers)
+                        {
+                            <option value="@logger.DeviceId">
+                                @logger.DeviceId
+                                @(!string.IsNullOrEmpty(logger.WineryId.ToString()) ? $"(Vinícola #{logger.WineryId})" : "")
+                            </option>
+                        }
+                    }
                 </select>
             </div>
 
@@ -323,8 +339,6 @@
                     <option value="week">Últimos 7 Dias</option>
                 </select>
             </div>
-
-            <button class="btn-filter" onclick="updateDashboard()">Atualizar</button>
         </div>
 
         <div class="kpi-grid">
@@ -535,6 +549,64 @@
         // Carrega os dados assim que a página abre
         document.addEventListener("DOMContentLoaded", () => {
             updateDashboard();
+        });
+
+        async function updateDashboard() {
+            // Pega o device selecionado no dropdown
+            const deviceId = document.getElementById('sensorSelect').value;
+
+            // Validação simples para não quebrar se não tiver sensor selecionado
+            if (!deviceId) {
+                console.warn("Nenhum dispositivo selecionado.");
+                return;
+            }
+
+            const btn = document.querySelector('.btn-filter');
+            btn.innerText = "Carregando...";
+
+            try {
+                // Chama nosso Controller C#
+                // Note que aqui o deviceId virá do value do option (que é o ID do FIWARE ex: logger001)
+                const response = await fetch(`@Url.Action("ObterDadosDashboard", "Home")?deviceId=${deviceId}`);
+
+                if (!response.ok) throw new Error('Falha na requisição');
+
+                const data = await response.json();
+
+                // 1. Atualiza KPI Cards
+                const cards = document.querySelectorAll('.kpi-value');
+                // Verifica se os dados existem antes de tentar acessar
+                if(data.kpi) {
+                    cards[0].innerText = (data.kpi.temp || 0).toFixed(1) + ' °C';
+                    cards[1].innerText = (data.kpi.hum || 0).toFixed(1) + '%';
+                    cards[2].innerText = (data.kpi.lum || 0).toFixed(0) + ' Lux';
+                }
+
+                // 2. Atualiza Gráficos (verifica se charts existe)
+                if(data.charts) {
+                    tempHumidityChart.data.datasets[0].data = data.charts.temp || [];
+                    tempHumidityChart.data.datasets[1].data = data.charts.hum || [];
+                    tempHumidityChart.update();
+
+                    luxChart.data.datasets[0].data = data.charts.lum || [];
+                    luxChart.update();
+                }
+
+            } catch (error) {
+                console.error("Erro ao buscar dados:", error);
+                // Não alertar toda vez para não travar a tela do usuário em loops
+            } finally {
+                btn.innerText = "Atualizar";
+            }
+        }
+
+        // Carrega os dados assim que a página abre
+        document.addEventListener("DOMContentLoaded", () => {
+            // Seleciona automaticamente o primeiro sensor da lista se houver
+            const sensorSelect = document.getElementById('sensorSelect');
+            if (sensorSelect.options.length > 0 && sensorSelect.value) {
+                updateDashboard();
+            }
         });
 
     </script>
