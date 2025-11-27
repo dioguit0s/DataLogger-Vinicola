@@ -274,7 +274,7 @@
             <li><a href="@Url.Action("Index", "Home")">Home</a></li>
             <li><a href="@Url.Action("Index", "Winery")">Vinícolas</a></li>
             <li><a href="#">DataLoggers</a></li>
-            <li><a href="#">Sobre</a></li>
+            <li><a href="@Url.Action("Index", "Sobre")">Sobre</a></li>
         </ul>
         <div class="user-profile">
             <div class="user-info">
@@ -492,27 +492,50 @@
             }
         });
 
-        // --- SIMULAÇÃO DE UPDATE ---
-        function updateDashboard() {
-            // Aqui futuramente faremos o fetch para a API
-            // Por enquanto, apenas atualiza com novos dados randômicos para mostrar interatividade
+        async function updateDashboard() {
+            // Pega o device selecionado no dropdown
+            const deviceId = document.getElementById('sensorSelect').value;
+            const btn = document.querySelector('.btn-filter');
+            btn.innerText = "Carregando...";
 
-            // Atualiza Temp/Hum
-            tempHumidityChart.data.datasets[0].data = generateData(12, 10, 18);
-            tempHumidityChart.data.datasets[1].data = generateData(12, 50, 90);
-            tempHumidityChart.update();
+            try {
+                // Chama nosso Controller C#
+                const response = await fetch(`@Url.Action("ObterDadosDashboard", "Home")?deviceId=${deviceId}`);
+                const data = await response.json();
 
-            // Atualiza Lux
-            luxChart.data.datasets[0].data = generateData(12, 50, 600);
-            luxChart.update();
+                // 1. Atualiza KPI Cards
+                const cards = document.querySelectorAll('.kpi-value');
+                cards[0].innerText = data.kpi.temp.toFixed(1) + ' °C'; // Temperatura
+                cards[1].innerText = data.kpi.hum.toFixed(1) + '%';    // Umidade
+                cards[2].innerText = data.kpi.lum.toFixed(0) + ' Lux'; // Luminosidade
 
-            // Atualiza KPI Cards (Simulação visual apenas)
-            const cards = document.querySelectorAll('.kpi-value');
-            cards[0].innerText = (12 + Math.random() * 4).toFixed(1) + ' °C';
-            cards[1].innerText = Math.floor(60 + Math.random() * 20) + '%';
+                // 2. Atualiza Gráfico Temp/Hum
+                // Se o histórico vier vazio, mantemos arrays vazios para não quebrar
+                tempHumidityChart.data.datasets[0].data = data.charts.temp || [];
+                tempHumidityChart.data.datasets[1].data = data.charts.hum || [];
 
-            console.log("Dados atualizados com base nos filtros mockados.");
+                // Ajusta labels dinamicamente se necessário (quantidade de pontos)
+                // Aqui mantemos as labels fixas de hora por enquanto, mas idealmente viriam do backend
+                tempHumidityChart.update();
+
+                // 3. Atualiza Gráfico Lux
+                luxChart.data.datasets[0].data = data.charts.lum || [];
+                luxChart.update();
+
+                console.log("Dados atualizados do FIWARE:", data);
+
+            } catch (error) {
+                console.error("Erro ao buscar dados:", error);
+                alert("Erro ao conectar com o servidor.");
+            } finally {
+                btn.innerText = "Atualizar";
+            }
         }
+
+        // Carrega os dados assim que a página abre
+        document.addEventListener("DOMContentLoaded", () => {
+            updateDashboard();
+        });
 
     </script>
 </body>

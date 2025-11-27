@@ -143,5 +143,54 @@ namespace Vinicola_app.Services
                 return $"Erro ao consultar FIWARE: {ex.Message}";
             }
         }
+
+        public async Task<string> ObterDadosAtuais(string deviceId)
+        {
+            var urlBase = _configuration["Fiware:Url"];
+            var portaBroker = _configuration["Fiware:PortBroker"];
+            var endpoint = $"http://{urlBase}:{portaBroker}/v2/entities/urn:ngsi-ld:Logger:{deviceId}";
+
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("fiware-service", _configuration["Fiware:Service"]);
+            _httpClient.DefaultRequestHeaders.Add("fiware-servicepath", _configuration["Fiware:ServicePath"]);
+
+            try
+            {
+                var response = await _httpClient.GetAsync(endpoint);
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsStringAsync();
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> ObterHistorico(string deviceId, string atributo)
+        {
+            var urlBase = _configuration["Fiware:Url"];
+            var portaSTH = _configuration["Fiware:PortSTH"] ?? "8666";
+
+            var endpoint = $"http://{urlBase}:{portaSTH}/STH/v1/contextEntities/type/Logger/id/urn:ngsi-ld:Logger:{deviceId}/attributes/{atributo}?lastN=12";
+
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("fiware-service", _configuration["Fiware:Service"]);
+            _httpClient.DefaultRequestHeaders.Add("fiware-servicepath", _configuration["Fiware:ServicePath"]);
+
+            try
+            {
+                var response = await _httpClient.GetAsync(endpoint);
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsStringAsync();
+
+                return "[]";
+            }
+            catch
+            {
+                return "[]";
+            }
+        }
     }
 }
