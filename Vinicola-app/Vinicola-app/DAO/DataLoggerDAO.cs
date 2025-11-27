@@ -40,7 +40,7 @@ namespace Vinicola_app.DAO
             HelperDAO.ExecutaProc("sp_dataLogger_delete", p);
         }
 
-        private DataLoggerViewModel MontaDataLogger(DataRow registro)
+        internal DataLoggerViewModel MontaDataLogger(DataRow registro)
         {
             DataLoggerViewModel d = new DataLoggerViewModel();
             d.Id = Convert.ToInt32(registro["id"]);
@@ -87,6 +87,23 @@ namespace Vinicola_app.DAO
             string sql = "select isnull(max(id) + 1, 1) as 'MAIOR' from dataLogger";
             DataTable tabela = HelperDAO.ExecutaSelect(sql, null);
             return Convert.ToInt32(tabela.Rows[0]["MAIOR"]);
+        }
+
+        public DataLoggerViewModel BuscarPorDeviceId(string deviceIdFIWARE)
+        {
+            // Ajuste essa query conforme está salvo na sua coluna device_id do SQL
+            string sql = "SELECT * FROM dataLogger WHERE device_id = @devId";
+
+            // Tenta buscar exato primeiro
+            SqlParameter[] p = { new SqlParameter("devId", deviceIdFIWARE) };
+
+            DataTable tabela = HelperDAO.ExecutaSelect(sql, p);
+
+            if (tabela.Rows.Count == 0) return null;
+
+            // Reutiliza seu método existente para montar o objeto
+            // (Precisa mudar o método MontaDataLogger para 'public' ou copiar a lógica aqui)
+            return MontaDataLogger(tabela.Rows[0]);
         }
     }
 }

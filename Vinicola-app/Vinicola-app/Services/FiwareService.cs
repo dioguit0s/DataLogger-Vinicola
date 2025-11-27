@@ -192,5 +192,43 @@ namespace Vinicola_app.Services
                 return "[]";
             }
         }
+
+        // Adicione este método dentro da classe FiwareService
+        public async Task EnviarComando(string deviceId, string comando)
+        {
+            var urlBase = _configuration["Fiware:Url"];
+            var portaBroker = _configuration["Fiware:PortBroker"]; // 1026
+
+            string entityName = deviceId.StartsWith("urn") ? deviceId : $"urn:ngsi-ld:Logger:{deviceId}";
+
+            var endpoint = $"http://{urlBase}:{portaBroker}/v2/entities/{entityName}/attrs";
+
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("fiware-service", _configuration["Fiware:Service"]);
+            _httpClient.DefaultRequestHeaders.Add("fiware-servicepath", _configuration["Fiware:ServicePath"]);
+
+            // Monta o payload dinâmico: { "TEMP_ALARM": { "type": "command", "value": "" } }
+            var payload = new Dictionary<string, object>
+            {
+                    { comando, new { type = "command", value = "" } }
+            };
+
+            var jsonContent = new StringContent(
+                JsonSerializer.Serialize(payload),
+                Encoding.UTF8,
+                "application/json");
+
+            try
+            {
+                // Envia PATCH
+                await _httpClient.PatchAsync(endpoint, jsonContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao enviar comando {comando}: {ex.Message}");
+            }
+        }
+
+
     }
 }
