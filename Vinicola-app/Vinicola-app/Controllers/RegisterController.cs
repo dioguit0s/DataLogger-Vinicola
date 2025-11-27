@@ -2,6 +2,7 @@
 using System;
 using Vinicola_app.DAO;
 using Vinicola_app.Models;
+using Vinicola_app.Services;
 
 namespace Vinicola_app.Controllers
 {
@@ -31,7 +32,7 @@ namespace Vinicola_app.Controllers
                 UsuarioViewModel usuario = new UsuarioViewModel();
                 usuario.Nome = nome;
                 usuario.Email = email;
-                usuario.SenhaHash = senhaHash;
+                usuario.SenhaHash = HashService.GerarHash(senhaHash);
                 usuario.FotoProfile = null; // Define uma foto padrão para não quebrar o banco
 
                 // 3. Salva no banco

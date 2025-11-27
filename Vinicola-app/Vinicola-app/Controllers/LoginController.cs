@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http; // Necessário para Sessão
 using Vinicola_app.DAO;
 using Vinicola_app.Models;
 using System;
+using Vinicola_app.Services;
 
 namespace Vinicola_app.Controllers
 {
@@ -24,9 +25,11 @@ namespace Vinicola_app.Controllers
             {
                 UsuarioDAO dao = new UsuarioDAO();
 
+                string senhaCriptografada = HashService.GerarHash(senhaHash);
+
                 // Você precisará criar este método 'VerificarLogin' no seu UsuarioDAO
                 // Ele deve retornar o objeto Usuario se achar, ou null se falhar
-                UsuarioViewModel usuario = dao.VerificarLogin(email, senhaHash);
+                UsuarioViewModel usuario = dao.VerificarLogin(email, senhaCriptografada);
 
                 if (usuario != null)
                 {
