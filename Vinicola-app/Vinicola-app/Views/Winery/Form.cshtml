@@ -1,0 +1,75 @@
+﻿@model Vinicola_app.Models.WineryViewModel
+
+@{
+    ViewData["Title"] = ViewBag.Operacao == "I" ? "Cadastrar Vinícola" : "Editar Vinícola";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Salvar" method="post">
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" name="Operacao" value="@ViewBag.Operacao" />
+
+            @if (ViewBag.Erro != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Erro</div>
+            }
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Name" class="control-label">Nome da Vinícola</label>
+                    <input asp-for="Name" class="form-control" placeholder="Ex: Vinícola Serra Gaúcha" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Cnpj" class="control-label">CNPJ</label>
+                    <input asp-for="Cnpj" class="form-control" placeholder="00.000.000/0000-00" />
+                    <span asp-validation-for="Cnpj" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Email" class="control-label">E-mail de Contato</label>
+                    <input asp-for="Email" type="email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Telephone" class="control-label">Telefone</label>
+                    <input asp-for="Telephone" class="form-control" placeholder="(00) 00000-0000" />
+                    <span asp-validation-for="Telephone" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Address" class="control-label">Endereço Completo</label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label">Descrição</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Salvar" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
