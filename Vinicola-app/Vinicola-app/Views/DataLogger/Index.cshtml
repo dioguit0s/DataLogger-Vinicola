@@ -5,100 +5,147 @@
 }
 
 <style>
-    .page-header {
+    /* --- Estilos Padronizados (Baseados em Winery/Index) --- */
+
+    .header-actions {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 30px;
+        margin-bottom: 2rem;
         flex-wrap: wrap;
         gap: 15px;
     }
 
-    .page-header h2 {
-        color: #2c3e50;
-        font-weight: 700;
-        margin: 0;
-    }
-
-    /* Card específico para DataLogger */
-    .logger-card {
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border-left: 5px solid #27ae60; /* Verde para diferenciar */
-        padding: 20px;
-        margin-bottom: 15px;
+    /* Card adaptado para DataLogger mantendo identidade visual */
+    .datalogger-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px; /* Padrão do site */
+        box-shadow: var(--shadow); /* Sombra padrão */
+        border-left: 5px solid var(--primary-color); /* Cor Vinho oficial */
+        margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 15px;
-        transition: box-shadow 0.3s ease;
+        gap: 20px;
+        transition: transform 0.2s;
     }
 
-    .logger-card:hover {
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+        .datalogger-card:hover {
+            transform: translateY(-3px); /* Efeito de levitação igual ao das Vinícolas */
+        }
 
-    .logger-info {
+    .datalogger-content {
         display: flex;
-        align-items: flex-start; /* Alinhado ao topo para listas de detalhes */
+        align-items: flex-start;
         gap: 20px;
         flex: 1;
-        min-width: 250px;
+        min-width: 300px;
     }
 
-    .logger-info .icon {
-        font-size: 36px;
-        color: #27ae60;
-        padding-top: 5px;
+    /* Ícone Circular */
+    .icon-container {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fce4ec; /* Fundo claro vinho/rosa */
+        border-radius: 50%;
+        color: var(--primary-color);
+        font-size: 24px;
+        flex-shrink: 0;
     }
 
-    .logger-details h4 {
-        margin: 0 0 5px 0;
-        color: #2c3e50;
-        font-size: 1.25rem;
-        font-weight: bold;
-    }
-
-    .logger-details .meta-info {
-        color: #7f8c8d;
-        font-size: 0.9rem;
-        margin-bottom: 8px;
-    }
-
-    /* Badges para as medidas */
-    .badge-medida {
-        display: inline-block;
-        font-size: 0.8rem;
-        padding: 4px 8px;
-        border-radius: 4px;
-        margin-right: 5px;
+    .info-group h4 {
+        color: var(--text-dark);
+        font-weight: 700;
         margin-bottom: 5px;
+        font-size: 1.2rem;
+    }
+
+    .info-group .meta {
+        color: #888;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    /* Tags estilizadas para as medidas (Substituindo badge-medida) */
+    .measure-tag {
+        display: inline-block;
+        font-size: 0.85rem;
+        padding: 6px 12px;
+        border-radius: 6px;
         background-color: #f8f9fa;
         border: 1px solid #e9ecef;
-        color: #555;
+        color: var(--text-dark);
+        margin-right: 5px;
+        margin-bottom: 5px;
+        font-weight: 500;
     }
 
-    .logger-actions {
+        .measure-tag i {
+            color: var(--primary-color);
+            margin-right: 4px;
+        }
+
+    .card-actions {
         display: flex;
         gap: 10px;
     }
+
+    /* Botões Customizados (Idênticos aos de Vinícola) */
+    .btn-delete-custom {
+        padding: 8px 15px;
+        background-color: white;
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+        .btn-delete-custom:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+    .btn-edit-custom {
+        padding: 8px 15px;
+        background-color: white;
+        border: 1px solid #6c757d;
+        color: #6c757d;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+        .btn-edit-custom:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+
+
 </style>
 
-<div class="page-header">
-    <h2>@ViewData["Title"]</h2>
-    <a asp-action="TesteFiware" target="_blank" class="btn btn-warning btn-lg me-2">
-        ⚠️ Ver Devices (JSON)
-    </a>
-    <a asp-action="Create" class="btn btn-success btn-lg">
-        📡 Novo Data Logger
-    </a>
+<div class="header-actions">
+    <h2 class="section-title" style="margin-bottom:0;">@ViewData["Title"]</h2>
+
+    <div>
+        <a asp-action="Create" class="btn btn-primary btn-lg" style="padding: 10px 25px; border-radius: 6px;">
+            + Novo Data Logger
+        </a>
+    </div>
 </div>
 
 @if (TempData["Erro"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger" style="border-radius: 12px; box-shadow: var(--shadow); border:none;">
         @TempData["Erro"]
     </div>
 }
@@ -106,49 +153,56 @@
 <div>
     @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-info">
-            Nenhum Data Logger cadastrado. Clique no botão acima para adicionar.
+        <div class="text-center p-5" style="background: white; border-radius: 12px; box-shadow: var(--shadow);">
+            <h4 style="color: var(--text-dark);">Nenhum Data Logger cadastrado.</h4>
+            <p class="text-muted">Comece adicionando seu primeiro dispositivo no botão acima.</p>
         </div>
     }
     else
     {
         @foreach (var item in Model)
         {
-            <div class="logger-card">
-                <div class="logger-info">
-                    <div class="icon">📡</div>
-                    <div class="logger-details">
+            <div class="datalogger-card">
+                <div class="datalogger-content">
+
+                    <div class="icon-container">
+                        <i class="fas fa-satellite-dish"></i> <span style="font-family: initial;">📡</span>
+                    </div>
+
+                    <div class="info-group">
                         <h4>
                             Logger #@item.Id
                             @if (item.GetType().GetProperty("DeviceId") != null)
                             {
-                                <span class="text-muted">(@item.GetType().GetProperty("DeviceId")?.GetValue(item, null))</span>
+                                var deviceId = item.GetType().GetProperty("DeviceId")?.GetValue(item, null);
+                                if (deviceId != null)
+                                {
+                                    <span style="font-size: 0.8rem; font-weight: normal; color: #999;">(@deviceId)</span>
+                                }
                             }
                         </h4>
 
-                        <p class="meta-info">
-                            <strong>Vinícola ID:</strong> @item.WineryId
-                        </p>
+                        <span class="meta">Vinculado à Vinícola ID: @item.WineryId</span>
 
-                        <div>
-                            <span class="badge-medida" title="Temperatura">
+                        <div style="margin-top: 12px;">
+                            <span class="measure-tag" title="Temperatura">
                                 🌡️ @item.TempMin°C a @item.TempMax°C
                             </span>
-                            <span class="badge-medida" title="Umidade">
+                            <span class="measure-tag" title="Umidade">
                                 💧 @item.HumidMin% a @item.HumidMax%
                             </span>
-                            <span class="badge-medida" title="Luminosidade">
+                            <span class="measure-tag" title="Luminosidade">
                                 💡 @item.LumMin Lx a @item.LumMax Lx
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <div class="logger-actions">
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info text-white">
+                <div class="card-actions">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn-edit-custom">
                         Editar
                     </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-delete-custom"
                        onclick="return confirm('Tem certeza que deseja excluir o logger #@item.Id?');">
                         Excluir
                     </a>
