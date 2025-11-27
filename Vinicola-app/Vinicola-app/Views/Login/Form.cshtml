@@ -1,92 +1,150 @@
 ﻿@model Vinicola_app.Models.UsuarioViewModel
 @{
     ViewBag.Title = ViewBag.Operacao == "I" ? "Novo Cadastro" : "Editar Perfil";
-    Layout = null; // Mantendo sem layout para focar no cadastro, ou adicione seu layout padrão
+    Layout = null;
 }
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <style>
         body {
             background-color: #f8f9fa;
-            font-family: -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            padding: 20px; /* Margem para mobile */
         }
 
-        .register-container {
-            max-width: 600px; /* Mais largo que o login */
-            margin: 50px auto;
-            background: #fff;
-            padding: 40px;
+        .register-card {
+            background-color: #fff;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            border-top: 5px solid #800020;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 6px solid #800020; /* Vinho - Igual ao Login */
+            padding: 40px;
+            width: 100%;
+            max-width: 500px; /* Um pouco mais largo que o login */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        .section-title {
+        .brand-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .brand-header img {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 150px; /* Logo um pouco menor no cadastro */
+                height: auto;
+                margin-bottom: 10px;
+            }
+
+        .page-title {
             color: #2c3e50;
             font-weight: 700;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
         }
 
-        .btn-vinho {
-            background-color: #800020;
+        .form-control {
+            height: 45px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
+
+        /* Botão igual ao do Login */
+        .btn-action {
+            background-color: #2c3e50;
             color: white;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            transition: background 0.2s;
         }
 
-            .btn-vinho:hover {
-                background-color: #600018;
+            .btn-action:hover {
+                background-color: #1a252f;
                 color: white;
             }
+
+        .link-back {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+            .link-back a {
+                color: #7f8c8d;
+                text-decoration: none;
+            }
+
+                .link-back a:hover {
+                    color: #2c3e50;
+                    text-decoration: underline;
+                }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="register-container">
-            <h2 class="section-title">@ViewBag.Title</h2>
+    <div class="register-card">
 
-            @using (Html.BeginForm("Salvar", "Usuario", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="operacao" value="@ViewBag.Operacao" />
-                @Html.HiddenFor(model => model.Id)
-
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        @Html.LabelFor(model => model.Nome, new { @class = "font-weight-bold" })
-                        @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", placeholder = "Nome Completo" } })
-                        @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger small" })
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        @Html.LabelFor(model => model.Email, new { @class = "font-weight-bold" })
-                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", type = "email", placeholder = "seu@email.com" } })
-                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger small" })
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        @Html.LabelFor(model => model.SenhaHash, "Senha", new { @class = "font-weight-bold" })
-                        @Html.EditorFor(model => model.SenhaHash, new { htmlAttributes = new { @class = "form-control", type = "password" } })
-                        @Html.ValidationMessageFor(model => model.SenhaHash, "", new { @class = "text-danger small" })
-                    </div>
-                </div>
-
-                <div class="mt-4 d-flex justify-content-between align-items-center">
-                    <a href="@Url.Action("Index", "Login")" class="text-secondary">Voltar para Login</a>
-                    <button type="submit" class="btn btn-vinho px-5">Salvar Cadastro</button>
-                </div>
-            }
+        <div class="brand-header">
+            <img src="@Url.Content("~/files/qualivine-logo.png")" alt="Qualivine">
         </div>
+
+        <h2 class="page-title">@ViewBag.Title</h2>
+
+        @if (TempData["Erro"] != null)
+        {
+            <div class="alert alert-danger text-center small">
+                @TempData["Erro"]
+            </div>
+        }
+
+        @using (Html.BeginForm("Salvar", "Usuario", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="operacao" value="@ViewBag.Operacao" />
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="form-group">
+                <label class="font-weight-bold text-muted small">NOME COMPLETO</label>
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", placeholder = "Ex: João Silva" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger small" })
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold text-muted small">E-MAIL</label>
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", type = "email", placeholder = "seu@email.com" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger small" })
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold text-muted small">SENHA</label>
+                @Html.EditorFor(model => model.SenhaHash, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "********" } })
+                @Html.ValidationMessageFor(model => model.SenhaHash, "", new { @class = "text-danger small" })
+            </div>
+
+            <button type="submit" class="btn btn-action btn-block mt-4">SALVAR CADASTRO</button>
+
+            <div class="link-back">
+                <a href="@Url.Action("Index", "Login")">← Voltar para o Login</a>
+            </div>
+        }
     </div>
 
 </body>

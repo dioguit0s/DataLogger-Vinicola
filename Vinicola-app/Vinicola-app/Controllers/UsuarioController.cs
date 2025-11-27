@@ -23,7 +23,7 @@ namespace Vinicola_app.Controllers
             UsuarioDAO dao = new UsuarioDAO();
             UsuarioViewModel usuario = new UsuarioViewModel();
             usuario.Id = dao.ProximoId();
-            return View("Form", usuario);
+            return View("~/Views/Login/Form.cshtml", usuario);
         }
 
         public ActionResult Edit(int id)
