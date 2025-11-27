@@ -73,6 +73,8 @@ namespace Vinicola_app.Controllers
 
                         if (valorStr.ToLower().Contains("nan")) return 0;
 
+                        valorStr = valorStr.Replace(",", ".");
+
                         if (double.TryParse(valorStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double valor))
                         {
                             return valor;
