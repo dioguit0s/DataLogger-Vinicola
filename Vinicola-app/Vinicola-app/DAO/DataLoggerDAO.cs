@@ -1,6 +1,8 @@
 ﻿using System.Data.SqlClient;
 using System.Data;
 using Vinicola_app.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Vinicola_app.DAO
 {
@@ -8,6 +10,7 @@ namespace Vinicola_app.DAO
     {
         public void Inserir(DataLoggerViewModel dataLogger)
         {
+            // O HelperDAO vai chamar a procedure enviando os parâmetros criados abaixo
             HelperDAO.ExecutaProc("sp_dataLogger_insert", CriaParametros(dataLogger));
         }
 
@@ -18,21 +21,28 @@ namespace Vinicola_app.DAO
 
         private SqlParameter[] CriaParametros(DataLoggerViewModel dataLogger)
         {
-            SqlParameter[] p = new SqlParameter[9];
+            // Aumentei o array para 10 posições para caber o device_id
+            SqlParameter[] p = new SqlParameter[10];
+
             p[0] = new SqlParameter("id", dataLogger.Id);
-            p[1] = new SqlParameter("wineryId", dataLogger.WineryId);
-            p[2] = new SqlParameter("userId", dataLogger.UserId);
-            p[3] = new SqlParameter("tempMin", dataLogger.TempMin);
-            p[4] = new SqlParameter("tempMax", dataLogger.TempMax);
-            p[5] = new SqlParameter("lumMin", dataLogger.LumMin);
-            p[6] = new SqlParameter("lumMax", dataLogger.LumMax);
-            p[7] = new SqlParameter("humidMin", dataLogger.HumidMin);
-            p[8] = new SqlParameter("humidMax", dataLogger.HumidMax);
+
+            // ATENÇÃO: Os nomes aqui ("winery_id", "device_id") devem ser IGUAIS aos da Procedure (@winery_id, @device_id)
+            p[1] = new SqlParameter("winery_id", dataLogger.WineryId);
+            p[2] = new SqlParameter("user_id", dataLogger.UserId);
+
+            // Novo Campo
+            p[3] = new SqlParameter("device_id", dataLogger.DeviceId ?? (object)DBNull.Value);
+
+            p[4] = new SqlParameter("temp_min", dataLogger.TempMin);
+            p[5] = new SqlParameter("temp_max", dataLogger.TempMax);
+            p[6] = new SqlParameter("lum_min", dataLogger.LumMin);
+            p[7] = new SqlParameter("lum_max", dataLogger.LumMax);
+            p[8] = new SqlParameter("humid_min", dataLogger.HumidMin);
+            p[9] = new SqlParameter("humid_max", dataLogger.HumidMax);
 
             return p;
         }
 
-        //Add procedure de Exclusão
         public void Excluir(int id)
         {
             string sql = "delete from dataLogger where id = @id";
@@ -40,18 +50,28 @@ namespace Vinicola_app.DAO
             HelperDAO.ExecutaSQL(sql, p);
         }
 
-        private DataLoggerViewModel MontaDataLogger (DataRow registro)
+        private DataLoggerViewModel MontaDataLogger(DataRow registro)
         {
             DataLoggerViewModel d = new DataLoggerViewModel();
             d.Id = Convert.ToInt32(registro["id"]);
-            d.WineryId = Convert.ToInt32(registro["wineryId"]);
-            d.UserId = Convert.ToInt32(registro["userId"]);
-            d.TempMin = Convert.ToInt32(registro["tempMin"]);
-            d.TempMax = Convert.ToInt32(registro["tempMax"]);
-            d.LumMin = Convert.ToInt32(registro["lumMin"]);
-            d.LumMax = Convert.ToInt32(registro["lumMax"]);
-            d.HumidMin = Convert.ToInt32(registro["humidMin"]);
-            d.HumidMax = Convert.ToInt32(registro["humidMax"]);
+
+            // Leitura dos campos usando os nomes das colunas do banco (snake_case)
+            d.WineryId = Convert.ToInt32(registro["winery_id"]);
+            d.UserId = Convert.ToInt32(registro["user_id"]);
+
+            // Leitura do novo campo (verifica se não é nulo para evitar erro)
+            if (registro.Table.Columns.Contains("device_id") && registro["device_id"] != DBNull.Value)
+            {
+                d.DeviceId = registro["device_id"].ToString();
+            }
+
+            d.TempMin = Convert.ToDouble(registro["temp_min"]);
+            d.TempMax = Convert.ToDouble(registro["temp_max"]);
+            d.LumMin = Convert.ToDouble(registro["lum_min"]);
+            d.LumMax = Convert.ToDouble(registro["lum_max"]);
+            d.HumidMin = Convert.ToDouble(registro["humid_min"]);
+            d.HumidMax = Convert.ToDouble(registro["humid_max"]);
+
             return d;
         }
 
@@ -68,7 +88,6 @@ namespace Vinicola_app.DAO
                 return MontaDataLogger(tabela.Rows[0]);
         }
 
-        //Add procedure de Listagem
         public List<DataLoggerViewModel> Listagem()
         {
             List<DataLoggerViewModel> lista = new List<DataLoggerViewModel>();
@@ -79,9 +98,9 @@ namespace Vinicola_app.DAO
             return lista;
         }
 
-        //Add procedure de proximoId
         public int ProximoId()
         {
+            // Como o ID no banco é IDENTITY, esta função é usada apenas para exibir na tela antes de salvar
             string sql = "select isnull(max(id) + 1, 1) as 'MAIOR' from dataLogger";
             DataTable tabela = HelperDAO.ExecutaSelect(sql, null);
             return Convert.ToInt32(tabela.Rows[0]["MAIOR"]);
