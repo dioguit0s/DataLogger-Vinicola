@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Vinicola_app.Services;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using Vinicola_app.DAO; 
+using Vinicola_app.Models;
 
 namespace Vinicola_app.Controllers
 {
@@ -18,7 +21,20 @@ namespace Vinicola_app.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            if (usuarioId == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            WineryDAO wineryDao = new WineryDAO();
+            DataLoggerDAO loggerDao = new DataLoggerDAO();
+
+            DashboardViewModel model = new DashboardViewModel();
+            model.Vinicolas = wineryDao.Listagem(usuarioId.Value);
+            model.Loggers = loggerDao.Listagem(usuarioId.Value);
+
+            return View(model);
         }
 
         public IActionResult Sobre()
@@ -30,42 +46,63 @@ namespace Vinicola_app.Controllers
         public async Task<IActionResult> ObterDadosDashboard(string deviceId)
         {
             if (string.IsNullOrEmpty(deviceId) || deviceId == "all")
-                deviceId = "003";
+            {
+                return Json(new { error = "Selecione um sensor." });
+            }
 
-            // 1. Busca dados atuais (Orion)
+            // Busca dados atuais
             var jsonAtual = await _fiwareService.ObterDadosAtuais(deviceId);
 
-            // 2. Busca histórico (STH)
-            var jsonHistTemp = await _fiwareService.ObterHistorico(deviceId, "temperature");
-            var jsonHistHum = await _fiwareService.ObterHistorico(deviceId, "humidity");
-            var jsonHistLum = await _fiwareService.ObterHistorico(deviceId, "luminosity");
+            double tempAtual = 0;
+            double humAtual = 0;
+            double lumAtual = 0;
 
-            // 3. Processa o retorno (Simplificado)
-            dynamic dadosAtuais = jsonAtual != null ? JObject.Parse(jsonAtual) : null;
+            if (!string.IsNullOrEmpty(jsonAtual))
+            {
+                try
+                {
+                    var dados = Newtonsoft.Json.Linq.JObject.Parse(jsonAtual);
 
-            // Extrai valores atuais (seguro contra nulos)
-            double tempAtual = dadosAtuais?.temperature?.value ?? 0;
-            double humAtual = dadosAtuais?.humidity?.value ?? 0;
-            double lumAtual = dadosAtuais?.luminosity?.value ?? 0;
+                    // --- CORREÇÃO DE SEGURANÇA ---
+                    // Função para converter "nan", nulos ou textos inválidos em 0.0 sem dar erro
+                    double LerValorSeguro(Newtonsoft.Json.Linq.JToken token)
+                    {
+                        if (token == null || token["value"] == null) return 0;
 
-            // Processa histórico para arrays simples [10, 12, 15...]
-            var histTemp = ProcessarHistoricoFIWARE(jsonHistTemp);
-            var histHum = ProcessarHistoricoFIWARE(jsonHistHum);
-            var histLum = ProcessarHistoricoFIWARE(jsonHistLum);
+                        string valorStr = token["value"].ToString();
 
+                        // Se vier "nan" (erro comum do sensor), retorna 0
+                        if (valorStr.ToLower().Contains("nan")) return 0;
+
+                        // Tenta converter. Se falhar, retorna 0.
+                        if (double.TryParse(valorStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double valor))
+                        {
+                            return valor;
+                        }
+                        return 0;
+                    }
+
+                    tempAtual = LerValorSeguro(dados["temperature"]);
+                    humAtual = LerValorSeguro(dados["humidity"]);
+                    lumAtual = LerValorSeguro(dados["luminosity"]);
+                }
+                catch { /* Ignora erro de JSON */ }
+            }
+
+            // Retorna JSON para o Dashboard
             return Json(new
             {
-                kpi = new { temp = tempAtual, hum = humAtual, lum = lumAtual },
-                charts = new
+                kpi = new
                 {
-                    temp = histTemp,
-                    hum = histHum,
-                    lum = histLum
-                }
+                    temp = tempAtual,
+                    hum = humAtual,
+                    lum = lumAtual
+                },
+                // Enviamos listas vazias para o gráfico não quebrar enquanto não focamos no histórico
+                charts = new { temp = new System.Collections.Generic.List<double>(), hum = new System.Collections.Generic.List<double>(), lum = new System.Collections.Generic.List<double>() }
             });
         }
 
-        // Auxiliar para limpar o JSON complexo do STH e retornar só os valores
         private List<double> ProcessarHistoricoFIWARE(string jsonSth)
         {
             var listaValores = new List<double>();
