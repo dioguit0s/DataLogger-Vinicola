@@ -10,8 +10,15 @@ namespace Vinicola_app.Controllers
     {
         public ActionResult Index()
         {
+            int? usuarioId = HttpContext.Session.GetInt32("usuarioId");
+            if (usuarioId == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
             WineryDAO dao = new WineryDAO();
-            List<WineryViewModel> lista = dao.Listagem();
+            List<WineryViewModel> lista = dao.Listagem(usuarioId.Value);
+
             return View(lista);
         }
 

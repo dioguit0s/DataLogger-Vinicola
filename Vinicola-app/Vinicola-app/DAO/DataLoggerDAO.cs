@@ -88,11 +88,12 @@ namespace Vinicola_app.DAO
                 return MontaDataLogger(tabela.Rows[0]);
         }
 
-        public List<DataLoggerViewModel> Listagem()
+        public List<DataLoggerViewModel> Listagem(int userId)
         {
             List<DataLoggerViewModel> lista = new List<DataLoggerViewModel>();
-            string sql = "select * from dataLogger order by id";
-            DataTable tabela = HelperDAO.ExecutaSelect(sql, null);
+            string sql = "select * from dataLogger where user_id = @id order by id";
+            SqlParameter[] p = { new SqlParameter("id", userId) };
+            DataTable tabela = HelperDAO.ExecutaSelect(sql, p);
             foreach (DataRow registro in tabela.Rows)
                 lista.Add(MontaDataLogger(registro));
             return lista;
