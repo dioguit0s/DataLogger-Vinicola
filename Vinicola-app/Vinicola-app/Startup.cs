@@ -23,6 +23,14 @@ namespace Vinicola_app
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDistributedMemoryCache(); // Armazena a sessão na memória RAM
+            services.AddSession(options =>
+            {
+                // options.IdleTimeout = TimeSpan.FromMinutes(30); // Tempo limite da sessão (opcional)
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             // Adiciona o suporte a HttpClient e o nosso Serviço
             services.AddHttpClient<FiwareService>();
         }
