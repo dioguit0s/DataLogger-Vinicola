@@ -16,6 +16,8 @@ namespace Vinicola_app.Controllers
             return View();
         }
 
+
+
         // Processa o formulário de login
         [HttpPost]
         public IActionResult Autenticar(string email, string senhaHash) // senhaHash aqui seria a senha digitada
@@ -30,11 +32,15 @@ namespace Vinicola_app.Controllers
 
                 if (usuario != null)
                 {
-                    // Grava dados na sessão
                     HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
                     HttpContext.Session.SetString("UsuarioNome", usuario.Nome);
 
-                    // Redireciona para a página principal do sistema
+                    // VERIFIQUE SE ESTA LINHA EXISTE NO SEU LOGIN:
+                    if (usuario.FotoProfile != null)
+                    {
+                        HttpContext.Session.Set("UsuarioFoto", usuario.FotoProfile);
+                    }
+
                     return RedirectToAction("Index", "Home");
                 }
                 else

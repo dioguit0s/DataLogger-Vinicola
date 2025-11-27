@@ -89,18 +89,15 @@ namespace Vinicola_app.DAO
 
         public UsuarioViewModel VerificarLogin(string email, string senha)
         {
-            UsuarioViewModel usuario = null; // Inicializa como nulo. Se não achar, retorna nulo.
+            UsuarioViewModel usuario = null;
 
-            // 1. Criar a conexão (Use a sua string de conexão ou método Helper)
             using (SqlConnection conexao = ConexaoBD.GetConexao())
             {
-                // 2. Criar a instrução SQL
-                // NOTA: Verifique se o nome da coluna no banco é 'Senha' ou 'SenhaHash'
-                string sql = "SELECT Id, Nome, Email, password_hash FROM users WHERE Email = @email AND password_hash = @senha";
+                // 1. ADICIONADO 'profile_pic' NA CONSULTA SQL
+                string sql = "SELECT Id, Nome, Email, password_hash, profile_pic FROM users WHERE Email = @email AND password_hash = @senha";
 
                 using (SqlCommand comando = new SqlCommand(sql, conexao))
                 {
-                    // 3. Adicionar parâmetros (Segurança contra SQL Injection)
                     comando.Parameters.Add(new SqlParameter("@email", email));
                     comando.Parameters.Add(new SqlParameter("@senha", senha));
 
@@ -119,12 +116,17 @@ namespace Vinicola_app.DAO
                                 usuario.Id = Convert.ToInt32(leitor["Id"]);
                                 usuario.Nome = leitor["Nome"].ToString();
                                 usuario.Email = leitor["Email"].ToString();
+
+                                // 2. ADICIONADA A LEITURA DA FOTO PARA O OBJETO
+                                if (leitor["profile_pic"] != DBNull.Value)
+                                {
+                                    usuario.FotoProfile = (byte[])leitor["profile_pic"];
+                                }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        // É uma boa prática logar o erro ou lançar para o controller tratar
                         throw new Exception("Erro ao verificar login: " + ex.Message);
                     }
                 }
