@@ -1,0 +1,93 @@
+﻿@model Vinicola_app.Models.UsuarioViewModel
+@{
+    ViewBag.Title = ViewBag.Operacao == "I" ? "Novo Cadastro" : "Editar Perfil";
+    Layout = null; 
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: -apple-system, sans-serif;
+        }
+
+        .register-container {
+            max-width: 600px; /* Mais largo que o login */
+            margin: 50px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border-top: 5px solid #800020;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .btn-vinho {
+            background-color: #800020;
+            color: white;
+        }
+
+            .btn-vinho:hover {
+                background-color: #600018;
+                color: white;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="register-container">
+            <h2 class="section-title">@ViewBag.Title</h2>
+
+            @using (Html.BeginForm("Salvar", "Usuario", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="operacao" value="@ViewBag.Operacao" />
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.Nome, new { @class = "font-weight-bold" })
+                        @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", placeholder = "Nome Completo" } })
+                        @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger small" })
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.Email, new { @class = "font-weight-bold" })
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", type = "email", placeholder = "seu@email.com" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger small" })
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.SenhaHash, "Senha", new { @class = "font-weight-bold" })
+                        @Html.EditorFor(model => model.SenhaHash, new { htmlAttributes = new { @class = "form-control", type = "password" } })
+                        @Html.ValidationMessageFor(model => model.SenhaHash, "", new { @class = "text-danger small" })
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-between align-items-center">
+                    <a href="@Url.Action("Index", "Login")" class="text-secondary">Voltar para Login</a>
+                    <button type="submit" class="btn btn-vinho px-5">Salvar Cadastro</button>
+                </div>
+            }
+        </div>
+    </div>
+
+</body>
+</html>

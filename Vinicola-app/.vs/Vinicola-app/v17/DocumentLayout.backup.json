@@ -126,8 +126,7 @@
               "RelativeToolTip": "Vinicola-app\\Controllers\\LoginController.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAqwA8AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-19T01:05:32.271Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-19T01:05:32.271Z"
             },
             {
               "$type": "Document",
@@ -139,8 +138,7 @@
               "RelativeToolTip": "Vinicola-app\\Views\\Login\\Form.cshtml",
               "ViewState": "AgIAAD8AAAAAAAAAAAAAAEEAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-19T00:26:22.313Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-19T00:26:22.313Z"
             },
             {
               "$type": "Document",
@@ -152,8 +150,7 @@
               "RelativeToolTip": "Vinicola-app\\DAO\\WineryDAO.cs",
               "ViewState": "AgIAAEYAAAAAAAAAAAAAAE8AAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-19T00:55:47.205Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-19T00:55:47.205Z"
             },
             {
               "$type": "Document",
@@ -165,8 +162,7 @@
               "RelativeToolTip": "Vinicola-app\\DAO\\UsuarioDAO.cs",
               "ViewState": "AgIAAEgAAAAAAAAAAAAgwFMAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T01:22:16.257Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-11T01:22:16.257Z"
             },
             {
               "$type": "Document",
@@ -178,8 +174,7 @@
               "RelativeToolTip": "Vinicola-app\\DAO\\HelperDAO.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAuwAkAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T01:23:16.975Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-11T01:23:16.975Z"
             },
             {
               "$type": "Document",
@@ -191,8 +186,7 @@
               "RelativeToolTip": "Vinicola-app\\DAO\\ConexaoBD.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T01:30:44.645Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-11T01:30:44.645Z"
             },
             {
               "$type": "Document",
@@ -204,8 +198,7 @@
               "RelativeToolTip": "Vinicola-app\\Startup.cs",
               "ViewState": "AgIAACQAAAAAAAAAAAAAADgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T00:08:55.443Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T00:08:55.443Z"
             },
             {
               "$type": "Document",
@@ -215,7 +208,7 @@
               "RelativeDocumentMoniker": "Vinicola-app\\Views\\Login\\Index.cshtml",
               "ToolTip": "C:\\Users\\SEIDORBR\\OneDrive\\\u00C1rea de Trabalho\\FESA\\Projetos\\DataLogger-Vinicola\\Vinicola-app\\Vinicola-app\\Views\\Login\\Index.cshtml*",
               "RelativeToolTip": "Vinicola-app\\Views\\Login\\Index.cshtml*",
-              "ViewState": "AgIAAFwAAAAAAAAAAAAiwGMAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAAAGMAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-11-19T00:26:37.027Z",
               "EditorCaption": ""
@@ -230,8 +223,7 @@
               "RelativeToolTip": "Vinicola-app\\Models\\WineryViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-19T00:55:49.803Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-19T00:55:49.803Z"
             },
             {
               "$type": "Document",
@@ -243,8 +235,7 @@
               "RelativeToolTip": "Vinicola-app\\DAO\\DataLoggerDAO.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAlwBkAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T01:01:34.551Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T01:01:34.551Z"
             },
             {
               "$type": "Document",
@@ -256,8 +247,7 @@
               "RelativeToolTip": "Vinicola-app\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T01:16:50.592Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-11T01:16:50.592Z"
             },
             {
               "$type": "Document",
@@ -269,8 +259,7 @@
               "RelativeToolTip": "Vinicola-app\\Controllers\\UsuarioController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAF0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T01:20:14.39Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-11T01:20:14.39Z"
             },
             {
               "$type": "Document",
@@ -282,8 +271,7 @@
               "RelativeToolTip": "Vinicola-app\\Views\\Usuario\\Index.cshtml",
               "ViewState": "AgIAAEgAAAAAAAAAAAAiwGYAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-12T01:02:54.48Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T01:02:54.48Z"
             },
             {
               "$type": "Document",
@@ -295,8 +283,7 @@
               "RelativeToolTip": "Vinicola-app\\Views\\Usuario\\Form.cshtml",
               "ViewState": "AgIAAB4AAAAAAAAAAAAAAEkAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-12T00:56:31.903Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T00:56:31.903Z"
             },
             {
               "$type": "Document",
