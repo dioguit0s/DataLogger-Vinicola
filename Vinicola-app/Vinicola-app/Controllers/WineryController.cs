@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using Vinicola_app.DAO;
 using Vinicola_app.Models;
-using System;
+using System.IO;
 
 namespace Vinicola_app.Controllers
 {
@@ -58,7 +58,6 @@ namespace Vinicola_app.Controllers
             return View("Form", model);
         }
 
-        // AÇÃO DE SALVAR (Recebe o Form) - ESTE ERA O TRECHO FALTANTE
         [HttpPost]
         public IActionResult Salvar(WineryViewModel model, string operacao)
         {
@@ -66,39 +65,50 @@ namespace Vinicola_app.Controllers
             int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
             if (usuarioId == null) return RedirectToAction("Index", "Login");
 
-            model.UserId = usuarioId.Value; // Garante que a vinícola pertence ao usuário logado
+            model.UserId = usuarioId.Value;
 
             try
             {
-                // 2. Validação Manual de Dados
                 ValidaDados(model);
 
                 if (ModelState.IsValid)
                 {
                     WineryDAO dao = new WineryDAO();
 
-                    if (operacao == "I")
+                    // LÓGICA DA IMAGEM (Igual ao UsuarioController)
+                    if (model.LogoUpload != null)
                     {
-                        dao.Inserir(model);
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            model.LogoUpload.CopyTo(memoryStream);
+                            model.LogoPic = memoryStream.ToArray();
+                        }
                     }
-                    else
+                    else if (operacao == "A") // Se for Alteração e não enviou foto nova
                     {
-                        dao.Alterar(model);
+                        // Busca a vinícola antiga para manter a foto que já existia
+                        var vinicolaAntiga = dao.Consulta(model.Id);
+                        if (vinicolaAntiga != null)
+                        {
+                            model.LogoPic = vinicolaAntiga.LogoPic;
+                        }
                     }
 
-                    // Sucesso: volta para a listagem
+                    if (operacao == "I")
+                        dao.Inserir(model);
+                    else
+                        dao.Alterar(model);
+
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    // Erro de Validação: devolve o formulário com os erros
                     ViewBag.Operacao = operacao;
                     return View("Form", model);
                 }
             }
             catch (Exception erro)
             {
-                // Erro de Banco/Sistema: exibe mensagem na tela
                 ViewBag.Operacao = operacao;
                 ViewBag.Erro = "Ocorreu um erro ao salvar: " + erro.Message;
                 return View("Form", model);

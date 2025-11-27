@@ -21,16 +21,20 @@ namespace Vinicola_app.DAO
         private SqlParameter[] CriaParametros(WineryViewModel model, bool incluirId)
         {
             List<SqlParameter> parametros = new List<SqlParameter>
-            {
-                new SqlParameter("user_id", model.UserId),
-                new SqlParameter("name", model.Name ?? (object)DBNull.Value),
-                new SqlParameter("description", model.Description ?? (object)DBNull.Value),
-                new SqlParameter("address", model.Address ?? (object)DBNull.Value),
-                new SqlParameter("cnpj", model.Cnpj ?? (object)DBNull.Value),
-                new SqlParameter("email", model.Email ?? (object)DBNull.Value),
-                new SqlParameter("telephone", model.Telephone ?? (object)DBNull.Value),
-                new SqlParameter("logo_pic", model.LogoPic ?? (object)DBNull.Value)
-            };
+    {
+        new SqlParameter("user_id", model.UserId),
+        new SqlParameter("name", model.Name ?? (object)DBNull.Value),
+        new SqlParameter("description", model.Description ?? (object)DBNull.Value),
+        new SqlParameter("address", model.Address ?? (object)DBNull.Value),
+        new SqlParameter("cnpj", model.Cnpj ?? (object)DBNull.Value),
+        new SqlParameter("email", model.Email ?? (object)DBNull.Value),
+        new SqlParameter("telephone", model.Telephone ?? (object)DBNull.Value),
+        
+        new SqlParameter("logo_pic", SqlDbType.VarBinary, -1)
+        {
+            Value = (object)model.LogoPic ?? DBNull.Value
+        }
+    };
 
             if (incluirId)
             {
@@ -51,6 +55,7 @@ namespace Vinicola_app.DAO
             WineryViewModel w = new WineryViewModel();
             w.Id = Convert.ToInt32(registro["id"]);
 
+            // ... (outros campos mantêm iguais) ...
             if (registro.Table.Columns.Contains("user_id"))
                 w.UserId = Convert.ToInt32(registro["user_id"]);
             else if (registro.Table.Columns.Contains("userId"))
@@ -62,7 +67,14 @@ namespace Vinicola_app.DAO
             w.Cnpj = registro["cnpj"].ToString();
             w.Email = registro["email"].ToString();
             w.Telephone = registro["telephone"].ToString();
-            w.LogoPic = registro["logo_pic"] != DBNull.Value ? registro["logo_pic"].ToString() : "";
+
+            if (registro["logo_pic"] != DBNull.Value)
+            {
+                if (registro["logo_pic"] is byte[])
+                {
+                    w.LogoPic = (byte[])registro["logo_pic"];
+                }
+            }
 
             return w;
         }
