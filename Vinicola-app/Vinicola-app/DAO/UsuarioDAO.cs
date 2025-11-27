@@ -95,22 +95,19 @@ namespace Vinicola_app.DAO
 
                     try
                     {
-                        conexao.Open();
+                        if (conexao.State != System.Data.ConnectionState.Open)
+                        {
+                            conexao.Open();
+                        }
 
-                        // 4. Executar o comando
                         using (SqlDataReader leitor = comando.ExecuteReader())
                         {
-                            // 5. Se encontrou uma linha, preenche o objeto
                             if (leitor.Read())
                             {
                                 usuario = new UsuarioViewModel();
                                 usuario.Id = Convert.ToInt32(leitor["Id"]);
                                 usuario.Nome = leitor["Nome"].ToString();
                                 usuario.Email = leitor["Email"].ToString();
-
-
-                                // Não é recomendável retornar a senha para a View, mas se precisar mapear:
-                                // usuario.SenhaHash = leitor["SenhaHash"].ToString();
                             }
                         }
                     }
