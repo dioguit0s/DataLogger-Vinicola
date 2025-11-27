@@ -173,14 +173,20 @@
             <div class="winery-card">
                 <div class="winery-content">
                     <div class="icon-container">
-                        @if (!string.IsNullOrEmpty(item.LogoPic))
-                        {
-                            <img src="@item.LogoPic" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
-                            <span style="display:none;">🍇</span>
-                        }
-                        else
-                        {
-                            <span>🍇</span>
+                        @{
+                            // Lógica de exibição da imagem
+                            if (item.LogoPic != null && item.LogoPic.Length > 0)
+                            {
+                                string base64 = Convert.ToBase64String(item.LogoPic);
+                                string imgSrc = String.Format("data:image/jpeg;base64,{0}", base64);
+
+                                <img src="@imgSrc" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                // Emoji ou imagem padrão caso não tenha logo
+                                <span>🍇</span>
+                            }
                         }
                     </div>
 

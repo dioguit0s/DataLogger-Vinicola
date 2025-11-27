@@ -10,6 +10,7 @@
         public string Cnpj { get; set; }
         public string Email { get; set; }
         public string Telephone { get; set; }
-        public string LogoPic { get; set; }
+        public byte[]? LogoPic { get; set; }
+        public IFormFile? LogoUpload { get; set; }
     }
 }
