@@ -108,13 +108,13 @@
             </div>
         }
 
-        @using (Html.BeginForm("Autenticar", "Register", FormMethod.Post))
+        @using (Html.BeginForm("Salvar", "Register", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
 
             <div class="form-group">
                 <label class="font-weight-bold text-muted small">NOME</label>
-                @Html.TextBox("nome", null, new { @class = "form-control", placeholder = "Nome Completo", type = "nome", required = "required" })
+                @Html.TextBox("nome", null, new { @class = "form-control", placeholder = "Nome Completo", required = "required" })
             </div>
 
             <div class="form-group">
@@ -129,13 +129,13 @@
 
             <div class="form-group">
                 <label class="font-weight-bold text-muted small">CONFIRMAR SENHA</label>
-                @Html.Password("senhaHash", null, new { @class = "form-control", placeholder = "********", required = "required" })
+                @Html.Password("confirmaSenha", null, new { @class = "form-control", placeholder = "********", required = "required" })
             </div>
 
             <button type="submit" class="btn btn-register btn-block mt-4">REGISTRAR</button>
         }
 
-        <a href="@Url.Action("Login", "Usuario")" class="btn btn-outline-secondary btn-block">
+        <a href="@Url.Action("Index", "Login")" class="btn btn-outline-secondary btn-block">
             Logar
         </a>
     </div>

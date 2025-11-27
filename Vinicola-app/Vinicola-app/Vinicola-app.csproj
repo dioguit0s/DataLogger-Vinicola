@@ -8,13 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Register\**" />
-    <Content Remove="Views\Register\**" />
-    <EmbeddedResource Remove="Views\Register\**" />
-    <None Remove="Views\Register\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
