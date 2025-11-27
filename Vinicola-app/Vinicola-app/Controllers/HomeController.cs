@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+ï»¿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Vinicola_app.Services;
@@ -42,6 +42,7 @@ namespace Vinicola_app.Controllers
             return View();
         }
 
+
         [HttpGet]
         public async Task<IActionResult> ObterDadosDashboard(string deviceId)
         {
@@ -50,7 +51,7 @@ namespace Vinicola_app.Controllers
                 return Json(new { error = "Selecione um sensor." });
             }
 
-            // Busca dados atuais
+            // 1. Busca dados atuais do FIWARE
             var jsonAtual = await _fiwareService.ObterDadosAtuais(deviceId);
 
             double tempAtual = 0;
@@ -63,18 +64,15 @@ namespace Vinicola_app.Controllers
                 {
                     var dados = Newtonsoft.Json.Linq.JObject.Parse(jsonAtual);
 
-                    // --- CORREÇÃO DE SEGURANÇA ---
-                    // Função para converter "nan", nulos ou textos inválidos em 0.0 sem dar erro
+                    // --- FUNÃ‡ÃƒO DE LEITURA SEGURA ---
                     double LerValorSeguro(Newtonsoft.Json.Linq.JToken token)
                     {
                         if (token == null || token["value"] == null) return 0;
 
                         string valorStr = token["value"].ToString();
 
-                        // Se vier "nan" (erro comum do sensor), retorna 0
                         if (valorStr.ToLower().Contains("nan")) return 0;
 
-                        // Tenta converter. Se falhar, retorna 0.
                         if (double.TryParse(valorStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double valor))
                         {
                             return valor;
@@ -85,11 +83,57 @@ namespace Vinicola_app.Controllers
                     tempAtual = LerValorSeguro(dados["temperature"]);
                     humAtual = LerValorSeguro(dados["humidity"]);
                     lumAtual = LerValorSeguro(dados["luminosity"]);
+
+                    // =========================================================================
+                    // ðŸ”’ LÃ“GICA DE VERIFICAÃ‡ÃƒO DE ALARMES (ATUALIZADA)
+                    // =========================================================================
+                    try
+                    {
+                        DataLoggerDAO dao = new DataLoggerDAO();
+                        var config = dao.BuscarPorDeviceId(deviceId);
+
+                        if (config != null)
+                        {
+                            // LÃ³gica em cadeia: Verifica um por um.
+                            // O primeiro que estiver fora dos limites dispara o alarme e impede o comando OFF.
+
+                            bool acionouAlarme = false;
+
+                            // 1. Verifica TEMPERATURA
+                            if (tempAtual < config.TempMin || tempAtual > config.TempMax)
+                            {
+                                await _fiwareService.EnviarComando(deviceId, "TEMP_ALARM");
+                                acionouAlarme = true;
+                            }
+                            // 2. Se Temperatura OK, Verifica UMIDADE
+                            else if (humAtual < config.HumidMin || humAtual > config.HumidMax)
+                            {
+                                await _fiwareService.EnviarComando(deviceId, "HUM_ALARM");
+                                acionouAlarme = true;
+                            }
+                            // 3. Se Umidade OK, Verifica LUMINOSIDADE
+                            else if (lumAtual < config.LumMin || lumAtual > config.LumMax)
+                            {
+                                await _fiwareService.EnviarComando(deviceId, "LUM_ALARM");
+                                acionouAlarme = true;
+                            }
+
+                            // 4. Se NENHUM alarme foi acionado (tudo dentro dos limites), desliga o LED
+                            if (!acionouAlarme)
+                            {
+                                await _fiwareService.EnviarComando(deviceId, "OFF");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Erro na lÃ³gica de alarme: {ex.Message}");
+                    }
+                    // =========================================================================
                 }
                 catch { /* Ignora erro de JSON */ }
             }
 
-            // Retorna JSON para o Dashboard
             return Json(new
             {
                 kpi = new
@@ -98,7 +142,6 @@ namespace Vinicola_app.Controllers
                     hum = humAtual,
                     lum = lumAtual
                 },
-                // Enviamos listas vazias para o gráfico não quebrar enquanto não focamos no histórico
                 charts = new { temp = new System.Collections.Generic.List<double>(), hum = new System.Collections.Generic.List<double>(), lum = new System.Collections.Generic.List<double>() }
             });
         }

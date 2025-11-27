@@ -1,5 +1,5 @@
 ﻿@model Vinicola_app.Models.DashboardViewModel
-
+@using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "Qualivine - Dashboard";
 }
@@ -152,289 +152,516 @@
         .charts-grid {
             grid-template-columns: 1fr;
         }
-    }
-</style>
 
-<h2 class="section-title">Painel de Monitoramento</h2>
-
-<div class="filters-bar">
-    <div class="filter-group">
-        <label for="vinicolaSelect">Vinícola</label>
-        <select id="vinicolaSelect">
-            <option value="all">Todas as Vinícolas</option>
-            @if (Model != null && Model.Vinicolas.Any())
-            {
-                foreach (var winery in Model.Vinicolas)
-                {
-                    <option value="@winery.Id">@winery.Name</option>
-                }
+            .btn-logout:hover {
+                background: rgba(255,255,255,0.1);
             }
-        </select>
-    </div>
 
-    <div class="filter-group">
-        <label for="sensorSelect">Datalogger</label>
-        <select id="sensorSelect" onchange="updateDashboard()">
-            @if (Model == null || !Model.Loggers.Any())
-            {
-                <option value="">Nenhum sensor cadastrado</option>
+            .btn-logout a {
+                color: white;
+                text-decoration: none;
             }
-            else
-            {
-                foreach (var logger in Model.Loggers)
-                {
-                    <option value="@logger.DeviceId">
-                        @logger.DeviceId
-                        @(!string.IsNullOrEmpty(logger.WineryId.ToString()) ? $"(Vinícola #{logger.WineryId})" : "")
-                    </option>
-                }
+
+        /* Main Content */
+        .main-container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Filters Bar */
+        .filters-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 20px;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+            .filter-group label {
+                font-size: 0.85rem;
+                color: #666;
+                font-weight: bold;
             }
-        </select>
-    </div>
 
-    <button class="btn-filter" onclick="updateDashboard()">Atualizar</button>
-</div>
+            .filter-group select {
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                min-width: 200px;
+                background-color: #fff;
+            }
 
-<div class="kpi-grid">
-    <div class="kpi-card" id="card-temp" style="border-left-color: #ccc;">
-        <h3>Temperatura Média (Atual)</h3>
-        <div class="kpi-value">0.0 °C</div>
-        <div class="kpi-status text-muted">
-            <i class="fas fa-sync fa-spin"></i> Sincronizando...
+        .btn-filter {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+            .btn-filter:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid #ccc;
+            transition: border-color 0.3s;
+        }
+
+            .kpi-card h3 {
+                font-size: 0.9rem;
+                color: #666;
+                margin-bottom: 10px;
+            }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .kpi-status {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .text-muted {
+            color: #999;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        .chart-full {
+            grid-column: 1 / -1;
+        }
+
+        h2.section-title {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Responsividade */
+        @@media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span>🍷 WineLogger</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+            <li><a href="@Url.Action("Index", "Winery")">Vinícolas</a></li>
+            <li><a href="@Url.Action("Index", "DataLogger")">DataLoggers</a></li>
+            <li><a href="@Url.Action("Sobre", "Home")">Sobre</a></li>
+        </ul>
+        <div class="user-profile">
+            <div class="user-info">
+                <div class="user-name">@Context.Session.GetString("UsuarioNome")</div>
+            </div>
+            <div class="avatar">
+                <img src="https://via.placeholder.com/40" alt="User" style="border-radius: 50%;">
+            </div>
+            <button class="btn-logout">
+                <a href="@Url.Action("Sair", "Login")">Sair</a>
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+
+        <h2 class="section-title">Painel de Monitoramento</h2>
+
+        <div class="filters-bar">
+            <div class="filter-group">
+                <label for="vinicolaSelect">Vinícola</label>
+                <select id="vinicolaSelect" onchange="filtrarLoggers()">
+                    <option value="all">Todas as Vinícolas</option>
+                    @if (Model != null && Model.Vinicolas.Any())
+                    {
+                        foreach (var winery in Model.Vinicolas)
+                        {
+                            <option value="@winery.Id">@winery.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="sensorSelect">Datalogger</label>
+                <select id="sensorSelect" onchange="updateDashboard()">
+                    @if (Model == null || !Model.Loggers.Any())
+                    {
+                        <option value="">Nenhum sensor cadastrado</option>
+                    }
+                    else
+                    {
+                        foreach (var logger in Model.Loggers)
+                        {
+                            // ATRIBUTO CRUCIAL: data-winery-id permite filtrar
+                            <option value="@logger.DeviceId" data-winery-id="@logger.WineryId">
+                                @logger.DeviceId
+                                @(!string.IsNullOrEmpty(logger.WineryId.ToString()) ? $"(Vinícola #{logger.WineryId})" : "")
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <button class="btn-filter" onclick="updateDashboard()">Atualizar</button>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card" id="card-temp" style="border-left-color: #ccc;">
+                <h3>Temperatura Média (Atual)</h3>
+                <div class="kpi-value">0.0 °C</div>
+                <div class="kpi-status text-muted">
+                    <i class="fas fa-sync fa-spin"></i> Sincronizando...
+                </div>
+            </div>
+
+            <div class="kpi-card" id="card-hum" style="border-left-color: #ccc;">
+                <h3>Umidade Relativa (Atual)</h3>
+                <div class="kpi-value">0%</div>
+                <div class="kpi-status text-muted">
+                    <i class="fas fa-sync fa-spin"></i> Sincronizando...
+                </div>
+            </div>
+
+            <div class="kpi-card" id="card-lum" style="border-left-color: #ccc;">
+                <h3>Luminosidade (Atual)</h3>
+                <div class="kpi-value">0 Lux</div>
+                <div class="kpi-status text-muted">
+                    <i class="fas fa-sync fa-spin"></i> Sincronizando...
+                </div>
+            </div>
+
+            <div class="kpi-card" style="border-left-color: #4bc0c0;">
+                <h3>Status do Sensor</h3>
+                <div class="kpi-value" style="font-size: 1.5rem;">Aguardando</div>
+                <div class="kpi-status text-muted">Verificando conexão...</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container chart-full">
+                <canvas id="tempHumidityChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="luxChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="sensorComparisonChart"></canvas>
+            </div>
         </div>
     </div>
 
-    <div class="kpi-card" id="card-hum" style="border-left-color: #ccc;">
-        <h3>Umidade Relativa (Atual)</h3>
-        <div class="kpi-value">0%</div>
-        <div class="kpi-status text-muted">
-            <i class="fas fa-sync fa-spin"></i> Sincronizando...
-        </div>
-    </div>
+    <script>
+        let intervaloAtualizacao;
 
-    <div class="kpi-card" id="card-lum" style="border-left-color: #ccc;">
-        <h3>Luminosidade (Atual)</h3>
-        <div class="kpi-value">0 Lux</div>
-        <div class="kpi-status text-muted">
-            <i class="fas fa-sync fa-spin"></i> Sincronizando...
-        </div>
-    </div>
+        // Variável para armazenar a lista completa de opções ao carregar a página
+        let todosLoggers = [];
 
-    <div class="kpi-card" style="border-left-color: #27ae60;">
-        <h3>Status do Sensor</h3>
-        <div class="kpi-value" style="font-size: 1.5rem;">Aguardando</div>
-        <div class="kpi-status text-muted">Verificando conexão...</div>
-    </div>
-</div>
-
-<div class="charts-grid">
-    <div class="chart-container chart-full">
-        <canvas id="tempHumidityChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <canvas id="luxChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <canvas id="sensorComparisonChart"></canvas>
-    </div>
-</div>
-
-<script>
-    let intervaloAtualizacao;
-
-    function generateLabels(count) {
-        const labels = [];
-        for (let i = 0; i < count; i++) {
-            if (i === 0) labels.unshift("Agora");
-            else labels.unshift(`-${i}`);
-        }
-        return labels;
-    }
-
-    // --- CHART CONFIG (Cores Atualizadas para o Tema VinoSense) ---
-    const themeColors = {
-        temp: '#800020', // Vinho
-        tempBg: 'rgba(128, 0, 32, 0.2)',
-        hum: '#2c3e50',  // Azul Escuro
-        humBg: 'rgba(44, 62, 80, 0.2)',
-        lux: '#f39c12',  // Laranja
-        luxBg: 'rgba(243, 156, 18, 0.4)'
-    };
-
-    const ctxTempHum = document.getElementById('tempHumidityChart').getContext('2d');
-    const tempHumidityChart = new Chart(ctxTempHum, {
-        type: 'line',
-        data: {
-            labels: generateLabels(12),
-            datasets: [
-                { label: 'Temperatura (°C)', data: [], borderColor: themeColors.temp, backgroundColor: themeColors.tempBg, yAxisID: 'y', tension: 0.4 },
-                { label: 'Umidade (%)', data: [], borderColor: themeColors.hum, backgroundColor: themeColors.humBg, yAxisID: 'y1', tension: 0.4 }
-            ]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
-            plugins: { title: { display: true, text: 'Últimas 12 Leituras (Tempo Real)' } },
-            scales: {
-                y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Temp (°C)' } },
-                y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Umid (%)' } }
+        function generateLabels(count) {
+            const labels = [];
+            for (let i = 0; i < count; i++) {
+                if (i === 0) labels.unshift("Agora");
+                else labels.unshift(`-${i}`);
             }
-        }
-    });
-
-    const ctxLux = document.getElementById('luxChart').getContext('2d');
-    const luxChart = new Chart(ctxLux, {
-        type: 'line',
-        data: {
-            labels: generateLabels(12),
-            datasets: [{ label: 'Luminosidade (Lux)', data: [], borderColor: themeColors.lux, backgroundColor: themeColors.luxBg, fill: true, tension: 0.3 }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Variação de Luminosidade' } } }
-    });
-
-    const ctxComp = document.getElementById('sensorComparisonChart').getContext('2d');
-    const sensorComparisonChart = new Chart(ctxComp, {
-        type: 'bar',
-        data: {
-            labels: ['Temp', 'Humid', 'Lum/10'],
-            datasets: [{ label: 'Leitura Atual', data: [0, 0, 0], backgroundColor: [themeColors.temp, themeColors.hum, themeColors.lux] }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Snapshot do Sensor Atual' } } }
-    });
-
-    // --- UPDATE FUNCTION ---
-    async function updateDashboard(silencioso = false) {
-        const deviceId = document.getElementById('sensorSelect').value;
-        if (!deviceId) return;
-
-        const btn = document.querySelector('.btn-filter');
-        if (!silencioso) {
-            btn.innerText = "Carregando...";
-            btn.disabled = true;
+            return labels;
         }
 
-        try {
-            const timestamp = new Date().getTime();
-            const response = await fetch(`@Url.Action("ObterDadosDashboard", "Home")?deviceId=${deviceId}&_=${timestamp}`);
-
-            if (!response.ok) throw new Error('Falha na requisição');
-
-            const data = await response.json();
-
-            const cards = document.querySelectorAll('.kpi-value');
-            const statusTexts = document.querySelectorAll('.kpi-status');
-            const cardDivs = document.querySelectorAll('.kpi-card');
-
-            if (data.kpi) {
-                // 1. TEMPERATURA
-                const temp = data.kpi.temp || 0;
-                cards[0].innerText = temp.toFixed(1) + ' °C';
-
-                if (temp === 0) {
-                    statusTexts[0].innerHTML = '<i class="fas fa-exclamation-circle"></i> Sem leitura';
-                    statusTexts[0].className = "kpi-status text-muted";
-                    cardDivs[0].style.borderLeftColor = "#ccc";
-                } else {
-                    statusTexts[0].innerHTML = '<i class="fas fa-check-circle"></i> Leitura Ativa';
-                    statusTexts[0].className = "kpi-status status-ok";
-                    cardDivs[0].style.borderLeftColor = themeColors.temp;
-                }
-
-                // 2. UMIDADE
-                const hum = data.kpi.hum || 0;
-                cards[1].innerText = hum.toFixed(1) + '%';
-
-                if (hum === 0) {
-                    statusTexts[1].innerHTML = '<i class="fas fa-exclamation-circle"></i> Sem leitura';
-                    statusTexts[1].className = "kpi-status text-muted";
-                    cardDivs[1].style.borderLeftColor = "#ccc";
-                } else {
-                    statusTexts[1].innerHTML = '<i class="fas fa-check-circle"></i> Leitura Ativa';
-                    statusTexts[1].className = "kpi-status status-ok";
-                    cardDivs[1].style.borderLeftColor = themeColors.hum;
-                }
-
-                // 3. LUMINOSIDADE
-                const lumValue = data.kpi.lum || 0;
-                cards[2].innerText = lumValue.toFixed(0) + ' Lux';
-                const statusLum = statusTexts[2];
-                const cardLum = cardDivs[2];
-
-                if (lumValue < 100) {
-                    statusLum.innerHTML = '<i class="fas fa-moon"></i> Baixa (Escuro)';
-                    statusLum.className = "kpi-status status-warn";
-                    cardLum.style.borderLeftColor = themeColors.lux;
-                } else if (lumValue > 800) {
-                    statusLum.innerHTML = '<i class="fas fa-sun"></i> Alta (Sol direto)';
-                    statusLum.className = "kpi-status status-danger";
-                    cardLum.style.borderLeftColor = "#c0392b";
-                } else {
-                    statusLum.innerHTML = '<i class="fas fa-lightbulb"></i> Ideal';
-                    statusLum.className = "kpi-status status-ok";
-                    cardLum.style.borderLeftColor = "#27ae60";
-                }
-
-                // 4. STATUS GERAL
-                const cardStatus = cards[3];
-                const textStatus = statusTexts[3];
-
-                if(temp > 0 || hum > 0 || lumValue > 0) {
-                    cardStatus.innerText = "Online";
-                    cardStatus.style.color = "#27ae60";
-                    textStatus.innerText = "Recebendo dados...";
-                    cardDivs[3].style.borderLeftColor = "#27ae60";
-                } else {
-                    cardStatus.innerText = "Offline";
-                    cardStatus.style.color = "#c0392b";
-                    textStatus.innerText = "Verifique o sensor";
-                    cardDivs[3].style.borderLeftColor = "#c0392b";
+        // --- CHART CONFIG ---
+        const ctxTempHum = document.getElementById('tempHumidityChart').getContext('2d');
+        const tempHumidityChart = new Chart(ctxTempHum, {
+            type: 'line',
+            data: {
+                labels: generateLabels(12),
+                datasets: [
+                    { label: 'Temperatura (°C)', data: [], borderColor: '#ff6384', backgroundColor: 'rgba(255, 99, 132, 0.2)', yAxisID: 'y', tension: 0.4 },
+                    { label: 'Umidade (%)', data: [], borderColor: '#36a2eb', backgroundColor: 'rgba(54, 162, 235, 0.2)', yAxisID: 'y1', tension: 0.4 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: { title: { display: true, text: 'Últimas 12 Leituras (Tempo Real)' } },
+                scales: {
+                    y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Temp (°C)' } },
+                    y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Umid (%)' } }
                 }
             }
+        });
 
-            // Atualiza Gráficos
-            if (data.charts) {
-                tempHumidityChart.data.datasets[0].data = data.charts.temp || [];
-                tempHumidityChart.data.datasets[1].data = data.charts.hum || [];
-                tempHumidityChart.update('none');
+        const ctxLux = document.getElementById('luxChart').getContext('2d');
+        const luxChart = new Chart(ctxLux, {
+            type: 'line',
+            data: {
+                labels: generateLabels(12),
+                datasets: [{ label: 'Luminosidade (Lux)', data: [], borderColor: '#ffce56', backgroundColor: 'rgba(255, 206, 86, 0.4)', fill: true, tension: 0.3 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Variação de Luminosidade' } } }
+        });
 
-                luxChart.data.datasets[0].data = data.charts.lum || [];
-                luxChart.update('none');
+        const ctxComp = document.getElementById('sensorComparisonChart').getContext('2d');
+        const sensorComparisonChart = new Chart(ctxComp, {
+            type: 'bar',
+            data: {
+                labels: ['Temp', 'Humid', 'Lum/10'],
+                datasets: [{ label: 'Leitura Atual', data: [0, 0, 0], backgroundColor: ['#ff6384', '#36a2eb', '#ffce56'] }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Snapshot do Sensor Atual' } } }
+        });
 
-                sensorComparisonChart.data.datasets[0].data = [
-                    data.kpi.temp,
-                    data.kpi.hum,
-                    data.kpi.lum / 10
-                ];
-                sensorComparisonChart.update('none');
-            }
+        // --- UPDATE FUNCTION ---
+        async function updateDashboard(silencioso = false) {
 
-        } catch (error) {
-            console.error("Erro ao buscar dados:", error);
-        } finally {
+            const deviceId = document.getElementById('sensorSelect').value;
+            // Se a lista estiver vazia (porque o filtro removeu tudo), não faz nada
+            if (!deviceId) return;
+
+            const btn = document.querySelector('.btn-filter');
             if (!silencioso) {
-                btn.innerText = "Atualizar";
-                btn.disabled = false;
+                btn.innerText = "Carregando...";
+                btn.disabled = true;
+            }
+
+            try {
+                const timestamp = new Date().getTime();
+                const response = await fetch(`@Url.Action("ObterDadosDashboard", "Home")?deviceId=${deviceId}&_=${timestamp}`);
+
+                if (!response.ok) throw new Error('Falha na requisição');
+
+                const data = await response.json();
+
+                const cards = document.querySelectorAll('.kpi-value');
+                const statusTexts = document.querySelectorAll('.kpi-status');
+                const cardDivs = document.querySelectorAll('.kpi-card');
+
+                if (data.kpi) {
+                    // 1. TEMPERATURA
+                    const temp = data.kpi.temp || 0;
+                    cards[0].innerText = temp.toFixed(1) + ' °C';
+
+                    if (temp === 0) {
+                        statusTexts[0].innerHTML = '<i class="fas fa-exclamation-circle"></i> Sem leitura';
+                        statusTexts[0].className = "kpi-status text-muted";
+                        cardDivs[0].style.borderLeftColor = "#ccc";
+                    } else {
+                        statusTexts[0].innerHTML = '<i class="fas fa-check-circle"></i> Leitura Ativa';
+                        statusTexts[0].className = "kpi-status status-ok";
+                        cardDivs[0].style.borderLeftColor = "#ff6384";
+                    }
+
+                    // 2. UMIDADE
+                    const hum = data.kpi.hum || 0;
+                    cards[1].innerText = hum.toFixed(1) + '%';
+
+                    if (hum === 0) {
+                        statusTexts[1].innerHTML = '<i class="fas fa-exclamation-circle"></i> Sem leitura';
+                        statusTexts[1].className = "kpi-status text-muted";
+                        cardDivs[1].style.borderLeftColor = "#ccc";
+                    } else {
+                        statusTexts[1].innerHTML = '<i class="fas fa-check-circle"></i> Leitura Ativa';
+                        statusTexts[1].className = "kpi-status status-ok";
+                        cardDivs[1].style.borderLeftColor = "#36a2eb";
+                    }
+
+                    // 3. LUMINOSIDADE
+                    const lumValue = data.kpi.lum || 0;
+                    cards[2].innerText = lumValue.toFixed(0) + ' Lux';
+
+                    const statusLum = statusTexts[2];
+                    const cardLum = cardDivs[2];
+
+                    if (lumValue < 100) {
+                        statusLum.innerHTML = '<i class="fas fa-moon"></i> Baixa (Escuro)';
+                        statusLum.className = "kpi-status status-warn";
+                        cardLum.style.borderLeftColor = "#f1c40f";
+                    } else if (lumValue > 800) {
+                        statusLum.innerHTML = '<i class="fas fa-sun"></i> Alta (Sol direto)';
+                        statusLum.className = "kpi-status status-danger";
+                        cardLum.style.borderLeftColor = "#e74c3c";
+                    } else {
+                        statusLum.innerHTML = '<i class="fas fa-lightbulb"></i> Ideal';
+                        statusLum.className = "kpi-status status-ok";
+                        cardLum.style.borderLeftColor = "#2ecc71";
+                    }
+
+                    // 4. STATUS GERAL
+                    const cardStatus = cards[3];
+                    const textStatus = statusTexts[3];
+
+                    if(temp > 0 || hum > 0 || lumValue > 0) {
+                        cardStatus.innerText = "Online";
+                        cardStatus.style.color = "green";
+                        textStatus.innerText = "Recebendo dados...";
+                        cardDivs[3].style.borderLeftColor = "green";
+                    } else {
+                        cardStatus.innerText = "Offline";
+                        cardStatus.style.color = "red";
+                        textStatus.innerText = "Verifique o sensor";
+                        cardDivs[3].style.borderLeftColor = "red";
+                    }
+                }
+
+                if (data.charts) {
+                    tempHumidityChart.data.datasets[0].data = data.charts.temp || [];
+                    tempHumidityChart.data.datasets[1].data = data.charts.hum || [];
+                    tempHumidityChart.update('none');
+
+                    luxChart.data.datasets[0].data = data.charts.lum || [];
+                    luxChart.update('none');
+
+                    sensorComparisonChart.data.datasets[0].data = [
+                        data.kpi.temp,
+                        data.kpi.hum,
+                        data.kpi.lum / 10
+                    ];
+                    sensorComparisonChart.update('none');
+                }
+
+            } catch (error) {
+                console.error("Erro ao buscar dados:", error);
+            } finally {
+                if (!silencioso) {
+                    btn.innerText = "Atualizar";
+                    btn.disabled = false;
+                }
             }
         }
-    }
 
-    function iniciarCicloAutomatico() {
-        if (intervaloAtualizacao) clearInterval(intervaloAtualizacao);
-        intervaloAtualizacao = setInterval(() => {
-            updateDashboard(true);
-        }, 5000);
-    }
-
-    document.getElementById('sensorSelect').addEventListener('change', () => {
-        updateDashboard(false);
-        iniciarCicloAutomatico();
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const sensorSelect = document.getElementById('sensorSelect');
-        if (sensorSelect.options.length > 0 && sensorSelect.value) {
-            updateDashboard(false);
-            iniciarCicloAutomatico();
+        function iniciarCicloAutomatico() {
+            if (intervaloAtualizacao) clearInterval(intervaloAtualizacao);
+            intervaloAtualizacao = setInterval(() => {
+                updateDashboard(true);
+            }, 5000);
         }
-    });
-</script>
+
+        // --- NOVA FUNÇÃO: Filtrar Sensores pela Vinícola ---
+        function filtrarLoggers() {
+            const vinicolaId = document.getElementById('vinicolaSelect').value;
+            const sensorSelect = document.getElementById('sensorSelect');
+
+            // Limpa as opções atuais
+            sensorSelect.innerHTML = "";
+
+            // Filtra da lista original (todosLoggers)
+            const filtrados = todosLoggers.filter(function(opcao) {
+                // Se for "all", retorna tudo. Se não, verifica o ID da vinícola.
+                return vinicolaId === 'all' || opcao.wineryId === vinicolaId;
+            });
+
+            // Reconstrói o Select
+            if (filtrados.length === 0) {
+                const opt = document.createElement('option');
+                opt.text = "Nenhum sensor nesta vinícola";
+                opt.value = "";
+                sensorSelect.add(opt);
+            } else {
+                filtrados.forEach(function(item) {
+                    const opt = document.createElement('option');
+                    opt.value = item.value;
+                    opt.text = item.text;
+                    // Mantemos o atributo caso precise filtrar de novo (embora usemos a var global)
+                    opt.setAttribute('data-winery-id', item.wineryId);
+                    sensorSelect.add(opt);
+                });
+            }
+
+            // Seleciona o primeiro item válido e atualiza o dashboard
+            if (sensorSelect.options.length > 0 && sensorSelect.value) {
+                sensorSelect.selectedIndex = 0;
+                updateDashboard(false); // Carrega dados do novo sensor selecionado
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const sensorSelect = document.getElementById('sensorSelect');
+
+            // 1. Salva todas as opções originais na memória
+            if (sensorSelect.options.length > 0) {
+                for (let i = 0; i < sensorSelect.options.length; i++) {
+                    const opt = sensorSelect.options[i];
+                    // Ignora opção vazia se houver
+                    if (opt.value) {
+                        todosLoggers.push({
+                            value: opt.value,
+                            text: opt.text,
+                            wineryId: opt.getAttribute('data-winery-id')
+                        });
+                    }
+                }
+            }
+
+            // 2. Aplica filtro inicial (caso já tenha vinícola selecionada ou 'all')
+            filtrarLoggers();
+
+            // 3. Inicia ciclo de atualização
+            iniciarCicloAutomatico();
+        });
+    </script>
+</body>
+</html>
