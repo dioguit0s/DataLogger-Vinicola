@@ -22,8 +22,12 @@ namespace Vinicola_app.Controllers
 
         public IActionResult Index()
         {
+            int? usuarioId = HttpContext.Session.GetInt32("usuarioId");
+            if (usuarioId == null) return RedirectToAction("Index", "Login");
+
             DataLoggerDAO dao = new DataLoggerDAO();
-            List<DataLoggerViewModel> lista = dao.Listagem();
+            List<DataLoggerViewModel> lista = dao.Listagem(usuarioId.Value);
+
             return View(lista);
         }
 
@@ -66,6 +70,12 @@ namespace Vinicola_app.Controllers
         //Salvar (Recebe o Submit do Form)
         public async Task<IActionResult> Salvar(DataLoggerViewModel model, string operacao)
         {
+            int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            if (usuarioId == null) return RedirectToAction("Index", "Login");
+
+            model.UserId = usuarioId.Value;
+
+
             try
             {
                 ValidaDados(model);
@@ -151,10 +161,18 @@ namespace Vinicola_app.Controllers
 
         private void CarregaVinicolasViewBag()
         {
-            WineryDAO wineryDao = new WineryDAO();
-            var listaVinicolas = wineryDao.Listagem();
+            int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
 
-            ViewBag.Vinicolas = new SelectList(listaVinicolas, "Id", "Name");
+            if (usuarioId != null)
+            {
+                WineryDAO wineryDao = new WineryDAO();
+                var listaVinicolas = wineryDao.Listagem(usuarioId.Value);
+                ViewBag.Vinicolas = new SelectList(listaVinicolas, "Id", "Name");
+            }
+            else
+            {
+                ViewBag.Vinicolas = new SelectList(new List<WineryViewModel>(), "Id", "Name");
+            }
         }
     }
 }
