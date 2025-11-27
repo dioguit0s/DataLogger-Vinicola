@@ -106,14 +106,62 @@
             font-weight: bold;
         }
 
-        .btn-logout {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.5);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
+    .kpi-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    .kpi-status {
+        font-size: 0.85rem;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 500;
+    }
+
+    .status-ok {
+        color: #27ae60;
+    }
+
+    .status-warn {
+        color: #f39c12;
+    }
+
+    .status-danger {
+        color: #c0392b;
+    }
+
+    .text-muted {
+        color: #adb5bd;
+    }
+
+    /* Gráficos */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 20px;
+    }
+
+    .chart-container {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        position: relative;
+        height: 400px;
+        width: 100%;
+    }
+
+    .chart-full {
+        grid-column: 1 / -1;
+    }
+
+    /* askjdjkasd */
+    @@media (max-width: 768px) {
+        .charts-grid {
+            grid-template-columns: 1fr;
         }
 
             .btn-logout:hover {
@@ -152,11 +200,14 @@
             gap: 5px;
         }
 
-            .filter-group label {
-                font-size: 0.85rem;
-                color: #666;
-                font-weight: bold;
-            }
+    <div class="kpi-card" id="card-lum" style="border-left-color: #ccc;">
+        <h3>Luminosidade (Atual)</h3>
+        <div class="kpi-value">0 Lux</div>
+        <div class="kpi-status text-muted">
+            <i class="fas fa-sync fa-spin"></i> Sincronizando...
+        </div>
+    </div>
+    
 
             .filter-group select {
                 padding: 10px;
