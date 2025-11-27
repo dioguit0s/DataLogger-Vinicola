@@ -10,35 +10,32 @@ namespace Vinicola_app.DAO
     {
         public void Inserir(WineryViewModel winery)
         {
-            // Para inserir, não passamos o ID (pois é Identity/Auto-incremento)
-            // Mas DEVEMOS passar o user_id
             HelperDAO.ExecutaProc("sp_winery_insert", CriaParametros(winery, false));
         }
 
         public void Alterar(WineryViewModel winery)
         {
-            // Para alterar, precisamos do ID para o WHERE
             HelperDAO.ExecutaProc("sp_winery_update", CriaParametros(winery, true));
         }
 
-        // Adicionei um booleano 'incluirId' para diferenciar Insert de Update
         private SqlParameter[] CriaParametros(WineryViewModel model, bool incluirId)
         {
-            // Se for Update (incluirId=true), temos 9 parametros. Se for Insert, 8.
             List<SqlParameter> parametros = new List<SqlParameter>
-            {
-                // ATENÇÃO: O nome do parâmetro aqui deve ser igual ao da Procedure (@user_id, @name, etc)
-                new SqlParameter("user_id", model.UserId),
-                new SqlParameter("name", model.Name ?? (object)DBNull.Value),
-                new SqlParameter("description", model.Description ?? (object)DBNull.Value),
-                new SqlParameter("address", model.Address ?? (object)DBNull.Value),
-                new SqlParameter("cnpj", model.Cnpj ?? (object)DBNull.Value),
-                new SqlParameter("email", model.Email ?? (object)DBNull.Value),
-                new SqlParameter("telephone", model.Telephone ?? (object)DBNull.Value),
-                new SqlParameter("logo_pic", model.LogoPic ?? (object)DBNull.Value)
-            };
+    {
+        new SqlParameter("user_id", model.UserId),
+        new SqlParameter("name", model.Name ?? (object)DBNull.Value),
+        new SqlParameter("description", model.Description ?? (object)DBNull.Value),
+        new SqlParameter("address", model.Address ?? (object)DBNull.Value),
+        new SqlParameter("cnpj", model.Cnpj ?? (object)DBNull.Value),
+        new SqlParameter("email", model.Email ?? (object)DBNull.Value),
+        new SqlParameter("telephone", model.Telephone ?? (object)DBNull.Value),
+        
+        new SqlParameter("logo_pic", SqlDbType.VarBinary, -1)
+        {
+            Value = (object)model.LogoPic ?? DBNull.Value
+        }
+    };
 
-            // Só adiciona o ID se for operação de Update
             if (incluirId)
             {
                 parametros.Add(new SqlParameter("id", model.Id));
@@ -49,9 +46,8 @@ namespace Vinicola_app.DAO
 
         public void Excluir(int id)
         {
-            string sql = "delete from winery where id = @id";
             SqlParameter[] p = { new SqlParameter("id", id) };
-            HelperDAO.ExecutaSQL(sql, p);
+            HelperDAO.ExecutaProc("sp_winery_delete", p);
         }
 
         private WineryViewModel MontaWinery(DataRow registro)
@@ -59,8 +55,7 @@ namespace Vinicola_app.DAO
             WineryViewModel w = new WineryViewModel();
             w.Id = Convert.ToInt32(registro["id"]);
 
-            // CORREÇÃO: No banco a coluna chama "user_id", verifique se sua procedure retorna com esse nome ou como "userId"
-            // Se der erro aqui, mude para "userId" caso sua procedure faça um alias
+            // ... (outros campos mantêm iguais) ...
             if (registro.Table.Columns.Contains("user_id"))
                 w.UserId = Convert.ToInt32(registro["user_id"]);
             else if (registro.Table.Columns.Contains("userId"))
@@ -72,34 +67,33 @@ namespace Vinicola_app.DAO
             w.Cnpj = registro["cnpj"].ToString();
             w.Email = registro["email"].ToString();
             w.Telephone = registro["telephone"].ToString();
-            w.LogoPic = registro["logo_pic"] != DBNull.Value ? registro["logo_pic"].ToString() : "";
+
+            if (registro["logo_pic"] != DBNull.Value)
+            {
+                if (registro["logo_pic"] is byte[])
+                {
+                    w.LogoPic = (byte[])registro["logo_pic"];
+                }
+            }
 
             return w;
         }
 
         public WineryViewModel Consulta(int id)
         {
-            var p = new SqlParameter[]
-            {
-                new SqlParameter("id", id)
-            };
-
+            var p = new SqlParameter[] { new SqlParameter("id", id) };
             DataTable tabela = HelperDAO.ExecutaProcSelect("sp_winery_select", p);
 
-            if (tabela.Rows.Count == 0)
-                return null;
-            else
-                return MontaWinery(tabela.Rows[0]);
+            if (tabela.Rows.Count == 0) return null;
+            return MontaWinery(tabela.Rows[0]);
         }
 
         public List<WineryViewModel> Listagem(int userId)
         {
             List<WineryViewModel> lista = new List<WineryViewModel>();
-            // Usando SQL direto para garantir compatibilidade se a procedure não existir
-            string sql = "select * from winery where user_id = @id order by name";
-            SqlParameter[] p = { new SqlParameter("id", userId) };
+            SqlParameter[] p = { new SqlParameter("user_id", userId) };
 
-            DataTable tabela = HelperDAO.ExecutaSelect(sql, p);
+            DataTable tabela = HelperDAO.ExecutaProcSelect("sp_winery_select_by_user", p);
 
             foreach (DataRow registro in tabela.Rows)
                 lista.Add(MontaWinery(registro));

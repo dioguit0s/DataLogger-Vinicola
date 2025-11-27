@@ -12,7 +12,7 @@ CREATE TABLE users
     email VARCHAR(255) NOT NULL UNIQUE, -- único no sistema
     
     password_hash VARCHAR(255) NOT NULL, 
-    profile_pic VARCHAR(MAX) 
+    profile_pic VARBINARY(MAX) 
     );
 GO
 
@@ -31,7 +31,7 @@ CREATE TABLE winery
     email VARCHAR(255) NOT NULL UNIQUE, -- único no sistema
     
     telephone VARCHAR(20) NOT NULL, 
-    logo_pic VARCHAR(MAX),
+    logo_pic VARBINARY(MAX),
 
     CONSTRAINT FK_winery_user 
         FOREIGN KEY (user_id) REFERENCES users(id)
