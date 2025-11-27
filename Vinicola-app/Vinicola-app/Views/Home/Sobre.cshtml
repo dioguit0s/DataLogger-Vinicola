@@ -1,0 +1,279 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre - Vinícola Datalogger</title>
+    <link rel="stylesheet" href="cadastro.css">
+    <style>
+        :root {
+            --primary-color: #722F37; /* Cor de Vinho/Merlot */
+            --primary-hover: #5a232b;
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --white: #ffffff;
+            --gray: #ccc;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Login Styles --- */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .brand-header .icon-logo {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .brand-header h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .brand-header p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+            .input-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 600;
+                font-size: 14px;
+            }
+
+            .input-group input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid var(--gray);
+                border-radius: 4px;
+                outline: none;
+            }
+
+                .input-group input:focus {
+                    border-color: var(--primary-color);
+                }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+            button:hover {
+                background-color: var(--primary-hover);
+            }
+
+        .footer-link {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+            .footer-link a {
+                color: var(--primary-color);
+                text-decoration: none;
+            }
+
+                .footer-link a:hover {
+                    text-decoration: underline;
+                }
+
+        /* Mensagens de Erro/Sucesso */
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error {
+            background-color: #fdd;
+            color: #900;
+        }
+
+        .success {
+            background-color: #dfd;
+            color: #090;
+        }
+
+        /* --- Sobre Styles --- */
+        .about-container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            height: auto; /* Permite rolar se necessário */
+        }
+
+        .about-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+            .back-link:hover {
+                background-color: var(--primary-color);
+                color: var(--white);
+            }
+
+        .info-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+            .info-card h2 {
+                color: var(--primary-color);
+                margin-bottom: 15px;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 10px;
+            }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+            .student-table th, .student-table td {
+                text-align: left;
+                padding: 12px;
+                border-bottom: 1px solid #eee;
+            }
+
+            .student-table th {
+                background-color: #f9f9f9;
+                color: var(--primary-color);
+            }
+
+            .student-table tr:hover {
+                background-color: #f1f1f1;
+            }
+
+        .about-footer {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="about-container">
+        <header class="about-header">
+            <h1>Sobre o Sistema</h1>
+            <a href="@Url.Action("Index", "Home")" class="back-link">Voltar para Login</a>
+        </header>
+
+        <section class="info-card">
+            <h2>Objetivo do Projeto</h2>
+            <p>
+                Este sistema consiste em uma solução completa de datalogging voltada para o monitoramento
+                de ambientes de vinícolas. O software realiza a coleta, armazenamento e visualização de dados
+                críticos como temperatura e umidade, garantindo a integridade da produção de vinhos.
+            </p>
+        </section>
+
+        <section class="info-card">
+            <h2>Integrantes do Grupo</h2>
+            <table class="student-table">
+                <thead>
+                    <tr>
+                        <th>RA</th>
+                        <th>Nome do Aluno</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>082230002</td>
+                        <td>Diogo Santos Rodrigues</td>
+                    </tr>
+                    <tr>
+                        <td>082230012</td>
+                        <td>Leonardo Rosário Teixeira</td>
+                    </tr>
+                    <tr>
+                        <td>082230019</td>
+                        <td>Bianca Ricci Lima</td>
+                    </tr>
+                    <tr>
+                        <td>082230024</td>
+                        <td>Ryan Corazza Alvarenga</td>
+                    </tr>
+                    <tr>
+                        <td>082230028</td>
+                        <td>Gustavo Sgrignoli Marmo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <footer class="about-footer">
+            <p>&copy; 2025 qualivine EC5</p>
+        </footer>
+    </div>
+
+</body>
+</html>

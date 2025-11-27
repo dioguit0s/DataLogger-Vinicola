@@ -12,7 +12,7 @@ namespace Vinicola_app.DAO
     {
         private SqlParameter[] CriaParametros(UsuarioViewModel usuario)
         {
-            SqlParameter[] p = new SqlParameter[2];
+            SqlParameter[] p = new SqlParameter[5];
             p[0] = new SqlParameter("id", usuario.Id);
             p[1] = new SqlParameter("nome", usuario.Nome);
             p[2] = new SqlParameter("email", usuario.Email);
@@ -23,7 +23,7 @@ namespace Vinicola_app.DAO
 
         public void Inserir(UsuarioViewModel usuario)
         {
-            string sql = "insert into users(id, nome, email, password_hash, profile_pic) values (@id, @nome, @email, @password_hash, @profile_pic)";
+            string sql = "insert into users(nome, email, password_hash, profile_pic) values (@nome, @email, @password_hash, @profile_pic)";
             HelperDAO.ExecutaSQL(sql, CriaParametros(usuario));
         }
 
@@ -85,7 +85,7 @@ namespace Vinicola_app.DAO
             {
                 // 2. Criar a instrução SQL
                 // NOTA: Verifique se o nome da coluna no banco é 'Senha' ou 'SenhaHash'
-                string sql = "SELECT Id, Nome, Email, DataNascimento, CPF, SenhaHash FROM users WHERE Email = @email AND SenhaHash = @senha";
+                string sql = "SELECT Id, Nome, Email, password_hash FROM users WHERE Email = @email AND password_hash = @senha";
 
                 using (SqlCommand comando = new SqlCommand(sql, conexao))
                 {
@@ -95,22 +95,19 @@ namespace Vinicola_app.DAO
 
                     try
                     {
-                        conexao.Open();
+                        if (conexao.State != System.Data.ConnectionState.Open)
+                        {
+                            conexao.Open();
+                        }
 
-                        // 4. Executar o comando
                         using (SqlDataReader leitor = comando.ExecuteReader())
                         {
-                            // 5. Se encontrou uma linha, preenche o objeto
                             if (leitor.Read())
                             {
                                 usuario = new UsuarioViewModel();
                                 usuario.Id = Convert.ToInt32(leitor["Id"]);
                                 usuario.Nome = leitor["Nome"].ToString();
                                 usuario.Email = leitor["Email"].ToString();
-
-
-                                // Não é recomendável retornar a senha para a View, mas se precisar mapear:
-                                // usuario.SenhaHash = leitor["SenhaHash"].ToString();
                             }
                         }
                     }
