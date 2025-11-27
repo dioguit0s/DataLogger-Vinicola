@@ -1,8 +1,11 @@
-﻿using Vinicola_app.Models;
-using Vinicola_app.DAO;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Text;
+using Vinicola_app.DAO;
 using Vinicola_app.Models;
+using Vinicola_app.Models;
+using System.Text;             // Necessário para o Hash
+using System.Security.Cryptography; // Necessário para o Hash
 
 
 namespace Vinicola_app.Controllers
@@ -37,28 +40,41 @@ namespace Vinicola_app.Controllers
             {
                 UsuarioDAO dao = new UsuarioDAO();
 
-                // Lógica de conversão de Imagem para Bits
+                // 1. Busca os dados atuais do banco para preservar informações se necessário
+                var usuarioAntigo = dao.Consulta(model.Id);
+
+                // 2. Lógica da SENHA
+                if (!string.IsNullOrEmpty(model.NovaSenha))
+                {
+                    // Se digitou algo, gera o hash novo
+                    model.SenhaHash = GerarHash(model.NovaSenha);
+                }
+                else
+                {
+                    // Se deixou em branco, mantém a senha antiga do banco
+                    model.SenhaHash = usuarioAntigo.SenhaHash;
+                }
+
+                // 3. Lógica da IMAGEM
                 if (model.FotoUpload != null)
                 {
                     using (var memoryStream = new MemoryStream())
                     {
                         model.FotoUpload.CopyTo(memoryStream);
-                        model.FotoProfile = memoryStream.ToArray(); // Converte para array de bytes
+                        model.FotoProfile = memoryStream.ToArray();
                     }
                 }
                 else
                 {
-                    // Se não upou nova foto, tenta manter a antiga (precisa buscar do banco para não perder)
-                    var usuarioAntigo = dao.Consulta(model.Id);
+                    // Mantém a foto antiga
                     model.FotoProfile = usuarioAntigo.FotoProfile;
                 }
 
-                dao.Alterar(model); // Atualize seu DAO para salvar o campo FotoPerfil
+                // 4. Salva no Banco
+                dao.Alterar(model);
 
-                // Atualiza sessão com novo nome se mudou
+                // 5. Atualiza Sessão (Nome e Foto podem ter mudado)
                 HttpContext.Session.SetString("UsuarioNome", model.Nome);
-
-                // Atualiza a foto na sessão (opcional, para exibir no layout sem ir no banco)
                 if (model.FotoProfile != null)
                     HttpContext.Session.Set("UsuarioFoto", model.FotoProfile);
 
@@ -69,6 +85,24 @@ namespace Vinicola_app.Controllers
             {
                 TempData["Erro"] = "Erro ao atualizar: " + ex.Message;
                 return View("Perfil", model);
+            }
+        }
+
+        // Método auxiliar para Hash (SHA256) - Copie se não tiver um helper global
+        private string GerarHash(string senha)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // Converte a senha para bytes
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(senha));
+
+                // Converte os bytes para string hexadecimal
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
             }
         }
 

@@ -15,6 +15,9 @@
         // Campo auxiliar para receber o upload no formulário (Não vai para o Banco)
         public IFormFile? FotoUpload { get; set; }
 
+        // Novo campo para receber a senha digitada na tela de edição
+        public string? NovaSenha { get; set; }
+
 
     }
 }
