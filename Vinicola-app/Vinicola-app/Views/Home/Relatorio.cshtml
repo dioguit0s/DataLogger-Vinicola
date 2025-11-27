@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Vinicola_app.Controllers.LeituraSensorViewModel>
+
+@{
+    ViewData["Title"] = "Relatório de Leituras";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title"><i class="fas fa-file-alt"></i> Relatório de Monitoramento</h2>
+        <button class="btn btn-primary" onclick="window.print()">
+            <i class="fas fa-print"></i> Imprimir / PDF
+        </button>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark" style="background-color: var(--primary-color);">
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Temperatura (°C)</th>
+                            <th>Umidade (%)</th>
+                            <th>Luminosidade (Lux)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        @if (item.Temperatura > 28)
+                                        {
+                                            <span class="text-danger fw-bold">@item.Temperatura</span>
+                                        }
+                                        else
+                                        {
+
+                                            <span>@item.Temperatura</span>
+                                        }
+                                    </td>
+                                    <td>@item.Umidade</td>
+                                    <td>@item.Luminosidade</td>
+                                    <td>
+                                        @if (item.Status == "Alerta")
+                                        {
+                                            <span class="badge bg-danger">Alerta</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Normal</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Nenhum dado encontrado.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
