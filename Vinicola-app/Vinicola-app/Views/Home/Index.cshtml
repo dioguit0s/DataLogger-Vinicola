@@ -1,5 +1,6 @@
 ﻿@model Vinicola_app.Models.DashboardViewModel
-@using Microsoft.AspNetCore.Http @{
+@using Microsoft.AspNetCore.Http
+@{
     Layout = null;
 }
 
@@ -8,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WineLogger - Dashboard</title>
+    <title>Qualivine - Dashboard</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -16,19 +17,21 @@
 
     <style>
         :root {
-            --primary-color: #722F37; /* Cor de Vinho */
-            --secondary-color: #f4f4f9;
-            --text-dark: #333;
+            /* TEMA VINOSENSE */
+            --primary-color: #800020; /* Vinho oficial */
+            --primary-hover: #5a0016;
+            --secondary-color: #f8f9fa; /* Fundo cinza claro */
+            --text-dark: #2c3e50;
             --text-light: #fff;
-            --sidebar-width: 250px;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --border-radius: 12px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         body {
@@ -36,17 +39,18 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            color: #333;
         }
 
-        /* --- Navbar --- */
+        /* --- Navbar (Estilo White Card) --- */
         .navbar {
-            background-color: var(--primary-color);
-            color: var(--text-light);
+            background-color: #ffffff;
+            border-bottom: 4px solid var(--primary-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 2rem;
-            height: 70px;
+            height: 80px;
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
@@ -54,28 +58,38 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
             display: flex;
             align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
             gap: 10px;
         }
 
+            .logo img {
+                max-height: 55px;
+                width: auto;
+            }
+
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             list-style: none;
         }
 
             .nav-links li a {
-                color: var(--text-light);
+                color: var(--text-dark);
                 text-decoration: none;
-                font-weight: 500;
-                transition: opacity 0.3s;
+                font-weight: 600;
+                font-size: 0.95rem;
+                transition: color 0.3s;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
 
                 .nav-links li a:hover {
-                    opacity: 0.8;
+                    color: var(--primary-color);
                 }
 
         .user-profile {
@@ -91,36 +105,47 @@
         .user-name {
             font-size: 0.9rem;
             font-weight: bold;
+            color: var(--primary-color);
         }
 
         .avatar {
             width: 40px;
             height: 40px;
-            background-color: #fff;
             border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--primary-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary-color);
-            font-weight: bold;
+            background: white;
         }
+
+            .avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
         .btn-logout {
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.5);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 6px 15px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
         }
 
             .btn-logout:hover {
-                background: rgba(255,255,255,0.1);
+                background-color: var(--primary-color);
+                color: white;
             }
 
             .btn-logout a {
-                color: white;
+                color: inherit;
                 text-decoration: none;
             }
 
@@ -132,17 +157,26 @@
             width: 100%;
         }
 
+        h2.section-title {
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            font-weight: 700;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
         /* --- Filters Bar --- */
         .filters-bar {
             background: white;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             margin-bottom: 2rem;
             display: flex;
             gap: 20px;
             align-items: end;
             flex-wrap: wrap;
+            border: 1px solid #eee;
         }
 
         .filter-group {
@@ -152,28 +186,35 @@
         }
 
             .filter-group label {
-                font-size: 0.85rem;
-                color: #666;
+                font-size: 0.75rem;
+                color: #888;
                 font-weight: bold;
+                text-transform: uppercase;
             }
 
             .filter-group select {
                 padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
                 min-width: 200px;
                 background-color: #fff;
+                color: #495057;
             }
 
         .btn-filter {
-            padding: 10px 20px;
-            background-color: var(--primary-color);
+            padding: 10px 25px;
+            background-color: var(--text-dark);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            transition: background 0.2s;
         }
+
+            .btn-filter:hover {
+                background-color: var(--primary-color);
+            }
 
             .btn-filter:disabled {
                 background-color: #ccc;
@@ -191,46 +232,53 @@
         .kpi-card {
             background: white;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             border-left: 5px solid #ccc;
-            transition: border-color 0.3s;
+            transition: transform 0.2s, border-color 0.3s;
         }
 
+            .kpi-card:hover {
+                transform: translateY(-3px);
+            }
+
             .kpi-card h3 {
-                font-size: 0.9rem;
-                color: #666;
+                font-size: 0.85rem;
+                color: #6c757d;
                 margin-bottom: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
 
         .kpi-value {
-            font-size: 2rem;
-            font-weight: bold;
+            font-size: 2.2rem;
+            font-weight: 700;
             color: var(--text-dark);
         }
 
         .kpi-status {
-            font-size: 0.8rem;
-            margin-top: 5px;
+            font-size: 0.85rem;
+            margin-top: 8px;
             display: flex;
             align-items: center;
             gap: 5px;
+            font-weight: 500;
         }
 
         .status-ok {
-            color: green;
+            color: #27ae60;
         }
 
         .status-warn {
-            color: orange;
+            color: #f39c12;
         }
 
         .status-danger {
-            color: red;
+            color: #c0392b;
         }
 
         .text-muted {
-            color: #999;
+            color: #adb5bd;
         }
 
         /* --- Charts Grid --- */
@@ -243,7 +291,7 @@
         .chart-container {
             background: white;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             position: relative;
             height: 400px;
@@ -254,52 +302,50 @@
             grid-column: 1 / -1;
         }
 
-        h2.section-title {
-            margin-bottom: 1rem;
-            color: var(--primary-color);
+        /* Responsividade */
+        @@media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
         }
-
-                /* Responsividade */
-                @@media (max-width: 768px) {
-                    .navbar {
-                        flex-direction: column;
-                        height: auto;
-                        padding: 1rem;
-                        gap: 1rem;
-                    }
-
-                    .nav-links {
-                        flex-wrap: wrap;
-                        justify-content: center;
-                    }
-
-                    .charts-grid {
-                        grid-template-columns: 1fr;
-                    }
-                }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <div class="logo">
-            <span>🍷 WineLogger</span>
-        </div>
+        <a href="#" class="logo">
+            <img src="@Url.Content("~/files/qualivine-logo.png")" alt="VinoSense" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span style="display:none;">🍷 VinoSense</span>
+        </a>
+
         <ul class="nav-links">
-            <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+            <li><a href="@Url.Action("Index", "Home")">Dashboard</a></li>
             <li><a href="@Url.Action("Index", "Winery")">Vinícolas</a></li>
             <li><a href="@Url.Action("Index", "DataLogger")">DataLoggers</a></li>
             <li><a href="@Url.Action("Sobre", "Home")">Sobre</a></li>
         </ul>
+
         <div class="user-profile">
             <div class="user-info">
                 <div class="user-name">@Context.Session.GetString("UsuarioNome")</div>
             </div>
             <div class="avatar">
-                <img src="https://via.placeholder.com/40" alt="User" style="border-radius: 50%;">
+                <img src="https://via.placeholder.com/40/800020/FFFFFF?text=U" alt="User">
             </div>
-            <button class="btn-logout">
-                <a href="@Url.Action("Sair", "Login")">Sair</a>
+            <button class="btn-logout" onclick="window.location.href='@Url.Action("Sair", "Login")'">
+                Sair
             </button>
         </div>
     </nav>
@@ -372,7 +418,7 @@
                 </div>
             </div>
 
-            <div class="kpi-card" style="border-left-color: #4bc0c0;">
+            <div class="kpi-card" style="border-left-color: #27ae60;">
                 <h3>Status do Sensor</h3>
                 <div class="kpi-value" style="font-size: 1.5rem;">Aguardando</div>
                 <div class="kpi-status text-muted">Verificando conexão...</div>
@@ -404,15 +450,24 @@
             return labels;
         }
 
-        // --- CHART CONFIG ---
+        // --- CHART CONFIG (Cores Atualizadas para o Tema VinoSense) ---
+        const themeColors = {
+            temp: '#800020', // Vinho
+            tempBg: 'rgba(128, 0, 32, 0.2)',
+            hum: '#2c3e50',  // Azul Escuro
+            humBg: 'rgba(44, 62, 80, 0.2)',
+            lux: '#f39c12',  // Laranja
+            luxBg: 'rgba(243, 156, 18, 0.4)'
+        };
+
         const ctxTempHum = document.getElementById('tempHumidityChart').getContext('2d');
         const tempHumidityChart = new Chart(ctxTempHum, {
             type: 'line',
             data: {
                 labels: generateLabels(12),
                 datasets: [
-                    { label: 'Temperatura (°C)', data: [], borderColor: '#ff6384', backgroundColor: 'rgba(255, 99, 132, 0.2)', yAxisID: 'y', tension: 0.4 },
-                    { label: 'Umidade (%)', data: [], borderColor: '#36a2eb', backgroundColor: 'rgba(54, 162, 235, 0.2)', yAxisID: 'y1', tension: 0.4 }
+                    { label: 'Temperatura (°C)', data: [], borderColor: themeColors.temp, backgroundColor: themeColors.tempBg, yAxisID: 'y', tension: 0.4 },
+                    { label: 'Umidade (%)', data: [], borderColor: themeColors.hum, backgroundColor: themeColors.humBg, yAxisID: 'y1', tension: 0.4 }
                 ]
             },
             options: {
@@ -431,7 +486,7 @@
             type: 'line',
             data: {
                 labels: generateLabels(12),
-                datasets: [{ label: 'Luminosidade (Lux)', data: [], borderColor: '#ffce56', backgroundColor: 'rgba(255, 206, 86, 0.4)', fill: true, tension: 0.3 }]
+                datasets: [{ label: 'Luminosidade (Lux)', data: [], borderColor: themeColors.lux, backgroundColor: themeColors.luxBg, fill: true, tension: 0.3 }]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Variação de Luminosidade' } } }
         });
@@ -441,12 +496,12 @@
             type: 'bar',
             data: {
                 labels: ['Temp', 'Humid', 'Lum/10'],
-                datasets: [{ label: 'Leitura Atual', data: [0, 0, 0], backgroundColor: ['#ff6384', '#36a2eb', '#ffce56'] }]
+                datasets: [{ label: 'Leitura Atual', data: [0, 0, 0], backgroundColor: [themeColors.temp, themeColors.hum, themeColors.lux] }]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Snapshot do Sensor Atual' } } }
         });
 
-        // --- UPDATE FUNCTION ---
+        // --- UPDATE FUNCTION (Lógica Preservada) ---
         async function updateDashboard(silencioso = false) {
 
             const deviceId = document.getElementById('sensorSelect').value;
@@ -469,7 +524,7 @@
                 // Seleciona Cards e Textos
                 const cards = document.querySelectorAll('.kpi-value');
                 const statusTexts = document.querySelectorAll('.kpi-status');
-                const cardDivs = document.querySelectorAll('.kpi-card'); // Para mudar a borda
+                const cardDivs = document.querySelectorAll('.kpi-card');
 
                 if (data.kpi) {
                     // 1. TEMPERATURA
@@ -483,7 +538,7 @@
                     } else {
                         statusTexts[0].innerHTML = '<i class="fas fa-check-circle"></i> Leitura Ativa';
                         statusTexts[0].className = "kpi-status status-ok";
-                        cardDivs[0].style.borderLeftColor = "#ff6384";
+                        cardDivs[0].style.borderLeftColor = themeColors.temp; // Vinho
                     }
 
                     // 2. UMIDADE
@@ -497,7 +552,7 @@
                     } else {
                         statusTexts[1].innerHTML = '<i class="fas fa-check-circle"></i> Leitura Ativa';
                         statusTexts[1].className = "kpi-status status-ok";
-                        cardDivs[1].style.borderLeftColor = "#36a2eb";
+                        cardDivs[1].style.borderLeftColor = themeColors.hum; // Azul Escuro
                     }
 
                     // 3. LUMINOSIDADE
@@ -510,15 +565,15 @@
                     if (lumValue < 100) {
                         statusLum.innerHTML = '<i class="fas fa-moon"></i> Baixa (Escuro)';
                         statusLum.className = "kpi-status status-warn";
-                        cardLum.style.borderLeftColor = "#f1c40f";
+                        cardLum.style.borderLeftColor = themeColors.lux; // Laranja
                     } else if (lumValue > 800) {
                         statusLum.innerHTML = '<i class="fas fa-sun"></i> Alta (Sol direto)';
                         statusLum.className = "kpi-status status-danger";
-                        cardLum.style.borderLeftColor = "#e74c3c";
+                        cardLum.style.borderLeftColor = "#c0392b";
                     } else {
                         statusLum.innerHTML = '<i class="fas fa-lightbulb"></i> Ideal';
                         statusLum.className = "kpi-status status-ok";
-                        cardLum.style.borderLeftColor = "#2ecc71";
+                        cardLum.style.borderLeftColor = "#27ae60";
                     }
 
                     // 4. STATUS GERAL
@@ -527,14 +582,14 @@
 
                     if(temp > 0 || hum > 0 || lumValue > 0) {
                         cardStatus.innerText = "Online";
-                        cardStatus.style.color = "green";
+                        cardStatus.style.color = "#27ae60";
                         textStatus.innerText = "Recebendo dados...";
-                        cardDivs[3].style.borderLeftColor = "green";
+                        cardDivs[3].style.borderLeftColor = "#27ae60";
                     } else {
                         cardStatus.innerText = "Offline";
-                        cardStatus.style.color = "red";
+                        cardStatus.style.color = "#c0392b";
                         textStatus.innerText = "Verifique o sensor";
-                        cardDivs[3].style.borderLeftColor = "red";
+                        cardDivs[3].style.borderLeftColor = "#c0392b";
                     }
                 }
 
@@ -580,8 +635,8 @@
         document.addEventListener("DOMContentLoaded", () => {
             const sensorSelect = document.getElementById('sensorSelect');
             if (sensorSelect.options.length > 0 && sensorSelect.value) {
-                updateDashboard(false); // Primeira carga visual
-                iniciarCicloAutomatico(); // Inicia o loop
+                updateDashboard(false);
+                iniciarCicloAutomatico();
             }
         });
     </script>

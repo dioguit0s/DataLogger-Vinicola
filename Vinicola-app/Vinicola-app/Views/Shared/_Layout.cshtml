@@ -1,49 +1,240 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    // Tenta pegar o nome do usuário, ou usa "Usuário" se estiver vazio
+    var nomeUsuario = Context.Session.GetString("UsuarioNome") ?? "Usuário";
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Vinicola_app</title>
+    <title>@ViewData["Title"] - VinoSense</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Vinicola_app.styles.css" asp-append-version="true" />
+
+    <style>
+        :root {
+            --primary-color: #800020; /* Vinho oficial */
+            --primary-hover: #5a0016;
+            --secondary-color: #f8f9fa; /* Fundo cinza claro */
+            --text-dark: #2c3e50;
+            --text-light: #fff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* --- Navbar --- */
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 4px solid var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 80px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+            .navbar-custom .logo {
+                display: flex;
+                align-items: center;
+            }
+
+                .navbar-custom .logo img {
+                    max-height: 55px;
+                    width: auto;
+                }
+
+            .navbar-custom .nav-links {
+                display: flex;
+                gap: 25px;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+                .navbar-custom .nav-links li a {
+                    color: var(--text-dark);
+                    text-decoration: none;
+                    font-weight: 600;
+                    font-size: 0.95rem;
+                    transition: color 0.3s;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                    .navbar-custom .nav-links li a:hover {
+                        color: var(--primary-color);
+                    }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .btn-logout-custom {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 6px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+            .btn-logout-custom:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+        /* --- Main Content --- */
+        .main-container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1; /* Empurra o footer para baixo */
+        }
+
+        /* --- Overrides --- */
+        .section-title {
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            font-weight: 700;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        .btn-primary {
+            background-color: var(--text-dark);
+            border-color: var(--text-dark);
+            font-weight: 600;
+        }
+
+            .btn-primary:hover {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+        footer {
+            background-color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @@media (max-width: 768px) {
+            .navbar-custom {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+                .navbar-custom .nav-links {
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Vinicola_app</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="DataLogger" asp-action="Index">Dataloggers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+
+    <nav class="navbar-custom">
+        <div class="logo">
+            <a href="@Url.Action("Index", "Home")" style="text-decoration:none;">
+                <img src="@Url.Content("~/files/qualivine-logo.png")" alt="VinoSense" onerror="this.style.display='none'; document.getElementById('logo-text').style.display='block';">
+                <span id="logo-text" style="display:none; font-weight:bold; color:#800020; font-size:1.5rem;">🍷 VinoSense</span>
+            </a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="@Url.Action("Index", "Home")">Dashboard</a></li>
+            <li><a href="@Url.Action("Index", "Winery")">Vinícolas</a></li>
+            <li><a href="@Url.Action("Index", "DataLogger")">DataLoggers</a></li>
+            <li><a href="@Url.Action("Sobre", "Home")">Sobre</a></li>
+        </ul>
+
+        <div class="user-profile">
+            <div class="user-info">
+                <div class="user-name">Ola, @nomeUsuario</div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+            <div class="avatar">
+                <img src="https://via.placeholder.com/40/800020/FFFFFF?text=U" alt="User">
+            </div>
+
+            <a href="@Url.Action("Sair", "Login")" class="btn-logout-custom" onclick="return confirm('Deseja realmente sair?');">
+                Sair
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer>
         <div class="container">
-            &copy; 2025 - Vinicola_app - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - VinoSense - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidade</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

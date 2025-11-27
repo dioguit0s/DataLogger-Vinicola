@@ -1,122 +1,159 @@
 ﻿@model List<Vinicola_app.Models.WineryViewModel>
 
 @{
-    ViewData["Title"] = "Minhas Vinícolas";
+    ViewData["Title"] = "Gerenciar Vinícolas";
 }
 
 <style>
-    .page-header {
+    /* Estilo Específico da Página inspirado no VinoSense */
+    .header-actions {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 30px;
+        margin-bottom: 2rem;
         flex-wrap: wrap;
         gap: 15px;
     }
 
-        .page-header h2 {
-            color: #2c3e50;
-            font-weight: 700;
-            margin: 0;
-        }
-
-    /* Card específico para Vinícola (Adaptado) */
+    /* Card de Vinícola adaptado para parecer com o KPI Card */
     .winery-card {
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        /* Cor Vinho/Roxo para diferenciar dos Loggers */
-        border-left: 5px solid #8e44ad;
-        padding: 20px;
-        margin-bottom: 15px;
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px; /* Mesmo raio do dashboard */
+        box-shadow: var(--shadow); /* Mesma sombra do dashboard */
+        border-left: 5px solid var(--primary-color);
+        margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 15px;
-        transition: box-shadow 0.3s ease;
+        gap: 20px;
+        transition: transform 0.2s;
     }
 
         .winery-card:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
         }
 
-    .winery-info {
+    .winery-content {
         display: flex;
         align-items: flex-start;
         gap: 20px;
         flex: 1;
-        min-width: 250px;
+        min-width: 300px;
     }
 
-        .winery-info .icon {
-            font-size: 36px;
-            color: #8e44ad; /* Cor do ícone */
-            padding-top: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-        }
+    .icon-container {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fce4ec; /* Um fundo bem claro vinho/rosa */
+        border-radius: 50%;
+        color: var(--primary-color);
+        font-size: 24px;
+        flex-shrink: 0;
+    }
 
-        .winery-info .logo-img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
+        .icon-container img {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            border: 2px solid #eee;
+            object-fit: cover;
         }
 
-    .winery-details h4 {
-        margin: 0 0 5px 0;
-        color: #2c3e50;
-        font-size: 1.25rem;
-        font-weight: bold;
+    .info-group h4 {
+        color: var(--text-dark);
+        font-weight: 700;
+        margin-bottom: 5px;
+        font-size: 1.2rem;
     }
 
-    .winery-details .meta-info {
-        color: #7f8c8d;
-        font-size: 0.9rem;
+    .info-group .meta {
+        color: #888;
+        font-size: 0.85rem;
+        font-weight: 600;
         margin-bottom: 8px;
         display: block;
     }
 
-    .winery-details .description {
-        font-style: italic;
+    .info-group .desc {
         color: #555;
-        font-size: 0.9rem;
+        font-style: italic;
         margin-bottom: 10px;
+        font-size: 0.95rem;
     }
 
-    /* Badges para contatos */
-    .badge-contato {
+    /* Tags estilizadas */
+    .contact-tag {
         display: inline-block;
         font-size: 0.8rem;
-        padding: 4px 8px;
-        border-radius: 4px;
+        padding: 5px 10px;
+        border-radius: 6px;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        color: var(--text-dark);
         margin-right: 5px;
-        margin-bottom: 5px;
-        background-color: #f3e5f5; /* Fundo levemente roxo */
-        border: 1px solid #e1bee7;
-        color: #4a148c;
+        font-weight: 500;
     }
 
-    .winery-actions {
+        .contact-tag i {
+            color: var(--primary-color);
+            margin-right: 4px;
+        }
+
+    .card-actions {
         display: flex;
         gap: 10px;
     }
+
+    /* Botão de exclusão mais discreto */
+    .btn-delete-custom {
+        padding: 8px 15px;
+        background-color: white;
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+        .btn-delete-custom:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+    .btn-edit-custom {
+        padding: 8px 15px;
+        background-color: white;
+        border: 1px solid #6c757d;
+        color: #6c757d;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+        .btn-edit-custom:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+
 </style>
 
-<div class="page-header">
-    <h2>@ViewData["Title"]</h2>
-    <a asp-action="Create" class="btn btn-primary btn-lg" style="background-color: #8e44ad; border-color: #8e44ad;">
-        🍷 Nova Vinícola
+<div class="header-actions">
+    <h2 class="section-title" style="margin-bottom:0;">@ViewData["Title"]</h2>
+
+    <a asp-action="Create" class="btn btn-primary btn-lg" style="padding: 10px 25px; border-radius: 6px;">
+        + Nova Vinícola
     </a>
 </div>
 
 @if (TempData["Erro"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger" style="border-radius: 12px; box-shadow: var(--shadow); border:none;">
         @TempData["Erro"]
     </div>
 }
@@ -124,8 +161,9 @@
 <div>
     @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-info">
-            Nenhuma vinícola cadastrada. Clique no botão acima para adicionar sua primeira propriedade.
+        <div class="text-center p-5" style="background: white; border-radius: 12px; box-shadow: var(--shadow);">
+            <h4 style="color: var(--text-dark);">Nenhuma vinícola cadastrada.</h4>
+            <p class="text-muted">Comece adicionando sua primeira unidade no botão acima.</p>
         </div>
     }
     else
@@ -133,11 +171,11 @@
         @foreach (var item in Model)
         {
             <div class="winery-card">
-                <div class="winery-info">
-                    <div class="icon">
+                <div class="winery-content">
+                    <div class="icon-container">
                         @if (!string.IsNullOrEmpty(item.LogoPic))
                         {
-                            <img src="@item.LogoPic" alt="Logo" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+                            <img src="@item.LogoPic" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
                             <span style="display:none;">🍇</span>
                         }
                         else
@@ -146,41 +184,36 @@
                         }
                     </div>
 
-                    <div class="winery-details">
+                    <div class="info-group">
                         <h4>@item.Name</h4>
-
-                        <span class="meta-info">CNPJ: @item.Cnpj</span>
+                        <span class="meta">CNPJ: @item.Cnpj</span>
 
                         @if (!string.IsNullOrEmpty(item.Description))
                         {
-                            <p class="description">"@item.Description"</p>
+                            <p class="desc">"@item.Description"</p>
                         }
 
-                        <p class="mb-2"><small>📍 @item.Address</small></p>
+                        <div style="margin-top: 10px;">
+                            <span class="contact-tag">📍 @item.Address</span>
 
-                        <div>
                             @if (!string.IsNullOrEmpty(item.Email))
                             {
-                                <span class="badge-contato" title="Email">
-                                    📧 @item.Email
-                                </span>
+                                <span class="contact-tag">✉️ @item.Email</span>
                             }
                             @if (!string.IsNullOrEmpty(item.Telephone))
                             {
-                                <span class="badge-contato" title="Telefone">
-                                    📞 @item.Telephone
-                                </span>
+                                <span class="contact-tag">📞 @item.Telephone</span>
                             }
                         </div>
                     </div>
                 </div>
 
-                <div class="winery-actions">
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info text-white">
+                <div class="card-actions">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn-edit-custom">
                         Editar
                     </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"
-                       onclick="return confirm('Tem certeza que deseja excluir a vinícola @item.Name? Isso excluirá também os sensores vinculados!');">
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-delete-custom"
+                       onclick="return confirm('Tem certeza que deseja excluir @item.Name? Isso removerá os sensores associados!');">
                         Excluir
                     </a>
                 </div>

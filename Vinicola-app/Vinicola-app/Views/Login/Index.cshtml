@@ -1,6 +1,6 @@
 ﻿@model Vinicola_app.Models.UsuarioViewModel
 @{
-    ViewBag.Title = "VinoSense - Login";
+    ViewBag.Title = "Qualivine - Login";
     Layout = null;
 }
 
@@ -89,9 +89,7 @@
 
     <div class="login-card">
         <div class="brand-header">
-            <!-- <div class="login-icon">🍷</div>  -->
             <img src="@Url.Content("~/files/qualivine-logo.png")" alt="qualivine">
-            <!-- <h1>Quali<span>vine</span></h1> -->
         </div>
 
         @if (TempData["ErroLogin"] != null)
@@ -115,7 +113,7 @@
                 @Html.Password("senhaHash", null, new { @class = "form-control", placeholder = "********", required = "required" })
             </div>
 
-            <button type="submit" class="btn btn-login btn-block mt-4">ENTRAR</button>
+            <button type="submit" class="btn btn-login btn-block mt-4">Login</button>
         }
 
         <div class="divider">
@@ -123,7 +121,7 @@
         </div>
 
         <a href="@Url.Action("Index", "Register")" class="btn btn-outline-secondary btn-block">
-            Criar nova conta
+            Registrar
         </a>
     </div>
 
