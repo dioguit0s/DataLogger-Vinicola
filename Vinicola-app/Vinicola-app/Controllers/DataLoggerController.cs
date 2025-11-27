@@ -3,12 +3,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using Vinicola_app.DAO;
 using Vinicola_app.Models;
+using Vinicola_app.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace Vinicola_app.Controllers
 {
     public class DataLoggerController : Controller
     {
+
+        private readonly FiwareService _fiwareService;
+
+        // Construtor para receber o serviço
+        public DataLoggerController(FiwareService fiwareService)
+        {
+            _fiwareService = fiwareService;
+        }
+
         public IActionResult Index()
         {
             DataLoggerDAO dao = new DataLoggerDAO();
@@ -53,7 +64,7 @@ namespace Vinicola_app.Controllers
         }
 
         //Salvar (Recebe o Submit do Form)
-        public IActionResult Salvar(DataLoggerViewModel model, string operacao)
+        public async Task<IActionResult> Salvar(DataLoggerViewModel model, string operacao)
         {
             try
             {
@@ -69,7 +80,21 @@ namespace Vinicola_app.Controllers
                     model.UserId = 1;
 
                     if (operacao == "I")
+                    {
                         dao.Inserir(model);
+                        // --- CHAMADA AO FIWARE ---
+                        // Só chamamos ao inserir um novo, pois o ID não muda na edição geralmente
+                        if (!string.IsNullOrEmpty(model.DeviceId))
+                        {
+                            bool sucessoFiware = await _fiwareService.CriarDispositivoFiware(model.DeviceId);
+                            if (!sucessoFiware)
+                            {
+                                // Opcional: Adicionar um alerta que salvou no banco mas falhou no Fiware
+                                TempData["Erro"] = "Dispositivo salvo localmente, mas houve erro na comunicação com o FIWARE.";
+                            }
+                        }
+
+                    }
                     else
                         dao.Alterar(model);
 
@@ -119,6 +144,9 @@ namespace Vinicola_app.Controllers
 
             if (model.TempMin >= model.TempMax)
                 ModelState.AddModelError("TempMin", "A temperatura mínima deve ser menor que a máxima.");
+
+            if (string.IsNullOrEmpty(model.DeviceId))
+                ModelState.AddModelError("DeviceId", "O ID do dispositivo (logger) é obrigatório.");
         }
 
         private void CarregaVinicolasViewBag()

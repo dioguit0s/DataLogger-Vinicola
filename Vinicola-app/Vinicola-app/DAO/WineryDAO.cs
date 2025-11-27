@@ -22,11 +22,11 @@ namespace Vinicola_app.DAO
             p[0] = new SqlParameter("id", usuario.Id);
             p[1] = new SqlParameter("name", usuario.Name);
             p[2] = new SqlParameter("description", usuario.Description);
-            p[3] = new SqlParameter("adress", usuario.Adress);
+            p[3] = new SqlParameter("address", usuario.Address);
             p[4] = new SqlParameter("cnpj", usuario.Cnpj);
             p[5] = new SqlParameter("email", usuario.Email);
             p[6] = new SqlParameter("telephone", usuario.Telephone);
-            p[7] = new SqlParameter("logoPic", usuario.LogoPic);
+            p[7] = new SqlParameter("logo_Pic", usuario.LogoPic);
             return p;
         }
 
@@ -42,13 +42,13 @@ namespace Vinicola_app.DAO
         {
             WineryViewModel w = new WineryViewModel();
             w.Id = Convert.ToInt32(registro["id"]);
-            w.Name = registro["nome"].ToString();
+            w.Name = registro["name"].ToString();
             w.Description = registro["description"].ToString();
-            w.Adress = registro["adress"].ToString();
+            w.Address = registro["address"].ToString();
             w.Cnpj = registro["cnpj"].ToString();
             w.Email = registro["email"].ToString();
             w.Telephone = registro["telephone"].ToString();
-            w.LogoPic = registro["logoPìc"].ToString();
+            w.LogoPic = registro["logo_Pic"].ToString();
             return w;
         }
 
@@ -69,7 +69,7 @@ namespace Vinicola_app.DAO
         public List<WineryViewModel> Listagem()
         {
             List<WineryViewModel> lista = new List<WineryViewModel>();
-            string sql = "select * from winery order by nome";
+            string sql = "select * from winery order by name";
             DataTable tabela = HelperDAO.ExecutaSelect(sql, null);
             foreach (DataRow registro in tabela.Rows)
                 lista.Add(MontaWinery(registro));

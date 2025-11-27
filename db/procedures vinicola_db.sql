@@ -1,7 +1,7 @@
 USE vinicola_db;
 GO
 
-CREATE PROCEDURE sp_users_insert
+CREATE OR ALTER PROCEDURE sp_users_insert
     @nome VARCHAR(100),
     @email VARCHAR(255),
     @password_hash VARCHAR(255),
@@ -15,7 +15,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_users_update
+CREATE OR ALTER PROCEDURE sp_users_update
     @id INT,
     @nome VARCHAR(100),
     @email VARCHAR(255),
@@ -33,7 +33,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_users_select
+CREATE OR ALTER PROCEDURE sp_users_select
     @id INT = NULL
 AS
 BEGIN
@@ -52,7 +52,7 @@ END;
 GO
 
 
-CREATE PROCEDURE sp_winery_insert
+CREATE OR ALTER PROCEDURE sp_winery_insert
     @user_id INT,
     @name VARCHAR(100),
     @address VARCHAR(500),
@@ -70,7 +70,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_winery_update
+CREATE OR ALTER PROCEDURE sp_winery_update
     @id INT,
     @user_id INT,
     @name VARCHAR(100),
@@ -96,7 +96,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_winery_select
+CREATE OR ALTER PROCEDURE sp_winery_select
     @id INT = NULL
 AS
 BEGIN
@@ -112,9 +112,11 @@ END;
 GO
 
 
-CREATE PROCEDURE sp_dataLogger_insert
+CREATE OR ALTER PROCEDURE sp_dataLogger_insert
+	@id int,
     @winery_id INT,
     @user_id INT,
+    @device_id VARCHAR(100),
     @temp_min DECIMAL(10,2),
     @temp_max DECIMAL(10,2),
     @lum_min DECIMAL(10,2),
@@ -123,17 +125,36 @@ CREATE PROCEDURE sp_dataLogger_insert
     @humid_max DECIMAL(10,2)
 AS
 BEGIN
-    INSERT INTO dataLogger (winery_id, user_id, temp_min, temp_max, lum_min, lum_max, humid_min, humid_max)
-    VALUES (@winery_id, @user_id, @temp_min, @temp_max, @lum_min, @lum_max, @humid_min, @humid_max);
-    
---    SELECT SCOPE_IDENTITY() AS new_id;
+    INSERT INTO dataLogger (
+        winery_id, 
+        user_id, 
+        device_id, 
+        temp_min, 
+        temp_max, 
+        lum_min, 
+        lum_max, 
+        humid_min, 
+        humid_max
+    )
+    VALUES (
+        @winery_id, 
+        @user_id, 
+        @device_id, 
+        @temp_min, 
+        @temp_max, 
+        @lum_min, 
+        @lum_max, 
+        @humid_min, 
+        @humid_max
+    );
 END;
 GO
 
-CREATE PROCEDURE sp_dataLogger_update
+CREATE OR ALTER PROCEDURE sp_dataLogger_update
     @id INT,
     @winery_id INT,
     @user_id INT,
+    @device_id VARCHAR(100), -- Novo parâmetro
     @temp_min DECIMAL(10,2),
     @temp_max DECIMAL(10,2),
     @lum_min DECIMAL(10,2),
@@ -143,9 +164,10 @@ CREATE PROCEDURE sp_dataLogger_update
 AS
 BEGIN
     UPDATE dataLogger
-    SET
+    SET 
         winery_id = @winery_id,
         user_id = @user_id,
+        device_id = @device_id, 
         temp_min = @temp_min,
         temp_max = @temp_max,
         lum_min = @lum_min,
@@ -156,7 +178,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_dataLogger_select
+CREATE OR ALTER PROCEDURE sp_dataLogger_select
     @id INT = NULL
 AS
 BEGIN
@@ -172,7 +194,7 @@ END;
 GO
 
 
-CREATE PROCEDURE sp_errorLog_insert
+CREATE OR ALTER PROCEDURE sp_errorLog_insert
     @datalogger_id INT,
     @log_time DATETIME2,
     @temp DECIMAL(10,2),
@@ -190,7 +212,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_errorLog_update
+CREATE OR ALTER PROCEDURE sp_errorLog_update
     @id BIGINT,
     @datalogger_id INT,
     @log_time DATETIME2,
@@ -216,7 +238,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_errorLog_select
+CREATE OR ALTER PROCEDURE sp_errorLog_select
     @id BIGINT = NULL
 AS
 BEGIN
