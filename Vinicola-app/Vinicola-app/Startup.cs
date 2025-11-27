@@ -30,16 +30,15 @@ namespace Vinicola_app
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
-            {
                 app.UseExceptionHandler("/Home/Error");
-            }
-            app.UseStaticFiles();
 
+            app.UseStaticFiles();
             app.UseRouting();
+
+            // Registrar o middleware de sessão antes de endpoints
+            app.UseSession();
 
             app.UseAuthorization();
 
@@ -47,7 +46,7 @@ namespace Vinicola_app
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Login}/{action=Index}/{id?}");
             });
         }
     }
