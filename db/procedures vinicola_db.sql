@@ -1,82 +1,87 @@
 USE vinicola_db;
 GO
 
--- 1. CORREÇÃO: sp_users_insert
--- Alterado @profile_pic de VARCHAR(MAX) para VARBINARY(MAX)
-CREATE OR ALTER PROCEDURE sp_users_insert
-    @nome VARCHAR(100),
-    @email VARCHAR(255),
-    @password_hash VARCHAR(255),
-    @profile_pic VARBINARY(MAX) = NULL 
+-- 1. ATUALIZAÇÃO: sp_users_select
+-- Adicionamos password_hash no retorno (pois o C# exige isso no MontaUsuario)
+-- Adicionamos ORDER BY nome quando for listagem geral
+CREATE OR ALTER PROCEDURE sp_users_select
+    @id INT = NULL
 AS
 BEGIN
-    INSERT INTO users (nome, email, password_hash, profile_pic)
-    VALUES (@nome, @email, @password_hash, @profile_pic);
+    IF @id IS NULL
+    BEGIN
+        SELECT id, nome, email, password_hash, profile_pic 
+        FROM users 
+        ORDER BY nome;
+    END
+    ELSE
+    BEGIN
+        SELECT id, nome, email, password_hash, profile_pic
+        FROM users
+        WHERE id = @id;
+    END
 END;
 GO
 
--- 2. CORREÇÃO: sp_users_update
--- Alterado @profile_pic de VARCHAR(MAX) para VARBINARY(MAX)
-CREATE OR ALTER PROCEDURE sp_users_update
-    @id INT,
-    @nome VARCHAR(100),
-    @email VARCHAR(255),
-    @password_hash VARCHAR(255),
-    @profile_pic VARBINARY(MAX) = NULL
+-- 2. NOVO: sp_users_delete
+CREATE OR ALTER PROCEDURE sp_users_delete
+    @id INT
 AS
 BEGIN
-    UPDATE users
-    SET 
-        nome = @nome,
-        email = @email,
-        password_hash = @password_hash,
-        profile_pic = @profile_pic
-    WHERE id = @id;
+    DELETE FROM users WHERE id = @id;
 END;
 GO
 
--- 3. CORREÇÃO PREVENTIVA: sp_winery_insert
--- Alterado @logo_pic de VARCHAR(MAX) para VARBINARY(MAX)
-CREATE OR ALTER PROCEDURE sp_winery_insert
-    @user_id INT,
-    @name VARCHAR(100),
-    @address VARCHAR(500),
-    @cnpj VARCHAR(18),
+-- 3. NOVO: sp_users_login
+CREATE OR ALTER PROCEDURE sp_users_login
     @email VARCHAR(255),
-    @telephone VARCHAR(20),
-    @description VARCHAR(500) = NULL,
-    @logo_pic VARBINARY(MAX) = NULL
+    @password_hash VARCHAR(255)
 AS
 BEGIN
-    INSERT INTO winery (user_id, name, description, address, cnpj, email, telephone, logo_pic)
-    VALUES (@user_id, @name, @description, @address, @cnpj, @email, @telephone, @logo_pic);
+    SELECT Id, Nome, Email, password_hash, profile_pic 
+    FROM users 
+    WHERE Email = @email AND password_hash = @password_hash;
 END;
 GO
 
--- 4. CORREÇÃO PREVENTIVA: sp_winery_update
--- Alterado @logo_pic de VARCHAR(MAX) para VARBINARY(MAX)
-CREATE OR ALTER PROCEDURE sp_winery_update
-    @id INT,
-    @user_id INT,
-    @name VARCHAR(100),
-    @address VARCHAR(500),
-    @cnpj VARCHAR(18),
-    @email VARCHAR(255),
-    @telephone VARCHAR(20),
-    @description VARCHAR(500) = NULL,
-    @logo_pic VARBINARY(MAX) = NULL
+-- 4. NOVO: sp_winery_delete
+CREATE OR ALTER PROCEDURE sp_winery_delete
+    @id INT
 AS
 BEGIN
-    UPDATE winery
-    SET
-        user_id = @user_id,
-        name = @name,
-        description = @description,
-        address = @address,
-        cnpj = @cnpj,
-        email = @email,
-        telephone = @telephone,
-        logo_pic = @logo_pic
-    WHERE id = @id;
+    DELETE FROM winery WHERE id = @id;
+END;
+GO
+
+-- 5. NOVO: sp_winery_select_by_user
+-- Necessário para listar as vinícolas de um usuário específico
+CREATE OR ALTER PROCEDURE sp_winery_select_by_user
+    @user_id INT
+AS
+BEGIN
+    SELECT * FROM winery 
+    WHERE user_id = @user_id 
+    ORDER BY name;
+END;
+GO
+
+-- 6. NOVO: sp_dataLogger_delete
+CREATE OR ALTER PROCEDURE sp_dataLogger_delete
+    @id INT
+AS
+BEGIN
+    DELETE FROM dataLogger WHERE id = @id;
+END;
+GO
+
+-- 7. NOVO: sp_dataLogger_select_by_user
+-- Necessário para listar os dataloggers de um usuário
+CREATE OR ALTER PROCEDURE sp_dataLogger_select_by_user
+    @user_id INT
+AS
+BEGIN
+    SELECT * FROM dataLogger 
+    WHERE user_id = @user_id 
+    ORDER BY id;
 END;
 GO
