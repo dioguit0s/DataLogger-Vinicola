@@ -53,6 +53,197 @@ O sistema é composto por um dispositivo de ponta (Edge) baseado em ESP32 que co
 
 ---
 
+## 🧱 Arquitetura da Aplicação Web (ASP.NET Core MVC)
+
+A aplicação web foi organizada em camadas para separar responsabilidades e facilitar manutenção:
+
+- **Controllers (Apresentação):**
+  - `LoginController`, `RegisterController`, `HomeController`
+  - `UsuarioController`, `WineryController`, `DataLoggerController`
+  - Responsáveis por fluxo HTTP, sessão e validações de entrada.
+
+- **Models (Dados de tela e domínio):**
+  - `UsuarioViewModel`, `WineryViewModel`, `DataLoggerViewModel`, `DashboardViewModel`
+  - Estruturas usadas para troca de dados entre Controller, DAO e Views.
+
+- **DAO (Acesso a dados):**
+  - `UsuarioDAO`, `WineryDAO`, `DataLoggerDAO`
+  - `HelperDAO` e `ConexaoBD` para execução SQL e abertura de conexão.
+
+- **Services (Integração e utilitários):**
+  - `FiwareService` (integração com IoT Agent, Orion e STH-Comet)
+  - `HashService` (hash SHA-256 para senha)
+
+### Fluxo principal de negócio
+
+1. Usuário autentica no `LoginController`.
+2. Sessão (`UsuarioId`) é criada e usada para filtrar os dados do usuário logado.
+3. `WineryController` e `DataLoggerController` executam CRUD em SQL Server via DAOs.
+4. No cadastro de DataLogger, o `DataLoggerController` aciona o `FiwareService` para provisionamento do dispositivo no FIWARE.
+5. O `HomeController` consulta dados atuais/históricos no FIWARE e dispara comandos de alarme conforme limites configurados.
+
+---
+
+## 🗂️ Estrutura do Repositório
+
+```text
+.
+├── DataLogger/                      # Firmware ESP32 (coleta e publicação MQTT)
+├── db/                              # Scripts SQL (tabelas e procedures)
+├── Vinicola-app/
+│   └── Vinicola-app/
+│       ├── Controllers/             # Camada MVC - fluxo HTTP
+│       ├── DAO/                     # Persistência e acesso ao SQL Server
+│       ├── Models/                  # ViewModels e dados de tela
+│       ├── Services/                # Integração FIWARE e utilitários
+│       ├── Views/                   # Telas Razor
+│       ├── wwwroot/                 # Recursos estáticos
+│       └── Program.cs / Startup.cs  # Inicialização da aplicação
+└── README.md
+```
+
+---
+
+## 📐 Diagrama UML de Classes
+
+> Diagrama simplificado das classes principais da aplicação web.
+
+```mermaid
+classDiagram
+direction LR
+
+class LoginController
+class RegisterController
+class HomeController
+class UsuarioController
+class WineryController
+class DataLoggerController
+
+class FiwareService {
+  +CriarDispositivoFiware(deviceId)
+  +ListarDispositivos()
+  +ObterDadosAtuais(deviceId)
+  +ObterHistorico(deviceId, atributo)
+  +EnviarComando(deviceId, comando)
+}
+
+class HashService {
+  <<static>>
+  +GerarHash(texto)
+}
+
+class UsuarioDAO {
+  +Inserir(usuario)
+  +Alterar(usuario)
+  +Excluir(id)
+  +Consulta(id)
+  +Listagem()
+  +VerificarLogin(email, senha)
+}
+
+class WineryDAO {
+  +Inserir(winery)
+  +Alterar(winery)
+  +Excluir(id)
+  +Consulta(id)
+  +Listagem(userId)
+}
+
+class DataLoggerDAO {
+  +Inserir(dataLogger)
+  +Alterar(dataLogger)
+  +Excluir(id)
+  +Consulta(id)
+  +Listagem(userId)
+  +BuscarPorDeviceId(deviceId)
+}
+
+class HelperDAO {
+  <<static>>
+  +ExecutaSQL(sql, parametros)
+  +ExecutaSelect(sql, parametros)
+  +ExecutaProc(nomeProc, parametros)
+  +ExecutaProcSelect(nomeProc, parametros)
+}
+
+class ConexaoBD {
+  <<static>>
+  +GetConexao()
+}
+
+class UsuarioViewModel {
+  +Id
+  +Nome
+  +Email
+  +SenhaHash
+  +FotoProfile
+  +FotoUpload
+  +NovaSenha
+}
+
+class WineryViewModel {
+  +Id
+  +UserId
+  +Name
+  +Description
+  +Address
+  +Cnpj
+  +Email
+  +Telephone
+  +LogoPic
+  +LogoUpload
+}
+
+class DataLoggerViewModel {
+  +Id
+  +DeviceId
+  +WineryId
+  +UserId
+  +TempMin
+  +TempMax
+  +LumMin
+  +LumMax
+  +HumidMin
+  +HumidMax
+}
+
+class DashboardViewModel {
+  +Vinicolas
+  +Loggers
+}
+
+LoginController ..> UsuarioDAO : autentica
+LoginController ..> HashService : gera hash
+RegisterController ..> UsuarioDAO : cadastra
+RegisterController ..> HashService : gera hash
+UsuarioController ..> UsuarioDAO : CRUD perfil
+WineryController ..> WineryDAO : CRUD vinicola
+HomeController ..> WineryDAO : consulta
+HomeController ..> DataLoggerDAO : consulta
+HomeController --> FiwareService : injecao
+DataLoggerController ..> DataLoggerDAO : CRUD logger
+DataLoggerController ..> WineryDAO : lista vinicolas
+DataLoggerController --> FiwareService : injecao
+
+UsuarioDAO ..> HelperDAO : usa
+WineryDAO ..> HelperDAO : usa
+DataLoggerDAO ..> HelperDAO : usa
+HelperDAO ..> ConexaoBD : abre conexao
+
+UsuarioDAO ..> UsuarioViewModel
+WineryDAO ..> WineryViewModel
+DataLoggerDAO ..> DataLoggerViewModel
+HomeController ..> DashboardViewModel
+
+DashboardViewModel *-- "0..*" WineryViewModel
+DashboardViewModel *-- "0..*" DataLoggerViewModel
+UsuarioViewModel "1" <-- "0..*" WineryViewModel : user_id
+UsuarioViewModel "1" <-- "0..*" DataLoggerViewModel : user_id
+WineryViewModel "1" <-- "0..*" DataLoggerViewModel : winery_id
+```
+
+---
+
 ## 🔧 Como Executar o Projeto
 
 ### Pré-requisitos
